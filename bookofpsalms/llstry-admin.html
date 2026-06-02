@@ -1852,6 +1852,7 @@ function renderOrdersTable(orders){
       +'<td>'+ref+'</td><td>'+LL.escHtml(child.name||'--')+' '+gBadge+'</td>'
       +'<td>'+LL.escHtml(buyer.name||'--')+'</td>'
       +'<td>'+LL.escHtml(buyer.phone||'--')+'</td>'
+      +'<td>'+LL.escHtml(buyer.address||'--')+'</td>'
       +'<td>\u20B1'+((pay.amount||0).toLocaleString())+'</td>'
       +'<td><select class="status-sel" onchange="updateOrderStatus(\''+ref+'\',this.value)">'
         +['pending','confirmed','shipped','completed','cancelled'].map(function(s){return'<option value="'+s+'"'+(pay.status===s?' selected':'')+'>'+s+'</option>';}).join('')+'</select></td>'
@@ -1859,16 +1860,27 @@ function renderOrdersTable(orders){
       +'<td><div class="act-btns"><button class="act-btn p" onclick="adminDownloadOrderPDF(\''+ref+'\')">PDF</button><button class="act-btn danger" onclick="promptDeleteOrder(\''+ref+'\')">Del</button></div></td>'
       +'</tr>';
   }).join('');
-  return '<table><thead><tr><th>Ref</th><th>Child</th><th>Buyer Name</th><th>Phone</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  return '<table><thead><tr><th>Ref</th><th>Child</th><th>Buyer Name</th><th>Phone</th><th>Address</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
 
 function filterOrders(q){_ordersFilter=q;renderOrders();}
 
 function updateOrderStatus(ref,status){
-  var orders=[]; try{orders=JSON.parse(localStorage.getItem('ht_orders')||'[]');}catch(e){}
-  orders.forEach(function(o){if(o.ref===ref&&o.payment)o.payment.status=status;});
-  localStorage.setItem('ht_orders',JSON.stringify(orders));
-  toast('Order '+ref+' -> '+status,'ok');
+  var orders = ST.orders || [];
+  var found = false;
+  orders.forEach(function(o){
+    if(o.ref===ref){
+      if(!o.payment) o.payment={};
+      o.payment.status=status;
+      found=true;
+    }
+  });
+  if(!found){ toast('Order not found in memory','err'); return; }
+  ST.orders = orders;
+  LL.saveRemoteState(ST, function(ok){
+    if(ok){ toast('Order '+ref+' → '+status,'ok'); }
+    else { toast('Save failed — try again','err'); }
+  });
 }
 
 function clearOrders(){
