@@ -4,18 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Little Book of Psalms — Personalized Christian Storybook</title>
-<meta name="description" content="A personalized Christian storybook with your child's name in every blessing, inspired by the Book of Psalms.">
-<link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
 <link rel="dns-prefetch" href="https://res.cloudinary.com">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600&family=Open+Sans:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@400;600;700&family=Luckiest+Guy&family=Kanit:wght@400;700&family=Margarine&family=Sniglet&family=Galindo&family=Darumadrop+One&family=Mochiy+Pop+P+One&family=Londrina+Solid&family=Belanosima:wght@400;700&family=Lilita+One&family=Braah+One&family=Gorditas:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600&family=Open+Sans:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@400;600;700&family=Luckiest+Guy&family=Kanit:wght@400;700&family=Margarine&family=Sniglet&family=Galindo&family=Darumadrop+One&family=Mochiy+Pop+P+One&family=Londrina+Solid&family=Belanosima:wght@400;700&family=Lilita+One&family=Braah One&family=Gorditas:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 <style>
 /* ════════════════════════════════════════════════
-   LITTLE BOOK OF PSALMS — CUSTOMER UI
+   LITTLE LIGHT V2 — CUSTOMER UI
    Design system: warm parchment + terracotta accent
    ════════════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -62,15 +60,6 @@ body.loading{overflow:hidden;}
 .loader-dots span:nth-child(3){animation-delay:.36s;}
 @keyframes ldot{0%,80%,100%{opacity:.3;transform:scale(.85);}40%{opacity:1;transform:scale(1);}}
 
-/* ── PDF PROGRESS ── */
-.pdf-progress{display:none;position:fixed;inset:0;z-index:800;
-  background:rgba(10,6,3,.88);backdrop-filter:blur(4px);
-  align-items:center;justify-content:center;flex-direction:column;gap:18px;}
-.pdf-progress.show{display:flex;}
-.pdf-progress-bar-wrap{width:260px;height:6px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden;}
-.pdf-progress-bar{height:100%;background:var(--accent);border-radius:10px;transition:width .3s ease;width:0%;}
-.pdf-progress-lbl{font-size:.8rem;color:rgba(245,237,224,.6);letter-spacing:.06em;}
-
 /* ── NAV ── */
 .nav{height:70px;display:flex;align-items:center;justify-content:space-between;
   padding:0 36px;background:#2b1f14;position:sticky;top:0;z-index:100;
@@ -78,7 +67,7 @@ body.loading{overflow:hidden;}
 .nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
 .nav-logo-img{height:38px;display:none;}
 .nav-logo-img.show{display:block;}
-.nav-brand-text{font-family:var(--head-font);font-size:1.2rem;color:#f5ede0;letter-spacing:.01em;}
+.nav-brand-text{font-family:var(--head-font);font-size:1.35rem;color:#f5ede0;letter-spacing:.01em;}
 .nav-brand-text em{font-style:italic;color:var(--accent-l);}
 .nav-right{display:flex;align-items:center;gap:18px;}
 .nav-a{color:rgba(245,237,224,.5);font-size:.82rem;letter-spacing:.06em;text-decoration:none;transition:color .2s;}
@@ -104,7 +93,7 @@ body.loading{overflow:hidden;}
 .hero-inner{position:relative;z-index:2;max-width:1080px;margin:0 auto;width:100%;
   display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:center;text-align:left;}
 .hero-product{position:relative;display:flex;align-items:center;justify-content:center;}
-.hero-product-img{max-width:100%;max-height:480px;object-fit:contain;
+.hero-product img{max-width:100%;max-height:480px;object-fit:contain;
   filter:drop-shadow(0 20px 48px rgba(0,0,0,.45));border-radius:4px;
   animation:float 4s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
@@ -134,7 +123,7 @@ body.loading{overflow:hidden;}
 @media(max-width:860px){
   .hero-inner{grid-template-columns:1fr;text-align:center;max-width:600px;gap:40px;}
   .hero-product{order:-1;}
-  .hero-product-img{max-height:260px;}
+  .hero-product img{max-height:260px;}
   .hero-cta{justify-content:center;}
   .hero-divider,.hero-sub{margin-left:auto;margin-right:auto;}
 }
@@ -153,7 +142,7 @@ body.loading{overflow:hidden;}
 .btn-full{width:100%;display:flex;justify-content:center;}
 .btn:disabled{opacity:.38;cursor:not-allowed;transform:none!important;}
 
-/* ── STEPS WRAP ── */
+/* ── STEPS ── */
 .steps-wrap{background:var(--warm);min-height:80vh;padding:72px 0;}
 .container{max-width:1120px;margin:0 auto;padding:0 28px;}
 .step-indicator{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:56px;}
@@ -200,7 +189,7 @@ body.loading{overflow:hidden;}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px;min-height:16px;}
 .chip{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;
   justify-content:center;font-family:var(--head-font);font-size:.95rem;font-weight:700;}
-.chip-ok{background:var(--accent-p);border:1.5px solid var(--accent);color:var(--brown);}
+.chip-ok{background:var(--accent-p);border:1.5px solid var(--accent);color:#5a3e2b;}
 .chip-ex{background:#fdecea;border:1.5px solid var(--err);color:var(--err);}
 .chip-sp{background:transparent;border:1.5px dashed var(--bd);color:var(--muted);font-size:.44rem;}
 
@@ -253,17 +242,39 @@ body.loading{overflow:hidden;}
 .book-scroll-wrap{border-radius:12px;overflow:hidden;background:#12100E;}
 .book-scroll-label{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
   color:rgba(245,237,224,.45);padding:14px 20px 10px;text-align:center;}
+
 .bsv-row{margin-bottom:0;}
 .bsv-row-label{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
   color:rgba(245,237,224,.35);padding:10px 0 5px;text-align:center;}
+
+/* Ratio box — explicit px height set by JS */
 .bsv-ratio-box{position:relative;width:100%;overflow:hidden;}
+
+/* Inner — transform:scale scales ALL children including px fonts */
 .bsv-inner{display:flex;align-items:stretch;}
-.bsv-solo{justify-content:center;}
+.bsv-solo  {justify-content:center;}
 .bsv-spread{justify-content:center;}
-.bsv-page{width:420px;height:296px;flex-shrink:0;position:relative;overflow:hidden;container-type:inline-size;}
-.bsv-solo .bsv-page{box-shadow:0 8px 32px rgba(0,0,0,.6);}
-.bsv-spread .bsv-page:first-child{border-right:1px solid rgba(0,0,0,.5);box-shadow:-4px 4px 24px rgba(0,0,0,.5);}
-.bsv-spread .bsv-page:last-child{box-shadow:4px 4px 24px rgba(0,0,0,.5);}
+
+/* Each page is always 420×296px. zoom scales it to fit. */
+.bsv-page{width:420px;height:296px;flex-shrink:0;position:relative;
+  overflow:hidden;container-type:inline-size;}
+.bsv-solo .bsv-page{
+  box-shadow:0 8px 32px rgba(0,0,0,.6);}
+.bsv-spread .bsv-page:first-child{
+  border-right:1px solid rgba(0,0,0,.5);
+  box-shadow:-4px 4px 24px rgba(0,0,0,.5);}
+.bsv-spread .bsv-page:last-child{
+  box-shadow:4px 4px 24px rgba(0,0,0,.5);}
+
+/* Cover panels — kept for any remaining references */
+.cover-panel{margin:0 auto 0;}
+.cover-label{font-size:.65rem;color:rgba(255,255,255,.45);text-transform:uppercase;
+  letter-spacing:.1em;text-align:center;margin-bottom:6px;}
+.cover-page{position:relative;width:420px;flex:0 0 420px;max-width:420px;
+  margin:0 auto;aspect-ratio:210/148;border-radius:3px 5px 5px 3px;
+  overflow:hidden;box-shadow:-4px 4px 20px rgba(0,0,0,.6);}
+.cover-back .cover-page{border-radius:5px 3px 3px 5px;}
+@media(max-width:600px){.cover-page{width:80%;}}
 
 /* Summary sidebar */
 .summary-card{background:white;border-radius:14px;padding:26px;
@@ -275,7 +286,7 @@ body.loading{overflow:hidden;}
 .summary-row:last-child{margin-bottom:0;}
 .sr-lbl{color:var(--muted);flex-shrink:0;}
 .sr-val{font-weight:600;text-align:right;word-break:break-word;color:var(--deep);}
-.sr-name{font-family:var(--head-font);font-size:1.15rem;font-weight:700;color:var(--brown);}
+.sr-name{font-family:var(--head-font);font-size:1.15rem;font-weight:700;color:#5a3e2b;}
 .sr-photo{width:62px;height:44px;object-fit:cover;border-radius:6px;border:2px solid var(--accent);}
 .summary-price{border-top:1px solid var(--bd-l);padding-top:16px;margin-top:16px;}
 .sp-row{display:flex;justify-content:space-between;font-size:.84rem;color:var(--muted);margin-bottom:8px;}
@@ -286,7 +297,9 @@ body.loading{overflow:hidden;}
 .edit-link{font-size:.78rem;color:var(--muted);text-align:center;margin-top:12px;
   cursor:pointer;text-decoration:underline;display:block;}
 .edit-link:hover{color:var(--accent);}
-@media(max-width:960px){.preview-layout{grid-template-columns:1fr;}.preview-sidebar{position:static;}}
+
+/* PDF button */
+.pdf-btn-wrap{margin-top:14px;}
 
 /* ── GCASH MODAL ── */
 .modal-ov{position:fixed;inset:0;z-index:500;background:rgba(20,12,6,.8);
@@ -312,7 +325,7 @@ body.loading{overflow:hidden;}
 .gcash-num{font-family:var(--head-font);font-size:1.55rem;font-weight:700;color:var(--deep);}
 .gcash-nm{font-size:.8rem;color:var(--muted);margin-top:3px;}
 .amt-box{background:var(--accent-p);border:1px solid rgba(231,119,55,.22);border-radius:10px;
-  padding:13px 16px;margin-bottom:16px;font-size:.88rem;color:var(--brown);line-height:1.6;}
+  padding:13px 16px;margin-bottom:16px;font-size:.88rem;color:#5a3e2b;line-height:1.6;}
 .ss-zone{border:2px dashed var(--bd);border-radius:12px;padding:22px;text-align:center;
   cursor:pointer;position:relative;background:var(--parch);transition:all .2s;}
 .ss-zone:hover{border-color:var(--accent);background:var(--accent-p);}
@@ -321,8 +334,6 @@ body.loading{overflow:hidden;}
 /* ── SUCCESS ── */
 .suc{display:none;text-align:center;padding:88px 32px;background:#0d0a08 !important;min-height:100vh;color:rgba(245,237,224,.85);}
 .suc.on{display:block;}
-
-/* ── FAQ ── */
 .faq-list{display:flex;flex-direction:column;gap:8px;}
 .faq-item{background:rgba(255,255,255,.06);border:1px solid rgba(201,148,58,.2);border-radius:10px;overflow:hidden;}
 .faq-q{padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:.88rem;color:rgba(245,237,224,.9);font-weight:500;user-select:none;background:transparent;}
@@ -332,43 +343,68 @@ body.loading{overflow:hidden;}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;padding:0 20px;font-size:.83rem;color:rgba(245,237,224,.7);line-height:1.7;}
 .faq-item.open .faq-a{max-height:500px;padding:0 20px 16px;}
 
-/* ── SITE FOOTER ── */
-.site-footer{background:#0d0a08;border-top:1px solid rgba(201,148,58,.15);padding:32px 20px;margin-top:0;}
-.footer-inner{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:14px;}
-.footer-social{display:flex;gap:12px;}
-.footer-social-link{width:36px;height:36px;background:rgba(255,255,255,.08);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;text-decoration:none;
-  border:1px solid rgba(255,255,255,.12);transition:background .2s;color:rgba(245,237,224,.5);}
-.footer-social-link:hover{background:rgba(231,119,55,.2);color:var(--gold);}
-.footer-links{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;}
-.footer-link{font-size:.76rem;color:rgba(245,237,224,.4);text-decoration:none;letter-spacing:.05em;transition:color .2s;}
-.footer-link:hover{color:var(--gold);}
-.footer-copy{font-size:.68rem;color:rgba(245,237,224,.2);letter-spacing:.08em;}
+/* ── PDF PROGRESS ── */
+.pdf-progress{display:none;position:fixed;inset:0;z-index:800;
+  background:rgba(10,6,3,.88);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;flex-direction:column;gap:18px;}
+.pdf-progress.show{display:flex;}
+.pdf-progress-bar-wrap{width:260px;height:6px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden;}
+.pdf-progress-bar{height:100%;background:var(--accent);border-radius:10px;
+  transition:width .3s ease;width:0%;}
+.pdf-progress-lbl{font-size:.8rem;color:rgba(245,237,224,.6);letter-spacing:.06em;}
 
 /* ── TOAST ── */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
-  background:#1a1a1a;color:#fefcfa;padding:12px 22px;border-radius:10px;
-  font-size:.84rem;opacity:0;transition:all .3s;z-index:9000;pointer-events:none;max-width:360px;text-align:center;}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(60px);
+  z-index:999;padding:14px 18px;background:#2b1f14;color:#fefcfa;
+  border-left:4px solid var(--accent);border-radius:10px;font-size:.86rem;line-height:1.5;
+  box-shadow:0 6px 24px rgba(0,0,0,.22);opacity:0;transition:all .3s;max-width:320px;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.toast.ok{border-color:var(--ok);}
+.toast.err{border-color:var(--err);}
 
 /* ── MESSENGER FLOAT ── */
-.msng-float{position:fixed;bottom:24px;right:24px;z-index:400;
-  width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(0,0,0,.3);transition:transform .2s;text-decoration:none;}
-.msng-float:hover{transform:scale(1.08);}
-.msng-tooltip{position:absolute;right:64px;background:#1a1a1a;color:white;
-  padding:6px 12px;border-radius:8px;font-size:.76rem;white-space:nowrap;
-  opacity:0;pointer-events:none;transition:opacity .2s;}
+.msng-float{position:fixed;bottom:24px;right:24px;z-index:9000;width:56px;height:56px;
+  border-radius:50%;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.18);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  text-decoration:none;transition:transform .22s,box-shadow .22s;border:none;}
+.msng-float:hover{transform:scale(1.08);box-shadow:0 8px 28px rgba(0,0,0,.22);}
+.msng-float svg{width:32px;height:32px;display:block;}
+.msng-tooltip{position:absolute;right:66px;top:50%;transform:translateY(-50%);
+  background:rgba(30,18,8,.88);color:#fefcfa;font-size:.76rem;font-family:var(--body-font);
+  padding:6px 11px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;}
 .msng-float:hover .msng-tooltip{opacity:1;}
 
+/* ── RESPONSIVE ── */
+@media(max-width:960px){.preview-layout{grid-template-columns:1fr;}.preview-sidebar{position:static;}}
 @media(max-width:600px){
-  .fcard{padding:28px 20px;}
-  .book-cards{flex-direction:column;}
-  .nav{padding:0 18px;}
-  .hero{padding:60px 20px;}
+  .container{padding:0 16px;}.fcard{padding:28px 20px;border-radius:12px;}
+  .gcards,.book-cards{flex-direction:column;}.hero{padding:72px 20px;}
+  .btn-lg{padding:16px 32px;}.steps-wrap{padding:48px 0;}
+  #nav-cta-btn{display:none;}
 }
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── FOOTER ── */
+.site-footer{background:#0d0a08;border-top:1px solid rgba(201,148,58,.15);padding:32px 20px;margin-top:0;}
+.footer-inner{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:14px;}
+.footer-social{display:flex;gap:16px;}
+.footer-social-link{color:rgba(245,237,224,.5);transition:color .2s;}
+.footer-social-link:hover{color:var(--gold);}
+.footer-links{display:flex;gap:20px;}
+.footer-link{color:rgba(245,237,224,.4);font-size:.78rem;text-decoration:none;transition:color .2s;}
+.footer-link:hover{color:var(--gold);}
+.footer-copy{font-size:.72rem;color:rgba(245,237,224,.25);text-align:center;}
+
+/* ── FAQ ── */
+.faq-list{display:flex;flex-direction:column;gap:8px;}
+.faq-item{background:rgba(255,255,255,.04);border:1px solid rgba(201,148,58,.15);border-radius:10px;overflow:hidden;}
+.faq-q{padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:.88rem;color:rgba(245,237,224,.85);font-weight:500;user-select:none;}
+.faq-q:hover{background:rgba(255,255,255,.04);}
+.faq-icon{color:var(--gold);font-size:1.1rem;flex-shrink:0;transition:transform .25s;}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;padding:0 20px;font-size:.83rem;color:var(--muted);line-height:1.7;}
+.faq-item.open .faq-a{max-height:400px;padding:0 20px 16px;}
 </style>
-</head>
 <body class="loading">
 
 <!-- LOADING GATE -->
@@ -403,7 +439,7 @@ body.loading{overflow:hidden;}
   <div class="hero-glow"></div>
   <div class="hero-inner">
     <div class="hero-text">
-      <div class="hero-badge" id="hero-badge">✦ Personalized Christian Storybook</div>
+      <div class="hero-badge" id="hero-badge">✦ Personalized Christian Storybooks</div>
       <h1 class="hero-h1" id="hero-h1">
         <span class="hero-h1-main" id="hero-name-display">Your Child</span>
         <em class="hero-name-em">Little Book of Psalms</em>
@@ -412,7 +448,7 @@ body.loading{overflow:hidden;}
       <p class="hero-sub" id="hero-sub">Every letter of their name receives a Psalm-inspired blessing — woven into a beautiful personalized storybook they'll treasure for life.</p>
       <div class="hero-cta">
         <a href="#steps" class="btn btn-gold btn-lg" id="hero-btn1">Create Your Book</a>
-        <a class="btn btn-out btn-lg" id="hero-btn2" href="samples.html">See Preview ↓</a>
+        <a class="btn btn-out btn-lg" id="hero-btn2" href="#steps">See Preview ↓</a>
       </div>
     </div>
     <div class="hero-product" id="hero-product-wrap">
@@ -492,7 +528,7 @@ body.loading{overflow:hidden;}
                 <div id="up-progress-pct" style="font-size:.72rem;color:var(--gold);margin-top:4px;">0%</div>
               </div>
               <button class="up-rm" onclick="rmPhoto(event)">✕ Remove Photo</button>
-              <div style="font-size:.74rem;color:var(--ok);margin-top:6px;" id="up-success-msg">✓ Photo uploaded successfully</div>
+              <div style="font-size:.74rem;color:var(--ok);margin-top:6px;" id="up-success-msg" style="display:none;">✓ Photo uploaded successfully</div>
             </div>
           </div>
           <div class="ferr" id="e-photo">Please upload your child's photo.</div>
@@ -537,7 +573,7 @@ body.loading{overflow:hidden;}
         <div class="fgrp">
           <label class="flbl">Who is this book from? <span style="color:var(--err);font-size:.72rem;font-weight:600;">Required*</span></label>
           <input class="finput" id="giver-msg" type="text"
-            placeholder="e.g. Daddy &amp; Mommy, Lolo &amp; Lola"
+            placeholder="e.g. Daddy & Mommy, Lolo & Lola"
             maxlength="60" oninput="onGiver(this)">
           <div class="fcc" id="giver-cc">0 / 60 characters</div>
           <div class="ferr" id="e-giver">Please fill in who this book is from.</div>
@@ -641,7 +677,6 @@ body.loading{overflow:hidden;}
       </div>
       <div class="footer-links">
         <a href="privacy.html" class="footer-link">Privacy Policy</a>
-        <a href="samples.html" class="footer-link">Samples</a>
       </div>
       <div class="footer-copy">© 2026 Little Light Storybooks. All rights reserved.</div>
     </div>
@@ -654,7 +689,7 @@ body.loading{overflow:hidden;}
     <button class="modal-x" onclick="cModal('pay-modal')">✕</button>
     <div class="modal-tag">GCash Payment</div>
     <div class="modal-h">Send Your Payment</div>
-    <div class="modal-sub">Send the exact amount to the GCash account below, then upload a screenshot of your payment for verification.<br><br>You may also transfer via banking app:<br><strong>Transfer → E-Wallet → GCash</strong></div>
+    <div class="modal-sub">Please send the exact amount to the GCash account below, then upload a screenshot of your payment for verification.<br><br>You may also transfer using your banking app by selecting:<br><strong>Transfer → E-Wallet → GCash</strong><br><br>Account Name: <strong>LLSTRYBKS</strong><br>GCash Number: <strong>0919 093 4772</strong></div>
     <div class="gcash-box">
       <div class="gcash-qr" id="gcash-qr-wrap">
         <span style="font-size:.7rem;color:var(--muted)">QR Code</span>
@@ -713,7 +748,7 @@ body.loading{overflow:hidden;}
 <div class="toast" id="toast"></div>
 
 <!-- MESSENGER FLOAT -->
-<a class="msng-float" href="https://m.me/littlelightstorybooks" target="_blank" rel="noopener" aria-label="Message us on Messenger">
+<a class="msng-float" href="https://m.me/728867286986943" target="_blank" rel="noopener" aria-label="Message us on Messenger">
   <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
     <circle cx="28" cy="28" r="28" fill="#0084FF"/>
     <path d="M28 11C18.06 11 10 18.61 10 28c0 5.05 2.14 9.61 5.59 12.86V47l6.18-3.4A18.9 18.9 0 0028 45c9.94 0 18-7.61 18-17S37.94 11 28 11zm1.79 22.89l-4.55-4.86-8.88 4.86 9.78-10.38 4.67 4.86 8.76-4.86-9.78 10.38z" fill="white"/>
@@ -721,11 +756,13 @@ body.loading{overflow:hidden;}
   <span class="msng-tooltip">Message us</span>
 </a>
 
+<!-- SCRIPTS -->
 <script src="letters.js"></script>
 <script src="engine.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════════
-// LITTLE BOOK OF PSALMS — index.js (inline)
+// LITTLE LIGHT V2 — index.js (inline)
+// Customer UI controller. Uses LL engine for all rendering.
 // ═══════════════════════════════════════════════════════════════
 
 // ── STATE ──────────────────────────────────────────────────────
@@ -734,15 +771,21 @@ var S = {
   photo: null, ded: '', giver: '', book: 'standard',
   bName: '', phone: '', addr: '', ss: null, ref: '',
 };
-var _allPages  = [];
-var _spreads   = [];
+var _spreads = [];          // [{left, right}] pairs for the spread viewer
 var _currentSpread = 0;
-window._LL_currentSpread = 0;
+window._LL_currentSpread = 0; // read by PDF exporter
 
 // ── INIT ───────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
-  var _failsafe = setTimeout(function() { appReady(); }, 5000);
+  // Hard failsafe: never leave loader on screen > 5s
+  var _failsafe = setTimeout(function() {
+    console.warn('[LL] Failsafe timeout — forcing appReady');
+    appReady();
+  }, 5000);
+
+  // Clear order session lock on every fresh page load
   sessionStorage.removeItem('bop_order_placed');
+
   LL.loadRemoteState(function(state) {
     clearTimeout(_failsafe);
     applySettings(state);
@@ -754,52 +797,69 @@ function applySettings(state) {
   var ps  = (state && state.pageSettings) || {};
   var cfg = (state && state.config)       || {};
 
-  function setText(id, v) { var el=document.getElementById(id); if(el&&v) el.innerHTML=v; }
-  setText('hero-badge',     ps.heroBadge);
-  setText('hero-h1',        ps.heroH1);
-  setText('hero-sub',       ps.heroSub);
-  setText('hero-btn1',      ps.heroBtn1);
+  function setText(id, v) {
+    var el = document.getElementById(id);
+    if (el && v) el.innerHTML = v;
+  }
+  setText('hero-badge', ps.heroBadge);
+  setText('hero-h1',    ps.heroH1);
+  setText('hero-sub',   ps.heroSub);
+  setText('hero-btn1',  ps.heroBtn1);
   setText('nav-brand-text', ps.navBrand);
   setText('nav-cta-btn',    ps.navCta);
   setText('spread-label',   ps.spreadLabel);
-  setText('fs-title',       ps.formTitle);
-  setText('fs-sub',         ps.formSub);
 
-  // See Preview button
+  // See Preview button — text and optional external link
   var btn2 = document.getElementById('hero-btn2');
   if (btn2) {
     if (ps.seePreview) btn2.textContent = ps.seePreview;
-    if (ps.seePreviewLink) { btn2.href=ps.seePreviewLink; btn2.target='_blank'; btn2.rel='noopener'; btn2.removeAttribute('onclick'); }
-    else { btn2.href='#steps'; btn2.removeAttribute('target'); }
-  }
-
-  // Logo
-  if (ps.logoSrc) {
-    var li=document.getElementById('nav-logo-img');
-    if (li) { li.src=LL.resolveImg(ps.logoSrc,200); li.classList.add('show');
-      if (ps.hideTextLogo) { var nt=document.getElementById('nav-brand-text'); if(nt) nt.style.display='none'; }
+    if (ps.seePreviewLink) {
+      btn2.href = ps.seePreviewLink;
+      btn2.target = '_blank';
+      btn2.rel = 'noopener';
+      btn2.removeAttribute('onclick');
+    } else {
+      btn2.href = '#steps';
+      btn2.removeAttribute('target');
     }
   }
 
-  // Hero background
-  if (ps.heroBgSrc) {
-    var bi=document.getElementById('hero-bg-img');
-    if (bi) { bi.src=LL.resolveImg(ps.heroBgSrc,1400); bi.setAttribute('fetchpriority','high'); bi.setAttribute('loading','eager'); bi.classList.add('show'); }
+  // Images loaded directly with Cloudinary-optimized URLs (f_auto,q_auto,w_X)
+  if (ps.logoSrc) {
+    var li = document.getElementById('nav-logo-img');
+    if (li) {
+      li.src = LL.resolveImg(ps.logoSrc, 200);
+      li.classList.add('show');
+      if (ps.hideTextLogo) {
+        var nt = document.getElementById('nav-brand-text');
+        if (nt) nt.style.display = 'none';
+      }
+    }
   }
 
-  // Product image
+  if (ps.heroBgSrc) {
+    var bi = document.getElementById('hero-bg-img');
+    if (bi) {
+      bi.src = LL.resolveImg(ps.heroBgSrc, 1400);
+      bi.setAttribute('fetchpriority','high');
+      bi.setAttribute('loading','eager');
+      bi.classList.add('show');
+    }
+  }
+
   if (ps.productImgSrc) {
-    var pw=document.getElementById('hero-product-wrap');
-    var pe=document.getElementById('hero-product-empty');
-    var pi=document.createElement('img');
-    pi.className='hero-product-img';
-    pi.alt='Little Book of Psalms';
-    pi.style.cssText='max-width:100%;max-height:480px;object-fit:contain;filter:drop-shadow(0 20px 48px rgba(0,0,0,.45));border-radius:4px;animation:float 4s ease-in-out infinite;';
+    var pw = document.getElementById('hero-product-wrap');
+    var pe = document.getElementById('hero-product-empty');
+    var pi = document.createElement('img');
+    pi.className = 'hero-product-img';
+    pi.alt = 'Little Book of Psalms';
+    pi.style.cssText = 'max-width:100%;max-height:480px;object-fit:contain;'
+      + 'filter:drop-shadow(0 20px 48px rgba(0,0,0,.45));border-radius:4px;animation:float 4s ease-in-out infinite;';
     pi.setAttribute('loading','eager');
     pi.setAttribute('fetchpriority','high');
-    pi.src=LL.resolveImg(ps.productImgSrc,600);
+    pi.src = LL.resolveImg(ps.productImgSrc, 600);
     if (pw) pw.appendChild(pi);
-    if (pe) pe.style.display='none';
+    if (pe) pe.style.display = 'none';
   }
 
   // Pricing
@@ -810,237 +870,285 @@ function applySettings(state) {
   if (cfg.hbMaxL)  LL.PRICING.hardbound.maxL = cfg.hbMaxL;
   if (cfg.hbEx)    LL.PRICING.hardbound.ex   = cfg.hbEx;
 
-  var _bsp=document.getElementById('bt-std-price');
-  var _bhp=document.getElementById('bt-hb-price');
+  var _bsp = document.getElementById('bt-std-price');
+  var _bhp = document.getElementById('bt-hb-price');
   if (_bsp) _bsp.textContent = '₱' + LL.PRICING.standard.base.toLocaleString();
   if (_bhp) _bhp.textContent = '₱' + LL.PRICING.hardbound.base.toLocaleString();
 
-  // GCash display
-  if (cfg.gcashNum)  { var gn=document.getElementById('gcash-num-display');  if(gn) gn.textContent=cfg.gcashNum; }
-  if (cfg.gcashName) { var ga=document.getElementById('gcash-acct-display'); if(ga) ga.textContent=cfg.gcashName; }
-  if (cfg.gcashQR)   { var qw=document.getElementById('gcash-qr-wrap'); if(qw) qw.innerHTML='<img src="'+LL.resolveImg(cfg.gcashQR,300)+'" alt="GCash QR" style="width:100%;height:100%;object-fit:cover;">'; }
-
-  // Messenger link
-  if (cfg.messengerLink) { var mf=document.querySelector('.msng-float'); if(mf) mf.href=cfg.messengerLink; }
-
   if (cfg.pixelId) LL.initPixel(cfg.pixelId);
+
+  // Apply messenger link
+  if (cfg.messengerLink) {
+    var mf = document.querySelector('.msng-float');
+    if (mf) mf.href = cfg.messengerLink;
+  }
 
   appReady();
 }
 
 function appReady() {
-  var loader=document.getElementById('app-loader');
+  var loader = document.getElementById('app-loader');
   if (!loader) return;
   loader.classList.add('fade-out');
   document.body.classList.remove('loading');
-  setTimeout(function(){ loader.style.display='none'; }, 280);
+  setTimeout(function() { loader.style.display = 'none'; }, 280);
 }
 
 // ── FORM HANDLERS ──────────────────────────────────────────────
 function onName(v) {
-  var cleaned = v.replace(/[^a-zA-Z ]/g,'').replace(/  +/g,' ');
-  cleaned = cleaned.replace(/\b\w/g, function(c){ return c.toUpperCase(); });
-  var lettersOnly = cleaned.replace(/ /g,'');
+  // Auto-capitalize each word, strip non-letters/spaces, max 15 letters (spaces not counted)
+  var cleaned = v.replace(/[^a-zA-Z ]/g, '').replace(/  +/g, ' ');
+  // Auto-capitalize first letter of each word
+  cleaned = cleaned.replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+  // Enforce max 15 letters (spaces not counted)
+  var lettersOnly = cleaned.replace(/ /g, '');
   if (lettersOnly.length > 15) {
-    var count=0, trimmed='';
-    for (var ci=0;ci<cleaned.length;ci++) {
-      if (cleaned[ci]===' ') { trimmed+=' '; }
-      else if (count<15) { trimmed+=cleaned[ci]; count++; }
+    // Trim to 15 letters, preserving spaces
+    var count = 0;
+    var trimmed = '';
+    for (var ci = 0; ci < cleaned.length; ci++) {
+      if (cleaned[ci] === ' ') { trimmed += ' '; }
+      else if (count < 15) { trimmed += cleaned[ci]; count++; }
       else break;
     }
     cleaned = trimmed.trimEnd();
   }
-  var inp=document.getElementById('child-name');
-  if (inp && inp.value!==cleaned) { var pos=inp.selectionStart||0; inp.value=cleaned; try{inp.setSelectionRange(pos,pos);}catch(e){} }
-  S.raw=cleaned; S.letters=cleaned.replace(/ /g,'').toUpperCase();
-  var nameCC=document.getElementById('name-cc');
-  if (nameCC) { var lCount=S.letters.length; nameCC.textContent=lCount+' / 15 letters'; nameCC.classList.toggle('warn',lCount>=13); }
+  var inp = document.getElementById('child-name');
+  if (inp && inp.value !== cleaned) {
+    var pos = inp.selectionStart || 0;
+    inp.value = cleaned;
+    try { inp.setSelectionRange(pos, pos); } catch(e) {}
+  }
+  S.raw     = cleaned;
+  S.letters = cleaned.replace(/ /g, '').toUpperCase();
+  var disp  = cleaned.trim();
+  // Update letter counter
+  var nameCC = document.getElementById('name-cc');
+  if (nameCC) {
+    var lCount = S.letters.length;
+    nameCC.textContent = lCount + ' / 15 letters';
+    nameCC.classList.toggle('warn', lCount >= 13);
+  }
   renderChips(cleaned.trim());
-  var hn=document.getElementById('hero-name-display'); if(hn) hn.textContent=cleaned.trim()||'Your Child';
+  var hn = document.getElementById('hero-name-display');
+  if (hn) hn.textContent = disp || 'Your Child';
 }
 
 function renderChips(raw) {
-  var wrap=document.getElementById('chips');
-  var hint=document.getElementById('name-hint');
-  if (!raw.trim()) { wrap.innerHTML=''; hint.textContent='Spaces allowed and not counted in pricing.'; return; }
-  var bt=LL.PRICING[S.book]; var li=0;
+  var wrap = document.getElementById('chips');
+  var hint = document.getElementById('name-hint');
+  if (!raw.trim()) {
+    wrap.innerHTML = '';
+    hint.textContent = 'Spaces allowed and not counted in pricing.';
+    return;
+  }
+  var bt = LL.PRICING[S.book];
+  var li = 0;
   wrap.innerHTML = raw.split('').map(function(ch) {
-    if (ch===' ') return '<div class="chip chip-sp" title="Space (not counted)">SPC</div>';
-    var ex=li++>=bt.maxL;
-    return '<div class="chip '+(ex?'chip-ex':'chip-ok')+'" title="'+(ex?'Extra +₱'+bt.ex:'Included')+'">'+ch+'</div>';
+    if (ch === ' ') return '<div class="chip chip-sp" title="Space (not counted)">SPC</div>';
+    var ex = li++ >= bt.maxL;
+    return '<div class="chip ' + (ex ? 'chip-ex' : 'chip-ok') + '" title="' + (ex ? 'Extra +₱' + bt.ex : 'Included') + '">' + ch + '</div>';
   }).join('');
-  var len=S.letters.length; var over=Math.max(0,len-bt.maxL);
-  hint.innerHTML = over>0
-    ? '<span style="color:var(--err)">⚠ '+over+' extra letter'+(over>1?'s':'')+' beyond '+bt.maxL+' — +₱'+(over*bt.ex)+' added</span>'
-    : len+' letter'+(len!==1?'s':'')+' · '+(bt.maxL-len)+' more included in base price';
+  var len  = S.letters.length;
+  var over = Math.max(0, len - bt.maxL);
+  hint.innerHTML = over > 0
+    ? '<span style="color:var(--err)">⚠ ' + over + ' extra letter' + (over > 1 ? 's' : '') + ' beyond ' + bt.maxL + ' — +₱' + (over * bt.ex) + ' added</span>'
+    : len + ' letter' + (len !== 1 ? 's' : '') + ' · ' + (bt.maxL - len) + ' more included in base price';
 }
 
-function pickGender(g,el) {
-  S.gender=g;
-  document.querySelectorAll('#gender-cards .gcard').forEach(function(c){ c.classList.remove('sel'); });
+function pickGender(g, el) {
+  S.gender = g;
+  document.querySelectorAll('#gender-cards .gcard').forEach(function(c) { c.classList.remove('sel'); });
   el.classList.add('sel');
 }
 
-function pickBookOption(type,el) {
-  S.book=type;
-  document.querySelectorAll('#book-option-cards .book-card').forEach(function(c){ c.classList.remove('sel'); });
+function pickBookOption(type, el) {
+  S.book = type;
+  document.querySelectorAll('#book-option-cards .book-card').forEach(function(c) { c.classList.remove('sel'); });
   el.classList.add('sel');
   document.getElementById('e-book').classList.remove('show');
   renderChips(S.raw);
 }
 
 function onPhoto(input) {
-  var f=input.files[0]; if(!f) return;
-  if (f.size>10*1024*1024) { LL.toast('Photo must be under 10MB','err'); return; }
-  var localURL=URL.createObjectURL(f);
-  document.getElementById('photo-prev-img').src=localURL;
-  document.getElementById('up-ph').style.display='none';
-  S.photo=null;
-  var doneEl=document.getElementById('up-done');
-  var progressWrap=document.getElementById('up-progress-wrap');
-  var progressBar=document.getElementById('up-progress-bar');
-  var progressPct=document.getElementById('up-progress-pct');
-  var successMsg=document.getElementById('up-success-msg');
-  if (doneEl) doneEl.style.display='block';
-  if (progressWrap) progressWrap.style.display='block';
-  if (successMsg) successMsg.style.display='none';
-  if (progressBar) progressBar.style.width='0%';
-  if (progressPct) progressPct.textContent='0%';
-  LL.uploadToCloudinary(f,'bookofpsalms_uploads/customers/photos',function(pct){
-    if (progressBar) progressBar.style.width=pct+'%';
-    if (progressPct) progressPct.textContent=pct+'%';
-  },'customer-photo').then(function(url){
-    S.photo=url;
-    document.getElementById('photo-prev-img').src=url;
-    if (progressWrap) progressWrap.style.display='none';
-    if (successMsg) successMsg.style.display='block';
-    LL.toast('Photo uploaded!','ok');
-  }).catch(function(e){
-    S.photo=null;
-    document.getElementById('up-ph').style.display='block';
-    if (doneEl) doneEl.style.display='none';
-    LL.toast('Photo upload failed: '+e.message,'err');
+  var f = input.files[0];
+  if (!f) return;
+  if (f.size > 10 * 1024 * 1024) { LL.toast('Photo must be under 10MB', 'err'); return; }
+
+  // Show local preview immediately
+  var localURL = URL.createObjectURL(f);
+  document.getElementById('photo-prev-img').src = localURL;
+  document.getElementById('up-ph').style.display = 'none';
+
+  // Show progress bar
+  S.photo = null;
+  var doneEl = document.getElementById('up-done');
+  var progressWrap = document.getElementById('up-progress-wrap');
+  var progressBar  = document.getElementById('up-progress-bar');
+  var progressPct  = document.getElementById('up-progress-pct');
+  var successMsg   = document.getElementById('up-success-msg');
+  if (doneEl) doneEl.style.display = 'block';
+  if (progressWrap) progressWrap.style.display = 'block';
+  if (successMsg) successMsg.style.display = 'none';
+  if (progressBar) progressBar.style.width = '0%';
+  if (progressPct) progressPct.textContent = '0%';
+
+  // Upload with progress
+  LL.uploadToCloudinary(f, 'bookofpsalms_uploads/customers/photos', function(pct) {
+    if (progressBar) progressBar.style.width = pct + '%';
+    if (progressPct) progressPct.textContent = pct + '%';
+  }, 'customer-photo').then(function(url) {
+    S.photo = url;
+    document.getElementById('photo-prev-img').src = url;
+    if (progressWrap) progressWrap.style.display = 'none';
+    if (successMsg) successMsg.style.display = 'block';
+    LL.toast('Photo uploaded!', 'ok');
+  }).catch(function(e) {
+    S.photo = null;
+    document.getElementById('up-ph').style.display = 'block';
+    if (doneEl) doneEl.style.display = 'none';
+    LL.toast('Photo upload failed: ' + e.message, 'err');
   });
 }
 
 function rmPhoto(e) {
   e.stopPropagation();
-  S.photo=null;
-  document.getElementById('photo-in').value='';
-  document.getElementById('up-ph').style.display='block';
-  document.getElementById('up-done').style.display='none';
+  S.photo = null;
+  document.getElementById('photo-in').value = '';
+  document.getElementById('up-ph').style.display = 'block';
+  document.getElementById('up-done').style.display = 'none';
 }
 
 function onDed(el) {
-  if (el.value.length>700) el.value=el.value.slice(0,700);
-  var len=el.value.length;
-  var cc=document.getElementById('ded-cc');
-  cc.textContent=len+' / 700 characters';
-  cc.classList.toggle('warn',len>600);
-  S.ded=el.value;
+  if (el.value.length > 700) el.value = el.value.slice(0, 700);
+  var len = el.value.length;
+  var cc = document.getElementById('ded-cc');
+  cc.textContent = len + ' / 700 characters';
+  cc.classList.toggle('warn', len > 600);
+  S.ded = el.value;
 }
 
 function onGiver(el) {
-  if (el.value.length>60) el.value=el.value.slice(0,60);
-  var len=el.value.length;
-  var cc=document.getElementById('giver-cc');
-  cc.textContent=len+' / 60 characters';
-  cc.classList.toggle('warn',len>50);
-  S.giver=el.value;
+  if (el.value.length > 60) el.value = el.value.slice(0, 60);
+  var len = el.value.length;
+  var cc = document.getElementById('giver-cc');
+  cc.textContent = len + ' / 60 characters';
+  cc.classList.toggle('warn', len > 50);
+  S.giver = el.value;
 }
 
 function onPhone(input) {
-  var v=input.value.replace(/\D/g,'');
-  if (v.length>11) v=v.slice(0,11);
-  input.value=v;
-  var ok=/^09\d{9}$/.test(v);
-  input.classList.toggle('inv',v.length>0&&!ok);
-  document.getElementById('e-bphone').classList.toggle('show',v.length>0&&!ok);
+  var v = input.value.replace(/\D/g, '');
+  if (v.length > 11) v = v.slice(0, 11);
+  input.value = v;
+  var ok = /^09\d{9}$/.test(v);
+  input.classList.toggle('inv', v.length > 0 && !ok);
+  document.getElementById('e-bphone').classList.toggle('show', v.length > 0 && !ok);
 }
 
 function phoneOK() { return /^09\d{9}$/.test(document.getElementById('b-phone').value); }
 
 function onSS(input) {
-  var f=input.files[0]; if(!f) return;
-  S.ss=null;
-  var phEl=document.getElementById('ss-ph');
-  var doneEl=document.getElementById('ss-done');
-  var progWrap=document.getElementById('ss-progress-wrap');
-  var progBar=document.getElementById('ss-progress-bar');
-  var progPct=document.getElementById('ss-progress-pct');
-  var sucMsg=document.getElementById('ss-success-msg');
-  phEl.style.display='none'; doneEl.style.display='block';
-  if (progWrap) progWrap.style.display='block';
-  if (sucMsg) sucMsg.style.display='none';
-  if (progBar) progBar.style.width='0%';
-  if (progPct) progPct.textContent='0%';
-  LL.uploadToCloudinary(f,'bookofpsalms_uploads/customers/screenshots',function(pct){
-    if (progBar) progBar.style.width=pct+'%';
-    if (progPct) progPct.textContent=pct+'%';
-  },'customer-screenshot').then(function(url){
-    S.ss=url;
-    if (progWrap) progWrap.style.display='none';
-    if (sucMsg) sucMsg.style.display='block';
-    LL.toast('Screenshot uploaded!','ok');
-  }).catch(function(e){
-    S.ss=null; phEl.style.display='block'; doneEl.style.display='none';
-    LL.toast('Screenshot upload failed: '+e.message,'err');
+  var f = input.files[0];
+  if (!f) return;
+  S.ss = null;
+  var phEl   = document.getElementById('ss-ph');
+  var doneEl = document.getElementById('ss-done');
+  var progWrap = document.getElementById('ss-progress-wrap');
+  var progBar  = document.getElementById('ss-progress-bar');
+  var progPct  = document.getElementById('ss-progress-pct');
+  var sucMsg   = document.getElementById('ss-success-msg');
+  phEl.style.display = 'none';
+  doneEl.style.display = 'block';
+  if (progWrap) progWrap.style.display = 'block';
+  if (sucMsg) sucMsg.style.display = 'none';
+  if (progBar) progBar.style.width = '0%';
+  if (progPct) progPct.textContent = '0%';
+
+  LL.uploadToCloudinary(f, 'bookofpsalms_uploads/customers/screenshots', function(pct) {
+    if (progBar) progBar.style.width = pct + '%';
+    if (progPct) progPct.textContent = pct + '%';
+  }, 'customer-screenshot').then(function(url) {
+    S.ss = url;
+    if (progWrap) progWrap.style.display = 'none';
+    if (sucMsg) sucMsg.style.display = 'block';
+    LL.toast('Screenshot uploaded!', 'ok');
+  }).catch(function(e) {
+    S.ss = null;
+    phEl.style.display = 'block';
+    doneEl.style.display = 'none';
+    LL.toast('Screenshot upload failed: ' + e.message, 'err');
   });
 }
 
 // ── STEP NAVIGATION ────────────────────────────────────────────
 function goStep2() {
-  var ok=true;
-  function showE(id,on){ document.getElementById(id).classList.toggle('show',on); }
-  if (!S.letters)                { showE('e-cname',true); ok=false; } else showE('e-cname',false);
+  var ok = true;
+  function showE(id, on) { document.getElementById(id).classList.toggle('show', on); }
+  if (!S.letters)           { showE('e-cname', true);  ok = false; } else showE('e-cname', false);
   if (!S.photo) {
-    var donEl=document.getElementById('up-done');
-    var uploading=donEl&&donEl.style.display!=='none'&&!document.getElementById('up-success-msg').style.display;
-    if (uploading) { LL.toast('Please wait — photo is still uploading...','err'); ok=false; }
-    else { showE('e-photo',true); ok=false; }
-  } else showE('e-photo',false);
-  if (!S.book)                   { showE('e-book',true);  ok=false; } else showE('e-book',false);
-  if (!S.ded||!S.ded.trim())     { showE('e-ded',true);   ok=false; } else showE('e-ded',false);
-  if (!S.giver||!S.giver.trim()) { showE('e-giver',true); ok=false; } else showE('e-giver',false);
-  if (!ok) { LL.toast('Please fill in all required fields','err'); return; }
+    var donEl = document.getElementById('up-done');
+    var uploading = donEl && donEl.style.display !== 'none' && donEl.textContent.includes('Uploading');
+    if (uploading) {
+      LL.toast('Please wait — photo is still uploading...', 'err');
+      ok = false;
+    } else {
+      showE('e-photo', true); ok = false;
+    }
+  } else showE('e-photo', false);
+  if (!S.book)              { showE('e-book',  true);  ok = false; } else showE('e-book',  false);
+  if (!S.ded || !S.ded.trim()) { showE('e-ded', true); ok = false; } else showE('e-ded', false);
+  if (!S.giver || !S.giver.trim()) { showE('e-giver', true); ok = false; } else showE('e-giver', false);
+  if (!ok) { LL.toast('Please fill in all required fields', 'err'); return; }
 
-  // Emotional loading phases
+  // 4-phase emotional loading screen
   var phases = [
     'Years from now, they may still smile remembering this story…',
-    'We\'re weaving their name into Psalm-inspired blessings…',
-    'Adding God\'s Word and love to every page…',
+    'We\'re turning their name into something they can treasure…',
+    'Adding blessings, Christ-centered messages, and Bible verses to every page…',
     'Almost ready. Made especially for your little one…'
   ];
-  var previewLoader=document.createElement('div');
-  previewLoader.id='preview-loader';
-  previewLoader.style.cssText='position:fixed;inset:0;background:rgba(13,10,8,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:32px;';
-  previewLoader.innerHTML='<div style="width:48px;height:48px;border:3px solid rgba(201,148,58,.2);border-top-color:#C9943A;border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:28px;flex-shrink:0;"></div>'
-    +'<div id="preview-loader-msg" style="font-family:Georgia,serif;font-size:1.05rem;color:rgba(245,237,224,.9);text-align:center;max-width:320px;line-height:1.7;font-style:italic;">'+phases[0]+'</div>';
+  var previewLoader = document.createElement('div');
+  previewLoader.id = 'preview-loader';
+  previewLoader.style.cssText = 'position:fixed;inset:0;background:rgba(13,10,8,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:32px;';
+  previewLoader.innerHTML = '<div style="width:48px;height:48px;border:3px solid rgba(201,148,58,.2);border-top-color:#C9943A;border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:28px;flex-shrink:0;"></div>'
+    + '<div id="preview-loader-msg" style="font-family:Georgia,serif;font-size:1.05rem;color:rgba(245,237,224,.9);text-align:center;max-width:320px;line-height:1.7;font-style:italic;">'
+    + phases[0] + '</div>';
   document.body.appendChild(previewLoader);
-  var phaseIdx=0;
-  var phaseTimer=setInterval(function(){
+
+  // Cycle through phases every 1.5s
+  var phaseIdx = 0;
+  var phaseTimer = setInterval(function() {
     phaseIdx++;
-    if (phaseIdx<phases.length) { var msgEl=document.getElementById('preview-loader-msg'); if(msgEl) msgEl.textContent=phases[phaseIdx]; }
+    if (phaseIdx < phases.length) {
+      var msgEl = document.getElementById('preview-loader-msg');
+      if (msgEl) msgEl.textContent = phases[phaseIdx];
+    }
   }, 1500);
 
   document.getElementById('step1').classList.remove('act');
   document.getElementById('step2').classList.add('act');
-  var si1=document.getElementById('si1'); si1.classList.remove('act'); si1.classList.add('done'); si1.textContent='✓';
+
+  var si1 = document.getElementById('si1'); si1.classList.remove('act'); si1.classList.add('done'); si1.textContent = '✓';
   document.getElementById('sl1').classList.remove('act');
   document.getElementById('si-line-1').classList.add('done');
   document.getElementById('si2').classList.add('act');
   document.getElementById('sl2').classList.add('act');
 
-  var minDelay=9000; var startTime=Date.now();
-  LL.loadRemoteState(function(state){
+  // Always fetch latest state before building — ensures admin uploads appear
+  var minDelay = 9000; // minimum 9s so all 4 phases are seen
+  var startTime = Date.now();
+  LL.loadRemoteState(function(state) {
     buildSpreads(state);
     updateSummary();
-    document.addEventListener('contextmenu',_blockRightClick);
-    var elapsed=Date.now()-startTime;
-    var remaining=Math.max(0,minDelay-elapsed);
-    setTimeout(function(){
+    // Disable right-click on step 2 to protect preview images
+    document.addEventListener('contextmenu', _blockRightClick);
+    // Wait for minimum delay before removing loader
+    var elapsed = Date.now() - startTime;
+    var remaining = Math.max(0, minDelay - elapsed);
+    setTimeout(function() {
       clearInterval(phaseTimer);
-      var loader=document.getElementById('preview-loader');
+      var loader = document.getElementById('preview-loader');
       if (loader) document.body.removeChild(loader);
     }, remaining);
   });
@@ -1050,247 +1158,403 @@ function goStep2() {
 function goStep1() {
   document.getElementById('step2').classList.remove('act');
   document.getElementById('step1').classList.add('act');
-  var si1=document.getElementById('si1'); si1.classList.add('act'); si1.classList.remove('done'); si1.textContent='1';
+  var si1 = document.getElementById('si1'); si1.classList.add('act'); si1.classList.remove('done'); si1.textContent = '1';
   document.getElementById('sl1').classList.add('act');
   document.getElementById('si-line-1').classList.remove('done');
   document.getElementById('si2').classList.remove('act');
   document.getElementById('sl2').classList.remove('act');
-  document.removeEventListener('contextmenu',_blockRightClick);
+  // Re-enable right-click on step 1
+  document.removeEventListener('contextmenu', _blockRightClick);
   goTo('steps');
 }
 
-function _blockRightClick(e){ e.preventDefault(); }
+function _blockRightClick(e) { e.preventDefault(); }
 
 // ── VERTICAL SCROLL BOOK VIEWER ────────────────────────────────
+// Pages rendered at fixed 420×296px then CSS-scaled to container width.
+// This guarantees pixel-accurate match between preview and PDF output.
+var _allPages = [];
+var _spreads  = []; // kept for PDF compat reference
+var _currentSpread = 0;
+window._LL_currentSpread = 0;
+
 function buildSpreads(state) {
-  var userData={raw:S.raw,letters:S.letters,gender:S.gender,photo:S.photo,ded:S.ded,giver:S.giver};
-  var pages=LL.buildPageModel(state||LL._readLocalState(),userData);
-  _allPages=pages;
-  var name=S.raw.trim().replace(/\b\w/g,function(c){return c.toUpperCase();});
-  var frontCoverPage=pages.find(function(p){return p.meta&&p.meta.isFrontCover;});
-  var backCoverPage=pages.find(function(p){return p.meta&&p.meta.isBackCover;});
-  var innerPages=pages.filter(function(p){
-    if (p.type==='filler') return false;
-    if (p.meta&&p.meta.isFrontCover) return false;
-    if (p.meta&&p.meta.isBackCover) return false;
+  var userData = { raw: S.raw, letters: S.letters, gender: S.gender, photo: S.photo, ded: S.ded, giver: S.giver };
+  var pages    = LL.buildPageModel(state || LL._readLocalState(), userData);
+  _allPages    = pages;
+  var name     = S.raw.trim().replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+
+  // Separate front cover, back cover, inner pages
+  var frontCoverPage = pages.find(function(p) { return p.meta && p.meta.isFrontCover; });
+  var backCoverPage  = pages.find(function(p) { return p.meta && p.meta.isBackCover; });
+  var innerPages     = pages.filter(function(p) {
+    if (p.type === 'filler') return false;
+    if (p.meta && p.meta.isFrontCover) return false;
+    if (p.meta && p.meta.isBackCover)  return false;
     return true;
   });
-  _spreads=[];
-  for (var i=0;i<innerPages.length;i+=2) { _spreads.push({left:innerPages[i],right:innerPages[i+1]||null}); }
-  renderBookScroll(frontCoverPage,innerPages,backCoverPage,name);
-  try { if(typeof fbq!=='undefined') fbq('track','ViewContent',{content_name:'Book Preview',content_category:'Personalized Storybook'}); } catch(e){}
+
+  // Pair inner pages into spreads (for _spreads compat)
+  _spreads = [];
+  for (var i = 0; i < innerPages.length; i += 2) {
+    _spreads.push({ left: innerPages[i], right: innerPages[i + 1] || null });
+  }
+
+  renderBookScroll(frontCoverPage, innerPages, backCoverPage, name);
+
+  // Fire ViewContent — customer sees their personalized book
+  try { if (typeof fbq !== 'undefined') fbq('track', 'ViewContent', { content_name: 'Book Preview', content_category: 'Personalized Storybook' }); } catch(e) {}
 }
 
-function renderBookScroll(frontCoverPage,innerPages,backCoverPage,name) {
-  var container=document.getElementById('book-scroll-pages');
+function renderBookScroll(frontCoverPage, innerPages, backCoverPage, name) {
+  var container = document.getElementById('book-scroll-pages');
   if (!container) return;
-  container.innerHTML='';
-  var wrap=container.closest('.book-scroll-wrap')||container.parentElement;
-  function getScale(totalW){ var w=wrap.offsetWidth||560; return Math.min(1,w/totalW); }
-  function makeRow(label,pageModels,type) {
-    var totalW=type==='spread'?840:420;
-    var scale=getScale(totalW);
-    var ratioH=Math.round(296*scale);
-    var row=document.createElement('div'); row.className='bsv-row'; row.setAttribute('data-totalw',totalW);
-    if (label) { var lbl=document.createElement('div'); lbl.className='bsv-row-label'; lbl.textContent=label; row.appendChild(lbl); }
-    var ratioBox=document.createElement('div'); ratioBox.className='bsv-ratio-box'; ratioBox.style.height=ratioH+'px';
-    var inner=document.createElement('div'); inner.className='bsv-inner bsv-'+type; inner.style.zoom=scale;
-    pageModels.forEach(function(p){
-      var pageEl=document.createElement('div'); pageEl.className='bsv-page';
-      pageEl.innerHTML=p?LL.renderPage(p,name,S.giver||''):'';
-      if (p) LL.mergePageImages(pageEl,p);
+  container.innerHTML = '';
+
+  // Calculate zoom scale — ratio of available width to page width
+  // For solo: page is 420px wide. For spread: 840px wide.
+  // We set the ratio-box padding-bottom in JS so height = width × (296/totalW).
+  // bsv-inner uses CSS zoom so ALL content including px fonts scales correctly.
+
+  var wrap = container.closest('.book-scroll-wrap') || container.parentElement;
+
+  function getScale(totalW) {
+    var w = wrap.offsetWidth || 560;
+    return Math.min(1, w / totalW);
+  }
+
+  function makeRow(label, pageModels, type) {
+    var totalW = type === 'spread' ? 840 : 420;
+    var scale  = getScale(totalW);
+    var ratioH = Math.round(296 * scale);
+
+    var row = document.createElement('div');
+    row.className = 'bsv-row';
+    row.setAttribute('data-totalw', totalW);
+
+    if (label) {
+      var lbl = document.createElement('div');
+      lbl.className = 'bsv-row-label';
+      lbl.textContent = label;
+      row.appendChild(lbl);
+    }
+
+    var ratioBox = document.createElement('div');
+    ratioBox.className = 'bsv-ratio-box';
+    ratioBox.style.height = ratioH + 'px';
+
+    var inner = document.createElement('div');
+    inner.className = 'bsv-inner bsv-' + type;
+    inner.style.zoom = scale;
+
+    pageModels.forEach(function(p) {
+      var pageEl = document.createElement('div');
+      pageEl.className = 'bsv-page';
+      pageEl.innerHTML = p ? LL.renderPage(p, name, S.giver||'') : '';
       inner.appendChild(pageEl);
     });
-    ratioBox.appendChild(inner); row.appendChild(ratioBox); container.appendChild(row);
+
+    ratioBox.appendChild(inner);
+    row.appendChild(ratioBox);
+    container.appendChild(row);
   }
-  makeRow('Front Cover',[frontCoverPage||{type:'filler',meta:{}}],'solo');
-  for (var i=0;i<innerPages.length;i+=2) {
-    var l=innerPages[i]; var r=innerPages[i+1]||null;
-    makeRow('Page '+(i+2),[l],'solo');
-    if (r) makeRow('Page '+(i+3),[r],'solo');
+
+  makeRow('Front Cover',  [frontCoverPage  || {type:'filler',meta:{}}], 'solo', false);
+
+  for (var i = 0; i < innerPages.length; i += 2) {
+    var l = innerPages[i];
+    var r = innerPages[i+1] || null;
+    makeRow('Page '+(i+2), [l], 'solo', false);
+    if (r) makeRow('Page '+(i+3), [r], 'solo', false);
   }
-  makeRow('Back Cover',[backCoverPage||{type:'filler',meta:{}}],'solo');
-  window.addEventListener('resize',function(){
-    container.querySelectorAll('.bsv-row').forEach(function(row){
-      var tw=parseInt(row.getAttribute('data-totalw'))||420;
-      var sc=getScale(tw);
-      var rb=row.querySelector('.bsv-ratio-box');
-      var inn=row.querySelector('.bsv-inner');
-      if(!rb||!inn) return;
-      rb.style.height=Math.round(296*sc)+'px';
-      inn.style.zoom=sc;
+
+  makeRow('Back Cover', [backCoverPage || {type:'filler',meta:{}}], 'solo', false);
+
+  // Re-apply on resize
+  window.addEventListener('resize', function() {
+    container.querySelectorAll('.bsv-row').forEach(function(row) {
+      var tw   = parseInt(row.getAttribute('data-totalw')) || 420;
+      var sc   = getScale(tw);
+      var rb   = row.querySelector('.bsv-ratio-box');
+      var inn  = row.querySelector('.bsv-inner');
+      if (!rb || !inn) return;
+      rb.style.height = Math.round(296 * sc) + 'px';
+      inn.style.zoom  = sc;
     });
-  },{passive:true});
+  }, { passive: true });
 }
+
+// Spread stubs removed — vertical scroll viewer handles all navigation
 
 // ── SUMMARY ────────────────────────────────────────────────────
 function updateSummary() {
-  document.getElementById('sum-name').textContent=S.raw||'—';
-  document.getElementById('sum-gender').textContent=S.gender==='girl'?'👧🏻 Girl':'👦🏻 Boy';
-  if (S.photo) { var sp=document.getElementById('sum-photo'); sp.src=S.photo; sp.style.display='block'; }
-  if (S.ded) { document.getElementById('sum-ded-row').style.display='flex'; document.getElementById('sum-ded').textContent=S.ded.slice(0,80)+(S.ded.length>80?'…':''); }
-  var totalPg=_allPages.filter(function(p){return p&&p.type!=='filler';}).length;
-  document.getElementById('sum-pages').textContent=totalPg+' pages';
+  document.getElementById('sum-name').textContent = S.raw || '—';
+  document.getElementById('sum-gender').textContent = S.gender === 'girl' ? '👧🏻 Girl' : '👦🏻 Boy';
+  if (S.photo) {
+    var sp = document.getElementById('sum-photo');
+    sp.src = S.photo; sp.style.display = 'block';
+  }
+  if (S.ded) {
+    document.getElementById('sum-ded-row').style.display = 'flex';
+    document.getElementById('sum-ded').textContent = S.ded.slice(0, 80) + (S.ded.length > 80 ? '…' : '');
+  }
+  var totalPg = _allPages.filter(function(p) { return p && p.type !== 'filler'; }).length;
+  document.getElementById('sum-pages').textContent = totalPg + ' pages';
   updateModalPrice();
 }
 
 function updateModalPrice() {
-  var bt=LL.PRICING[S.book];
-  var over=Math.max(0,S.letters.length-bt.maxL);
-  var total=bt.base+over*bt.ex;
-  document.getElementById('sp-base-lbl').textContent=bt.label+' · up to '+bt.maxL+' letters';
-  document.getElementById('sp-base-val').textContent='₱'+bt.base.toLocaleString();
-  document.getElementById('sp-total').textContent='₱'+total.toLocaleString();
-  var er=document.getElementById('sp-extra-row');
-  if (over>0) {
-    er.style.display='flex';
-    document.getElementById('sp-extra-lbl').textContent=over+' extra letter'+(over>1?'s':'');
-    document.getElementById('sp-extra-val').textContent='+₱'+(over*bt.ex).toLocaleString();
-  } else { er.style.display='none'; }
-  document.getElementById('modal-amount').textContent='₱'+total.toLocaleString();
+  var bt    = LL.PRICING[S.book];
+  var over  = Math.max(0, S.letters.length - bt.maxL);
+  var total = bt.base + over * bt.ex;
+  document.getElementById('sp-base-lbl').textContent = bt.label + ' · up to ' + bt.maxL + ' letters';
+  document.getElementById('sp-base-val').textContent = '₱' + bt.base.toLocaleString();
+  document.getElementById('sp-total').textContent    = '₱' + total.toLocaleString();
+  var er = document.getElementById('sp-extra-row');
+  if (over > 0) {
+    er.style.display = 'flex';
+    document.getElementById('sp-extra-lbl').textContent = over + ' extra letter' + (over > 1 ? 's' : '');
+    document.getElementById('sp-extra-val').textContent = '+₱' + (over * bt.ex).toLocaleString();
+  } else {
+    er.style.display = 'none';
+  }
+  document.getElementById('modal-amount').textContent = '₱' + total.toLocaleString();
   return total;
 }
 
 // ── PAYMENT ────────────────────────────────────────────────────
 function openPayment() {
-  if (sessionStorage.getItem('bop_order_placed')==='1') {
-    LL.toast('Order already placed. Click "Create Another Book" to start a new order.','err');
+  // Session lock — prevent duplicate orders in same session
+  if (sessionStorage.getItem('bop_order_placed') === '1') {
+    LL.toast('Order already placed. Click "Create Another Book" to start a new order.', 'err');
     return;
   }
-  try { if(typeof fbq!=='undefined') fbq('track','InitiateCheckout'); } catch(e){}
+  // Fire InitiateCheckout — customer clicked Order Now
+  try { if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout'); } catch(e) {}
   var now=new Date();
   var mm=String(now.getMonth()+1).padStart(2,'0');
   var dd=String(now.getDate()).padStart(2,'0');
   var yy=String(now.getFullYear()).slice(-2);
   var chars='ABCDEFGHJKLMNPQRSTUVWXYZ';
-  var uid=''; for(var ci=0;ci<3;ci++) uid+=chars.charAt(Math.floor(Math.random()*chars.length));
+  var uid='';for(var ci=0;ci<3;ci++)uid+=chars.charAt(Math.floor(Math.random()*chars.length));
   S.ref='BOP-'+mm+dd+yy+'-'+uid;
-  document.getElementById('modal-ref').textContent=S.ref;
+  var es  = LL._readLocalState();
+  var cfg = es.config || {};
+  document.getElementById('gcash-num-display').textContent  = cfg.gcashNum  || '09XX-XXX-XXXX';
+  document.getElementById('gcash-acct-display').textContent = cfg.gcashName || 'Account Name';
+  var qw = document.getElementById('gcash-qr-wrap');
+  if (cfg.gcashQR) qw.innerHTML = '<img src="' + cfg.gcashQR + '" alt="GCash QR">';
+  document.getElementById('modal-ref').textContent = S.ref;
   updateModalPrice();
   oModal('pay-modal');
 }
 
 function confirmOrder() {
-  var bn=document.getElementById('b-name').value.trim();
-  var ph=document.getElementById('b-phone').value.trim();
-  var ad=document.getElementById('b-addr').value.trim();
-  var ok=true;
-  function showE(id,on){ document.getElementById(id).classList.toggle('show',on); }
-  if (!bn)        { showE('e-bname',true);  ok=false; } else showE('e-bname',false);
-  if (!phoneOK()) { showE('e-bphone',true); ok=false; } else showE('e-bphone',false);
-  if (!ad)        { showE('e-baddr',true);  ok=false; } else showE('e-baddr',false);
-  if (!S.ss)      { showE('e-ss',true);     ok=false; } else showE('e-ss',false);
-  if (!ok) { LL.toast('Please fix the errors above','err'); return; }
+  var bn = document.getElementById('b-name').value.trim();
+  var ph = document.getElementById('b-phone').value.trim();
+  var ad = document.getElementById('b-addr').value.trim();
+  var ok = true;
+  function showE(id, on) { document.getElementById(id).classList.toggle('show', on); }
+  if (!bn)       { showE('e-bname',  true); ok = false; } else showE('e-bname',  false);
+  if (!phoneOK()) { showE('e-bphone', true); ok = false; } else showE('e-bphone', false);
+  if (!ad)       { showE('e-baddr',  true); ok = false; } else showE('e-baddr',  false);
+  if (!S.ss)     { showE('e-ss',     true); ok = false; } else showE('e-ss',     false);
+  if (!ok) { LL.toast('Please fix the errors above', 'err'); return; }
 
-  S.bName=bn; S.phone=ph; S.addr=ad;
-  var bt=LL.PRICING[S.book];
-  var over=Math.max(0,S.letters.length-bt.maxL);
-  var total=bt.base+over*bt.ex;
-  var cfg=LL._readLocalState().config||{};
-  var iCount=cfg.introCount||13;
-  var oCount=cfg.outroCount||5;
-  var totalPg=Math.ceil((iCount+S.letters.length*2+oCount)/4)*4;
+  S.bName = bn; S.phone = ph; S.addr = ad;
+  var bt     = LL.PRICING[S.book];
+  var over   = Math.max(0, S.letters.length - bt.maxL);
+  var total  = bt.base + over * bt.ex;
+  var cfg    = LL._readLocalState().config || {};
+  var iCount = cfg.introCount || 13;
+  var oCount = cfg.outroCount || 5;
+  var totalPg = Math.ceil((iCount + S.letters.length * 2 + oCount) / 4) * 4;
 
   var order = {
     ref:        S.ref,
     timestamp:  new Date().toISOString(),
-    child:      { name:S.raw, lettersOnly:S.letters, gender:S.gender, photo:S.photo },
+    child:      { name: S.raw, lettersOnly: S.letters, gender: S.gender, photo: S.photo },
     dedication: S.ded,
     giver:      S.giver,
     bookType:   S.book,
-    buyer:      { name:S.bName, phone:S.phone, address:S.addr },
-    payment:    { screenshot:S.ss, amount:total, status:'pending' },
+    buyer:      { name: S.bName, phone: S.phone, address: S.addr },
+    payment:    { screenshot: S.ss, amount: total, status: 'pending' },
     pages:      totalPg,
     created:    Date.now(),
   };
 
-  // Save order: fetch-then-save to preserve existing orders
-  LL.loadRemoteState(function(state) {
-    state = state || {};
-    var existing = Array.isArray(state.orders) ? state.orders : [];
-    existing = existing.filter(function(o){ return o.ref !== order.ref; });
-    existing.unshift(order);
-    state.orders = existing;
-    LL.saveRemoteState(state, function(){});
+  // Save order to JSONBin so admin can see it from any device
+  LL.saveOrder(order, function() {
   });
 
-  sessionStorage.setItem('bop_order_placed','1');
-  var orderBtn=document.getElementById('order-now-btn');
-  if (orderBtn) { orderBtn.disabled=true; orderBtn.textContent='Order Placed ✓'; }
+  // Set session lock — prevents duplicate orders
+  sessionStorage.setItem('bop_order_placed', '1');
+  var orderBtn = document.getElementById('order-now-btn');
+  if (orderBtn) { orderBtn.disabled = true; orderBtn.textContent = 'Order Placed ✓'; }
 
   LL.firePixel(total, S.ref, window.location.href, order);
   cModal('pay-modal');
 
-  // Loading before success
-  var loadingEl=document.createElement('div');
-  loadingEl.id='order-loading';
-  loadingEl.style.cssText='position:fixed;inset:0;background:rgba(13,10,8,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;';
-  loadingEl.innerHTML='<div style="width:48px;height:48px;border:3px solid rgba(201,148,58,.2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:20px;"></div>'
-    +'<div id="order-loading-msg" style="font-family:var(--head-font);font-size:1.1rem;color:var(--gold);letter-spacing:.1em;">Processing your order…</div>';
+  // Show 3-second loading before success screen
+  var loadingEl = document.createElement('div');
+  loadingEl.id = 'order-loading';
+  loadingEl.style.cssText = 'position:fixed;inset:0;background:rgba(13,10,8,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;';
+  loadingEl.innerHTML = '<div style="width:48px;height:48px;border:3px solid rgba(201,148,58,.2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:20px;"></div>'
+    + '<div id="order-loading-msg" style="font-family:var(--head-font);font-size:1.1rem;color:var(--gold);letter-spacing:.1em;">Processing your order…</div>';
   document.body.appendChild(loadingEl);
 
-  setTimeout(function(){ var m=document.getElementById('order-loading-msg'); if(m) m.textContent='Sending book request…'; }, 1500);
+  // Phase 2 — switch message after 1.5s
+  setTimeout(function() {
+    var msgEl2 = document.getElementById('order-loading-msg');
+    if (msgEl2) msgEl2.textContent = 'Sending book request…';
+  }, 1500);
 
-  setTimeout(function(){
+  setTimeout(function() {
     document.body.removeChild(loadingEl);
-    document.querySelector('.steps-wrap').style.display='none';
-    var suc=document.getElementById('suc');
-    var cfg2=LL._readLocalState().config||{};
-    var msgTpl=cfg2.confirmMsg||
+    document.querySelector('.steps-wrap').style.display = 'none';
+    var suc = document.getElementById('suc');
+
+    // Render admin-editable confirmation message — {ref} and {phone} are bold placeholders
+    var cfg2 = LL._readLocalState().config || {};
+    var msgTpl = cfg2.confirmMsg ||
       'We\'ve received your order {ref}. We\'ll send your book to {phone} within the delivery window. God bless you! ✦';
-    var msgEl=document.getElementById('suc-msg');
+    var msgEl = document.getElementById('suc-msg');
     if (msgEl) {
-      var parts=msgTpl.replace('{ref}','|||REF|||').replace('{phone}','|||PHONE|||').replace('{babyname}',S.raw||'').split('|||');
-      msgEl.innerHTML=parts.map(function(p){
+      var parts = msgTpl.replace('{ref}','|||REF|||').replace('{phone}','|||PHONE|||').replace('{babyname}', S.raw||'').split('|||');
+      msgEl.innerHTML = parts.map(function(p){
         if(p==='REF')   return '<strong>Order #'+S.ref+'</strong>';
         if(p==='PHONE') return '<strong>'+S.phone+'</strong>';
-        return LL.escHtml(p).replace(/\n/g,'<br>');
+        return LL.escHtml(p).replace(/\n/g, '<br>');
       }).join('');
     }
+
     suc.classList.add('on');
-    suc.style.display='block';
+    suc.style.display = 'block';
     document.querySelector('.steps-wrap').parentElement.appendChild(suc);
-    document.body.style.background='#0d0a08';
+    document.body.style.background = '#0d0a08';
+    document.body.style.margin = '0';
     renderFAQ();
-    LL.toast('Order submitted!','ok');
+    LL.toast('Order submitted!', 'ok');
   }, 6000);
 }
 
-// ── UTILS ──────────────────────────────────────────────────────
-function oModal(id){ document.getElementById(id).classList.add('open'); }
-function cModal(id){ document.getElementById(id).classList.remove('open'); }
-function goTo(id){ var el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth'}); }
-</script>
+// ── PDF EXPORT ─────────────────────────────────────────────────
+// Uses the LL.exportPDF engine — page-by-page, no special cases.
+async function downloadPDF() {
+  if (!window.jspdf || !window.html2canvas) {
+    alert('PDF libraries still loading — please wait a moment and try again.');
+    return;
+  }
+  if (!_allPages.length) {
+    alert('No preview loaded. Enter a name and click Next first.');
+    return;
+  }
 
+  var btn = document.getElementById('pdf-download-btn');
+  var pgEl = document.getElementById('pdf-progress');
+  var barEl = document.getElementById('pdf-bar');
+  var lblEl = document.getElementById('pdf-bar-lbl');
+
+  if (btn) { btn.textContent = '⏳ Generating…'; btn.disabled = true; }
+  if (pgEl) pgEl.classList.add('show');
+
+  var total = _allPages.filter(function(p){ return p && p.type !== 'filler'; }).length;
+
+  function progress(step, total, label) {
+    var pct = Math.round((step / total) * 100);
+    if (barEl) barEl.style.width = pct + '%';
+    if (lblEl) lblEl.textContent = label || ('Step ' + step + ' of ' + total);
+  }
+
+  // State is already current from goStep2's loadRemoteState call.
+  var state = LL._readLocalState();
+  var userData = { raw: S.raw, letters: S.letters, gender: S.gender, photo: S.photo, ded: S.ded, giver: S.giver };
+  var pdfPages = LL.buildPageModel(state, userData, { raw: true });
+
+  LL.exportPDF(
+    pdfPages,
+    S.raw,
+    null, null, null,
+    progress,
+    function() {
+      if (btn) { btn.textContent = '⬇ Download PDF'; btn.disabled = false; }
+      if (pgEl) pgEl.classList.remove('show');
+    },
+    S.giver || ''
+  );
+}
+window.downloadPDF = downloadPDF;
+
+// ── UTILS ──────────────────────────────────────────────────────
+function oModal(id) { document.getElementById(id).classList.add('open'); }
+function cModal(id) { document.getElementById(id).classList.remove('open'); }
+function goTo(id)   { var el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth' }); }
+</script>
+<!-- FAQ SCRIPT -->
 <script>
 var FAQ_ITEMS = [
-  { q:"When will I receive my book?", a:"Standard Option: 3–5 business days production after payment confirmation.<br>Hardbound Option: 2–3 weeks lead time due to the premium binding process.<br><br>Shipping estimates after production:<br>• NCR: 1–2 days<br>• Luzon: 1–3 days<br>• Visayas: 3–5 days<br>• Mindanao: 5–7 days<br><br>Please note that we do not ship to island locations at this time." },
-  { q:"Where are you located?", a:"We are based in Quezon City. We do not have a physical store at this time. You may reach us through our Messenger for all inquiries." },
-  { q:"What is your return and refund policy?", a:"We take quality seriously. If your book arrives damaged or in poor condition, it is insured through our courier and we will send a replacement. A video of you opening the parcel is required as proof of condition upon arrival." },
-  { q:"Can I change the name or details after ordering?", a:"Please message us immediately through Messenger and provide your reference number. We will do our best to accommodate the correction before production begins." },
-  { q:"What if I made a mistake in the name spelling?", a:"Contact us immediately through Messenger before production begins. We will do our best to accommodate the correction." },
-  { q:"How will I know my order is being processed?", a:"Once we confirm your payment, we will reach out to you via the contact number you provided. You may also message us through our Facebook page or tap the Messenger icon." },
-  { q:"How is the book delivered?", a:"We ship nationwide through our trusted courier partners." },
-  { q:"Can I order for multiple children?", a:"Absolutely! Simply place a separate order for each child so each book is uniquely personalized." },
-  { q:"Is my child's photo kept private?", a:"Yes. Your child's photo is used solely for creating the personalized book and stored securely. We store photos and information for a maximum of 1 week after order placement. We do not share your data with any third parties." }
+  {
+    q: "When will I receive my book?",
+    a: "Standard Option: 3–5 business days production after payment confirmation.<br>Hardbound Option: 2–3 weeks lead time due to the premium binding process.<br><br>Shipping estimates after production:<br>• NCR: 1–2 days<br>• Luzon: 1–3 days<br>• Visayas: 3–5 days<br>• Mindanao: 5–7 days<br><br>Please note that we do not ship to island locations at this time. We will contact you through the number you provided for updates."
+  },
+  {
+    q: "Where are you located?",
+    a: "We are based in Quezon City. We do not have a physical store at this time. You may reach us through our Messenger for all inquiries."
+  },
+  {
+    q: "What is your return and refund policy?",
+    a: "We have sold hundreds of books — now going into thousands — and have not had a single return case. We take quality seriously. However, if your book arrives damaged or in poor condition, it is insured through our courier and we will send a replacement book as soon as possible.<br><br>To process a replacement, a video of you opening the parcel is required as proof of condition upon arrival. Please note that a sticker is placed on the parcel — we kindly ask that you record your video before opening or removing it."
+  },
+  {
+    q: "Can I change the name or details after ordering?",
+    a: "Please message us immediately through Messenger and provide your reference number. We will match it with our records and do our best to accommodate the correction before production begins."
+  },
+  {
+    q: "What if I made a mistake in the name spelling?",
+    a: "Contact us immediately through Messenger before production begins. We will do our best to accommodate the correction."
+  },
+  {
+    q: "How will I know my order is being processed?",
+    a: "Once we confirm your payment, we will reach out to you via the contact number you provided. You may also message us directly through our Facebook page or tap the Messenger icon at the lower right side of the screen to chat with us."
+  },
+  {
+    q: "How is the book delivered?",
+    a: "We ship nationwide through our trusted courier partners."
+  },
+  {
+    q: "Can I order for multiple children?",
+    a: "Absolutely! Simply place a separate order for each child so each book is uniquely personalized."
+  },
+  {
+    q: "What if my payment screenshot was unclear?",
+    a: "Please message us directly through our Messenger so we can verify your payment manually."
+  },
+  {
+    q: "Is my child's photo kept private?",
+    a: "Yes. Your child's photo is used solely for creating the personalized book and is stored securely. We have a maximum of 1 week to store your photos and information after order placement. We do not share your data with any third parties."
+  }
 ];
 
 function renderFAQ() {
-  var list=document.getElementById('faq-list'); if(!list) return;
-  list.innerHTML=FAQ_ITEMS.map(function(item,i){
+  var list = document.getElementById('faq-list');
+  if (!list) return;
+  list.innerHTML = FAQ_ITEMS.map(function(item, i) {
     return '<div class="faq-item" id="faq-'+i+'">'
-      +'<div class="faq-q" onclick="toggleFAQ('+i+')">'
-      +LL.escHtml(item.q)
-      +'<span class="faq-icon">+</span></div>'
-      +'<div class="faq-a">'+item.a+'</div>'
-      +'</div>';
+      + '<div class="faq-q" onclick="toggleFAQ('+i+')">'
+      + LL.escHtml(item.q)
+      + '<span class="faq-icon">+</span></div>'
+      + '<div class="faq-a">'+item.a+'</div>'
+      + '</div>';
   }).join('');
 }
 
 function toggleFAQ(i) {
-  var item=document.getElementById('faq-'+i); if(!item) return;
-  var isOpen=item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(function(el){ el.classList.remove('open'); });
+  var item = document.getElementById('faq-'+i);
+  if (!item) return;
+  var isOpen = item.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.faq-item').forEach(function(el) { el.classList.remove('open'); });
+  // Open clicked if it was closed
   if (!isOpen) item.classList.add('open');
 }
 </script>
