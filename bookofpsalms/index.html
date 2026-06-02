@@ -708,14 +708,23 @@ function applyIcon(wrapId, fallbackId, src) {
 
 // ── DYNAMIC SECTIONS ──────────────────────────────────────────
 function applyDynamicSections(state) {
-  var ps = (state && state.pageSettings) || {};
-  var sp = (state && state.socialProof)  || {};
-  var hiw = (state && state.howItWorks)  || {};
+  var ps  = (state && state.pageSettings) || {};
+  var lp  = (state && state.landingPage)  || {};
+
+  // Trust strip text
+  if (ps.trustLabel1) { var el=document.getElementById('trust-label-1'); if(el) el.textContent=ps.trustLabel1; }
+  if (ps.trustLabel2) { var el=document.getElementById('trust-label-2'); if(el) el.textContent=ps.trustLabel2; }
+  if (ps.trustLabel3) { var el=document.getElementById('trust-label-3'); if(el) el.textContent=ps.trustLabel3; }
+
+  // Social proof section text
+  if (lp.spEyebrow) { var el=document.getElementById('sp-eyebrow'); if(el) el.textContent=lp.spEyebrow; }
+  if (lp.spTitle)   { var el=document.getElementById('sp-title');   if(el) el.innerHTML=lp.spTitle; }
+  if (lp.spSub)     { var el=document.getElementById('sp-sub');     if(el) el.textContent=lp.spSub; }
 
   // Social proof cards
   var strip = document.getElementById('proof-strip');
-  if (strip && sp.cards && sp.cards.length) {
-    strip.innerHTML = sp.cards.map(function(card) {
+  if (strip && lp.spCards && lp.spCards.length) {
+    strip.innerHTML = lp.spCards.map(function(card) {
       if (!card) return '';
       var photoHtml = card.photo
         ? '<img class="proof-card-photo" src="'+LL.resolveImg(card.photo,300)+'" alt="'+LL.escHtml(card.name||'')+'" loading="lazy">'
@@ -723,7 +732,6 @@ function applyDynamicSections(state) {
       return '<div class="proof-card">'+photoHtml+'<div class="proof-card-body"><div class="proof-stars">⭐⭐⭐⭐⭐</div><div class="proof-quote">'+LL.escHtml(card.quote||'')+'</div><div class="proof-name">— '+LL.escHtml(card.name||'')+'</div></div></div>';
     }).join('');
   } else if (strip) {
-    // Default placeholder cards
     strip.innerHTML = [
       {quote:'My son cried happy tears!', name:'Ate Maria, QC'},
       {quote:'Perfect baptism gift!', name:'Kuya Rex, Manila'},
@@ -732,6 +740,11 @@ function applyDynamicSections(state) {
       return '<div class="proof-card"><div class="proof-card-photo-empty">📸</div><div class="proof-card-body"><div class="proof-stars">⭐⭐⭐⭐⭐</div><div class="proof-quote">'+LL.escHtml(c.quote)+'</div><div class="proof-name">— '+LL.escHtml(c.name)+'</div></div></div>';
     }).join('');
   }
+
+  // How it works text
+  if (lp.hiwEyebrow) { var el=document.getElementById('hiw-eyebrow'); if(el) el.textContent=lp.hiwEyebrow; }
+  if (lp.hiwTitle)   { var el=document.getElementById('hiw-title');   if(el) el.textContent=lp.hiwTitle; }
+  if (lp.hiwSub)     { var el=document.getElementById('hiw-sub');     if(el) el.textContent=lp.hiwSub; }
 
   // How it works steps
   var stepsWrap = document.getElementById('hiw-steps');
@@ -742,7 +755,7 @@ function applyDynamicSections(state) {
     {icon:'🖨️', title:'We Print with Care',      desc:'We confirm your order and place it in our production queue.'},
     {icon:'📦', title:'Delivered to Your Door',  desc:'Your book is printed, bound, and shipped with love and care.'},
   ];
-  var steps = (hiw.steps && hiw.steps.length) ? hiw.steps : defaultSteps;
+  var steps = (lp.hiwSteps && lp.hiwSteps.length) ? lp.hiwSteps : defaultSteps;
   if (stepsWrap) {
     stepsWrap.innerHTML = steps.map(function(step, i) {
       var iconHtml = step.iconSrc
