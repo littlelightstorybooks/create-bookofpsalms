@@ -439,7 +439,7 @@ body.loading{overflow:hidden;}
   <div class="hero-glow"></div>
   <div class="hero-inner">
     <div class="hero-text">
-      <div class="hero-badge" id="hero-badge">✦ Personalized Christian Storybooks</div>
+      <div class="hero-badge" id="hero-badge">✦ Personalized Christian Storybook</div>
       <h1 class="hero-h1" id="hero-h1">
         <span class="hero-h1-main" id="hero-name-display">Your Child</span>
         <em class="hero-name-em">Little Book of Psalms</em>
@@ -875,7 +875,7 @@ function applySettings(state) {
   if (_bsp) _bsp.textContent = '₱' + LL.PRICING.standard.base.toLocaleString();
   if (_bhp) _bhp.textContent = '₱' + LL.PRICING.hardbound.base.toLocaleString();
 
-  if (cfg.pixelId) LL.initPixel(cfg.pixelId);
+  // if (cfg.pixelId) LL.initPixel(cfg.pixelId); // DISABLED FOR TESTING
 
   // Apply messenger link
   if (cfg.messengerLink) {
@@ -1203,7 +1203,7 @@ function buildSpreads(state) {
   renderBookScroll(frontCoverPage, innerPages, backCoverPage, name);
 
   // Fire ViewContent — customer sees their personalized book
-  try { if (typeof fbq !== 'undefined') fbq('track', 'ViewContent', { content_name: 'Book Preview', content_category: 'Personalized Storybook' }); } catch(e) {}
+  // try { if (typeof fbq !== 'undefined') fbq('track', 'ViewContent', { content_name: 'Book Preview', content_category: 'Personalized Storybook' }); } catch(e) {} // DISABLED FOR TESTING
 }
 
 function renderBookScroll(frontCoverPage, innerPages, backCoverPage, name) {
@@ -1330,7 +1330,7 @@ function openPayment() {
     return;
   }
   // Fire InitiateCheckout — customer clicked Order Now
-  try { if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout'); } catch(e) {}
+  // try { if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout'); } catch(e) {} // DISABLED FOR TESTING
   var now=new Date();
   var mm=String(now.getMonth()+1).padStart(2,'0');
   var dd=String(now.getDate()).padStart(2,'0');
@@ -1392,7 +1392,7 @@ function confirmOrder() {
   var orderBtn = document.getElementById('order-now-btn');
   if (orderBtn) { orderBtn.disabled = true; orderBtn.textContent = 'Order Placed ✓'; }
 
-  LL.firePixel(total, S.ref, window.location.href, order);
+  // LL.firePixel(total, S.ref, window.location.href, order); // DISABLED FOR TESTING
   cModal('pay-modal');
 
   // Show 3-second loading before success screen

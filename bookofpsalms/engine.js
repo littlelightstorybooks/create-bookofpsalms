@@ -1133,6 +1133,9 @@ LL.initPixel = function(id) {
 };
 
 LL.firePixel = function(val, ref, url, orderData) {
+  // DISABLED FOR TESTING — re-enable before going live
+  return;
+
   // Browser-side Pixel
   try { if (typeof fbq !== 'undefined') fbq('track', 'Purchase', { value: val, currency: 'PHP' }); } catch(e) {}
 
