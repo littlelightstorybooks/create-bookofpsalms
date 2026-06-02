@@ -1933,7 +1933,7 @@ function closeAdminPDFModal(){_adminPDFCancelled=true;document.getElementById('a
 
 async function adminDownloadOrderPDF(ref){
   if(!window.jspdf||!window.html2canvas){toast('PDF libraries loading -- wait.','err');return;}
-  var orders=[]; try{orders=JSON.parse(localStorage.getItem('ht_orders')||'[]');}catch(e){}
+  var orders=ST.orders||[];
   var order=orders.find(function(o){return o.ref===ref;});
   if(!order){toast('Order not found: '+ref,'err');return;}
   var child=order.child||{};
