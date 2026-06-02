@@ -2,564 +2,744 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Little Book of Psalms — Personalized Christian Storybook</title>
 <meta name="description" content="A personalized Christian storybook with your child's name in every blessing, inspired by the Book of Psalms.">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=Poppins:wght@400;600;700&family=Luckiest+Guy&family=Kanit:wght@400;700&family=Margarine&family=Sniglet&family=Galindo&family=Darumadrop+One&family=Mochiy+Pop+P+One&family=Londrina+Solid&family=Belanosima:wght@400;700&family=Lilita+One&family=Braah+One&family=Gorditas:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
+<link rel="dns-prefetch" href="https://res.cloudinary.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600&family=Open+Sans:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@400;600;700&family=Luckiest+Guy&family=Kanit:wght@400;700&family=Margarine&family=Sniglet&family=Galindo&family=Darumadrop+One&family=Mochiy+Pop+P+One&family=Londrina+Solid&family=Belanosima:wght@400;700&family=Lilita+One&family=Braah+One&family=Gorditas:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 <style>
-/* ── RESET & VARIABLES ───────────────────────────────────────── */
+/* ════════════════════════════════════════════════
+   LITTLE BOOK OF PSALMS — CUSTOMER UI
+   Design system: warm parchment + terracotta accent
+   ════════════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --orange:#F47B20;--orange-light:#FFB347;--orange-dark:#E06010;
-  --navy:#1A3A5C;--navy-light:#2D5A8C;--navy-dark:#0D2040;
-  --sky:#EAF6FF;--sky-mid:#C8E8F8;
-  --green:#7DB87A;--green-dark:#4A8C47;
-  --pink:#F4A7B9;--blue-rib:#A8D8EA;
-  --cream:#FFFDF8;--parch:#FFF8EE;--white:#FFFFFF;
-  --muted:#6B8FAB;--border:#D4E8F4;--text:#1A3A5C;
-  --gold:#D4A017;--err:#E53E3E;
-  --radius:14px;--radius-sm:10px;--radius-lg:20px;
-}
 html{scroll-behavior:smooth;}
-body{background:var(--cream);font-family:'Nunito',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;}
+:root{
+  --accent:   #e77737;
+  --accent-l: #f0956a;
+  --accent-p: #fef3ec;
+  --accent-sh:rgba(231,119,55,.18);
+  --deep:     #1a1a1a;
+  --body:     #3d3530;
+  --muted:    #7a7069;
+  --cream:    #fefcfa;
+  --warm:     #faf5ef;
+  --parch:    #f5ede0;
+  --sand:     #ede4d6;
+  --bd:       #ddd4c6;
+  --bd-l:     #ede8e0;
+  --ok:       #2e6e40;
+  --err:      #b33a3a;
+  --gold:     #e77737;
+  --brown:    #5a3e2b;
+  --hero-bg:  #2b1f14;
+  --body-font:'Open Sans',sans-serif;
+  --head-font:'Playfair Display',serif;
+}
+body{font-family:var(--body-font);background:var(--cream);color:var(--body);
+     line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased;}
+img{max-width:100%;}
 
-/* ── NAV ─────────────────────────────────────────────────────── */
-.nav{background:rgba(255,255,255,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:200;}
-.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
-.nav-logo-wrap{position:relative;width:42px;height:42px;}
-.nav-logo-img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--orange);display:none;}
+/* ── LOADING GATE ── */
+body.loading{overflow:hidden;}
+#app-loader{position:fixed;inset:0;z-index:9999;background:#FDF3DC;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .25s ease;}
+#app-loader.fade-out{opacity:0;pointer-events:none;}
+.loader-logo{font-family:'Lora',serif;font-size:1.4rem;color:#12100E;
+  font-style:italic;margin-bottom:18px;letter-spacing:.02em;}
+.loader-logo em{color:#C9943A;}
+.loader-dots{display:flex;gap:7px;}
+.loader-dots span{width:8px;height:8px;border-radius:50%;background:#C9943A;
+  opacity:.3;animation:ldot 1.1s ease-in-out infinite;}
+.loader-dots span:nth-child(2){animation-delay:.18s;}
+.loader-dots span:nth-child(3){animation-delay:.36s;}
+@keyframes ldot{0%,80%,100%{opacity:.3;transform:scale(.85);}40%{opacity:1;transform:scale(1);}}
+
+/* ── NAV ── */
+.nav{height:70px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 36px;background:#2b1f14;position:sticky;top:0;z-index:100;
+  border-bottom:1px solid rgba(231,119,55,.12);box-shadow:0 2px 12px rgba(0,0,0,.15);}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.nav-logo-img{height:38px;display:none;}
 .nav-logo-img.show{display:block;}
-.nav-logo-fallback{width:42px;height:42px;border-radius:50%;border:2px solid var(--orange);background:linear-gradient(135deg,#FFF0E0,#FFE0C0);display:flex;align-items:center;justify-content:center;font-size:20px;}
-.nav-brand-text{}
-.nav-name{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--navy);font-weight:700;line-height:1.1;}
-.nav-sub{font-size:8px;color:var(--orange);letter-spacing:2px;font-weight:700;text-transform:uppercase;}
-.nav-cta-btn{background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-size:12px;font-weight:800;padding:8px 18px;border-radius:20px;text-decoration:none;white-space:nowrap;font-family:'Nunito',sans-serif;}
+.nav-logo-fallback{font-size:1.4rem;}
+.nav-brand-text{font-family:var(--head-font);font-size:1.2rem;color:#f5ede0;letter-spacing:.01em;}
+.nav-brand-text em{font-style:italic;color:var(--accent-l);}
+.nav-right{display:flex;align-items:center;gap:18px;}
+.nav-a{color:rgba(245,237,224,.5);font-size:.82rem;letter-spacing:.06em;text-decoration:none;transition:color .2s;}
+.nav-a:hover{color:var(--accent-l);}
 
-/* ── HERO ────────────────────────────────────────────────────── */
-.hero{position:relative;min-height:520px;background:linear-gradient(160deg,#C8E8FF 0%,#D8F0E8 50%,#E8F4D8 100%);display:flex;flex-direction:column;overflow:hidden;}
+/* ── HERO ── */
+.hero{min-height:88vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:90px 32px;position:relative;overflow:hidden;
+  background:linear-gradient(160deg,#2b1f14 0%,#3d2916 55%,#2b1f14 100%);}
 .hero-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;}
 .hero-bg-img.show{display:block;}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(200,232,255,.25) 0%,rgba(232,244,216,.4) 100%);pointer-events:none;}
-.hero-top{position:relative;z-index:2;padding:40px 24px 24px;text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.hero-badge{display:inline-block;background:rgba(255,255,255,.88);color:var(--orange);font-size:10px;font-weight:800;letter-spacing:2px;padding:4px 16px;border-radius:20px;border:1px solid rgba(244,123,32,.2);margin-bottom:14px;}
-.hero-h1{font-family:'Cormorant Garamond',serif;font-size:38px;color:var(--navy);font-weight:700;line-height:1.2;margin-bottom:10px;}
-.hero-h1 em{color:var(--orange);font-style:italic;}
-.hero-sub-text{font-size:13px;color:var(--muted);line-height:1.8;max-width:320px;margin:0 auto 24px;}
-.hero-btns{display:flex;flex-direction:column;gap:10px;align-items:center;}
-.hero-btn1{display:inline-block;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;padding:14px 36px;border-radius:28px;text-decoration:none;box-shadow:0 6px 24px rgba(244,123,32,.35);letter-spacing:.3px;}
-.hero-btn2{font-size:12px;color:var(--navy-light);text-decoration:none;font-weight:700;opacity:.8;}
-.hero-product-wrap{position:relative;z-index:2;text-align:center;padding:8px 24px 0;}
-.hero-product-img{max-width:100%;max-height:260px;object-fit:contain;filter:drop-shadow(0 12px 32px rgba(0,0,0,.18));border-radius:4px;animation:float 4s ease-in-out infinite;}
-.hero-product-empty{font-size:80px;filter:drop-shadow(0 8px 24px rgba(0,0,0,.12));animation:float 4s ease-in-out infinite;}
+.hero-overlay{position:absolute;inset:0;background:rgba(30,18,8,.65);}
+.hero-stars{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(1.5px 1.5px at 12% 18%,rgba(231,119,55,.45) 0%,transparent 100%),
+    radial-gradient(1px 1px at 35% 62%,rgba(255,255,255,.15) 0%,transparent 100%),
+    radial-gradient(1px 1px at 58% 28%,rgba(231,119,55,.22) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 82% 44%,rgba(231,119,55,.28) 0%,transparent 100%),
+    radial-gradient(1px 1px at 90% 76%,rgba(255,255,255,.12) 0%,transparent 100%),
+    radial-gradient(2px 2px at 20% 85%,rgba(231,119,55,.18) 0%,transparent 100%);}
+.hero-glow{position:absolute;width:700px;height:480px;
+  background:radial-gradient(ellipse,rgba(231,119,55,.07) 0%,transparent 65%);
+  top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+.hero-inner{position:relative;z-index:2;max-width:1080px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:center;text-align:left;}
+.hero-product{position:relative;display:flex;align-items:center;justify-content:center;}
+.hero-product img{max-width:100%;max-height:480px;object-fit:contain;
+  filter:drop-shadow(0 20px 48px rgba(0,0,0,.45));border-radius:4px;
+  animation:float 4s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.hero-product-empty{width:100%;height:320px;border-radius:16px;
+  border:2px dashed rgba(231,119,55,.2);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;color:rgba(245,237,224,.2);font-size:.8rem;gap:10px;}
+.hero-badge{display:inline-block;border:1px solid rgba(231,119,55,.38);color:var(--accent-l);
+  font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;padding:8px 22px;
+  border-radius:40px;margin-bottom:36px;background:rgba(231,119,55,.06);}
+@keyframes heroFadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.hero-badge{animation:heroFadeUp .7s ease both;}
+.hero-h1{animation:heroFadeUp .8s .1s ease both;}
+.hero-divider{animation:heroFadeUp .8s .2s ease both;}
+.hero-sub{animation:heroFadeUp .8s .25s ease both;}
+.hero-cta{animation:heroFadeUp .8s .35s ease both;}
+.hero-h1{font-family:var(--head-font);font-size:clamp(2.2rem,5vw,4.4rem);color:#fefcfa;
+  line-height:1.12;margin-bottom:10px;font-weight:700;}
+.hero-h1-main{display:block;font-size:clamp(2.5rem,5.5vw,5rem);color:#fefcfa;
+  line-height:1.05;margin-bottom:6px;letter-spacing:-.01em;}
+.hero-name-em{font-style:italic;color:var(--accent-l);display:block;
+  font-size:clamp(1.8rem,4.2vw,3.8rem);line-height:1.15;
+  text-shadow:0 0 40px rgba(231,119,55,.22),0 2px 8px rgba(0,0,0,.2);}
+.hero-divider{width:40px;height:2px;background:rgba(231,119,55,.35);border-radius:2px;margin:18px 0 20px;}
+.hero-sub{font-family:var(--body-font);color:rgba(245,237,224,.72);font-size:1.05rem;
+  line-height:1.9;margin-bottom:46px;max-width:520px;}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
+.hero-name-chip{display:inline-block;font-style:italic;color:var(--accent-l);}
+@media(max-width:860px){
+  .hero-inner{grid-template-columns:1fr;text-align:center;max-width:600px;gap:40px;}
+  .hero-product{order:-1;}
+  .hero-product img{max-height:260px;}
+  .hero-cta{justify-content:center;}
+  .hero-divider,.hero-sub{margin-left:auto;margin-right:auto;}
+}
 
-/* Live name chip */
-.name-chip{display:inline-block;background:rgba(255,255,255,.9);border:1px solid rgba(244,123,32,.3);border-radius:20px;padding:4px 14px;font-size:12px;color:var(--navy);font-weight:700;margin-bottom:16px;min-width:80px;}
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:15px 32px;
+  font-family:var(--body-font);font-size:.9rem;font-weight:600;letter-spacing:.04em;
+  border:none;border-radius:10px;cursor:pointer;transition:all .24s;
+  text-decoration:none;white-space:nowrap;}
+.btn-gold{background:var(--accent);color:#fff;box-shadow:0 4px 18px var(--accent-sh);}
+.btn-gold:hover{background:var(--accent-l);transform:translateY(-2px);box-shadow:0 6px 22px var(--accent-sh);}
+.btn-out{background:transparent;color:#fefcfa;border:1.5px solid rgba(245,237,224,.28);}
+.btn-out:hover{border-color:var(--accent-l);color:var(--accent-l);}
+.btn-sm{padding:10px 18px;font-size:.8rem;border-radius:8px;}
+.btn-lg{padding:17px 44px;font-size:.95rem;}
+.btn-full{width:100%;display:flex;justify-content:center;}
+.btn:disabled{opacity:.38;cursor:not-allowed;transform:none!important;}
 
-/* ── TRUST STRIP ─────────────────────────────────────────────── */
-.trust{display:flex;justify-content:center;align-items:center;gap:0;background:rgba(255,255,255,.95);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-.trust-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 8px;border-right:1px solid var(--border);}
+/* ── TRUST STRIP ── */
+.trust{display:flex;justify-content:center;align-items:stretch;
+  background:var(--parch);border-bottom:1px solid var(--bd);}
+.trust-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:18px 12px;border-right:1px solid var(--bd);text-align:center;}
 .trust-item:last-child{border-right:none;}
+.trust-icon-wrap{font-size:1.5rem;min-height:28px;display:flex;align-items:center;justify-content:center;}
 .trust-icon{width:28px;height:28px;object-fit:contain;}
-.trust-icon-fallback{font-size:22px;line-height:1;}
-.trust-label{font-size:10px;color:var(--navy);font-weight:700;text-align:center;line-height:1.3;}
+.trust-label{font-size:.72rem;font-weight:700;color:var(--body);letter-spacing:.04em;line-height:1.4;}
 
-/* ── SHARED SECTION STYLES ───────────────────────────────────── */
-.sec-eyebrow{font-size:10px;font-weight:800;color:var(--orange);letter-spacing:2px;text-align:center;margin-bottom:8px;text-transform:uppercase;}
-.sec-title{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--navy);font-weight:700;text-align:center;line-height:1.3;margin-bottom:4px;}
-.sec-sub{font-size:12px;color:var(--muted);text-align:center;line-height:1.7;max-width:340px;margin:0 auto;}
+/* ── LANDING SECTIONS ── */
+.steps-wrap{background:var(--warm);padding:72px 0;}
+.container{max-width:1120px;margin:0 auto;padding:0 28px;}
+.sec-eyebrow{font-size:.72rem;font-weight:700;color:var(--accent);letter-spacing:.22em;
+  text-align:center;margin-bottom:10px;text-transform:uppercase;}
+.sec-title{font-family:var(--head-font);font-size:clamp(1.6rem,3vw,2.4rem);color:var(--deep);
+  font-weight:700;text-align:center;line-height:1.3;margin-bottom:8px;}
+.sec-sub{font-size:.9rem;color:var(--muted);text-align:center;line-height:1.7;
+  max-width:500px;margin:0 auto 40px;}
 
-/* ── SECTION 1.1 — SOCIAL PROOF ──────────────────────────────── */
-.social{background:var(--white);padding:32px 0;border-bottom:1px solid var(--border);}
-.social-hdr{padding:0 24px 20px;}
-.proof-strip{display:flex;gap:12px;overflow-x:auto;padding:4px 24px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+/* Social proof */
+.social-sec{background:white;padding:56px 0;border-bottom:1px solid var(--bd-l);}
+.proof-strip{display:flex;gap:16px;overflow-x:auto;padding:4px 0 8px;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;}
 .proof-strip::-webkit-scrollbar{display:none;}
-.proof-card{flex-shrink:0;width:152px;background:var(--sky);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;box-shadow:0 2px 12px rgba(26,58,92,.07);}
-.proof-card-photo{width:152px;height:152px;object-fit:cover;display:block;background:linear-gradient(135deg,#D4EEFF,#E8F8E8);}
-.proof-card-photo-empty{width:152px;height:152px;background:linear-gradient(135deg,#D4EEFF,#E8F8E8);display:flex;align-items:center;justify-content:center;font-size:48px;}
-.proof-card-body{padding:10px 12px;}
-.proof-stars{color:var(--orange);font-size:11px;margin-bottom:3px;letter-spacing:1px;}
-.proof-quote{font-size:10px;color:var(--navy);line-height:1.5;font-style:italic;margin-bottom:4px;}
-.proof-name{font-size:9px;color:var(--muted);font-weight:700;}
-.proof-hint{text-align:center;font-size:11px;color:var(--muted);padding:4px 24px 0;font-weight:600;}
+.proof-card{flex-shrink:0;width:180px;background:var(--warm);border-radius:12px;
+  border:1px solid var(--bd);overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.05);}
+.proof-card-photo{width:180px;height:160px;object-fit:cover;display:block;}
+.proof-card-photo-empty{width:180px;height:160px;background:var(--parch);
+  display:flex;align-items:center;justify-content:center;font-size:2.5rem;}
+.proof-card-body{padding:12px 14px;}
+.proof-stars{color:var(--accent);font-size:.8rem;margin-bottom:4px;}
+.proof-quote{font-size:.78rem;color:var(--body);line-height:1.5;font-style:italic;margin-bottom:5px;}
+.proof-name{font-size:.7rem;color:var(--muted);font-weight:700;}
 
-/* ── SECTION 1.2 — HOW IT WORKS ──────────────────────────────── */
-.hiw{background:linear-gradient(160deg,#EAF6FF,#F0F8E8);padding:36px 24px;border-bottom:1px solid var(--border);}
-.steps{display:flex;flex-direction:column;align-items:center;margin-top:20px;gap:0;}
-.step{display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.85);border-radius:var(--radius);padding:14px 16px;border:1px solid rgba(255,255,255,.9);box-shadow:0 2px 12px rgba(26,58,92,.06);width:100%;max-width:440px;}
-.step-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+/* How it works */
+.hiw-sec{background:var(--warm);padding:56px 0;border-bottom:1px solid var(--bd-l);}
+.hiw-steps{display:flex;flex-direction:column;align-items:center;gap:0;margin-top:8px;}
+.step{display:flex;align-items:flex-start;gap:16px;background:white;border-radius:12px;
+  padding:18px 20px;border:1px solid var(--bd-l);box-shadow:0 2px 10px rgba(0,0,0,.04);
+  width:100%;max-width:500px;}
+.step-num{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;
+  font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:2px;}
 .step-icon-wrap{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.step-icon-img{width:32px;height:32px;object-fit:contain;}
-.step-icon-emoji{font-size:24px;line-height:1;}
+.step-icon-emoji{font-size:1.5rem;line-height:1;}
+.step-icon-img{width:28px;height:28px;object-fit:contain;}
 .step-body{flex:1;}
-.step-title{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:2px;}
-.step-desc{font-size:11px;color:var(--muted);line-height:1.6;}
-.step-connector{width:2px;height:12px;background:linear-gradient(180deg,var(--orange),var(--orange-light));border-radius:2px;opacity:.3;margin:0 auto;}
+.step-title{font-size:.9rem;font-weight:700;color:var(--deep);margin-bottom:3px;}
+.step-desc{font-size:.8rem;color:var(--muted);line-height:1.6;}
+.step-connector{width:2px;height:14px;background:linear-gradient(180deg,var(--accent),var(--accent-l));
+  border-radius:2px;opacity:.3;margin:0 auto;}
 
-/* ── STEP 2 — FORM ───────────────────────────────────────────── */
-.form-section{background:var(--white);padding:28px 20px;border-bottom:1px solid var(--border);}
-.form-badge{display:inline-block;background:var(--sky);color:var(--navy-light);font-size:9px;font-weight:800;letter-spacing:1.5px;padding:3px 12px;border-radius:10px;border:1px solid var(--border);margin-bottom:12px;}
-.form-h2{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--navy);font-weight:700;margin-bottom:4px;line-height:1.2;}
-.form-sub{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
-.fgrp{margin-bottom:14px;}
-.flbl{display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:800;color:var(--navy);letter-spacing:.5px;margin-bottom:5px;}
-.flbl-req{color:var(--err);margin-left:2px;}
-.fchar{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:0;}
-.finput{width:100%;background:#F8FCFF;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;font-size:14px;font-family:'Nunito',sans-serif;color:var(--navy);outline:none;transition:border .2s;}
-.finput:focus{border-color:var(--sky-mid);}
-.finput.err{border-color:var(--err);}
-.ftextarea{width:100%;background:#F8FCFF;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;font-family:'Nunito',sans-serif;color:var(--navy);outline:none;resize:none;transition:border .2s;line-height:1.6;}
-.ftextarea:focus{border-color:var(--sky-mid);}
-.ftextarea.err{border-color:var(--err);}
-.ferr{font-size:10px;color:var(--err);margin-top:4px;display:none;font-weight:600;}
+/* ── FORM AREA ── */
+.form-wrap{background:var(--warm);padding:72px 0;}
+.fcard{background:white;border-radius:16px;padding:44px 40px;
+  border:1px solid var(--bd-l);box-shadow:0 4px 24px rgba(0,0,0,.06);
+  max-width:660px;margin:0 auto;}
+.fcard-title{font-family:var(--head-font);font-size:1.85rem;margin-bottom:6px;color:var(--deep);}
+.fcard-sub{font-size:.9rem;color:var(--muted);margin-bottom:34px;line-height:1.6;}
+.fgrp{margin-bottom:28px;}
+.fgrp:last-of-type{margin-bottom:0;}
+.flbl{display:block;font-size:.78rem;font-weight:700;letter-spacing:.05em;
+  color:var(--body);margin-bottom:8px;}
+.finput,.ftextarea{width:100%;padding:14px 16px;border:1.5px solid var(--bd);
+  border-radius:10px;font-size:1rem;font-family:var(--body-font);color:var(--deep);
+  background:white;outline:none;transition:border-color .2s,box-shadow .2s;line-height:1.5;}
+.finput:focus,.ftextarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(231,119,55,.12);}
+.finput.inv{border-color:var(--err);}
+.ftextarea{resize:vertical;min-height:110px;line-height:1.7;}
+.fhint{font-size:.8rem;color:var(--muted);margin-top:6px;line-height:1.5;}
+.ferr{font-size:.8rem;color:var(--err);margin-top:6px;display:none;font-weight:500;}
 .ferr.show{display:block;}
+.fcc{font-size:.76rem;color:var(--muted);text-align:right;margin-top:5px;}
+.fcc.warn{color:var(--err);font-weight:600;}
+
+/* Name big input */
+.name-big{width:100%;padding:16px 18px;border:2px solid var(--bd);border-radius:10px;
+  font-size:1.7rem;font-family:var(--head-font);color:var(--deep);background:white;
+  outline:none;letter-spacing:.06em;transition:border-color .2s,box-shadow .2s;}
+.name-big:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(231,119,55,.1);}
 
 /* Gender pills */
-.gender-pills{display:flex;gap:10px;}
-.gpill{flex:1;padding:12px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:#F8FCFF;text-align:center;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;}
-.gpill.boy.sel{border-color:var(--blue-rib);background:#EAF6FF;color:var(--navy-light);}
-.gpill.girl.sel{border-color:var(--pink);background:#FFF0F5;color:#C06080;}
+.gender-pills{display:flex;gap:14px;}
+.gpill{flex:1;padding:18px 14px;border:1.5px solid var(--bd);border-radius:12px;
+  cursor:pointer;text-align:center;transition:all .2s;background:white;font-size:.9rem;font-weight:600;color:var(--deep);}
+.gpill:hover,.gpill.sel{border-color:var(--accent);background:var(--accent-p);}
+.gpill-icon{font-size:2rem;margin-bottom:6px;}
 
 /* Photo upload */
-.photo-zone{background:#F8FCFF;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:20px;text-align:center;cursor:pointer;transition:border .2s;position:relative;}
-.photo-zone:active{border-color:var(--orange);}
-.photo-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.photo-preview{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--orange);margin:0 auto 8px;display:none;}
-.photo-preview.show{display:block;}
-.photo-icon{font-size:28px;margin-bottom:4px;}
-.photo-label{font-size:11px;color:var(--muted);font-weight:600;line-height:1.5;}
+.upzone{border:2px dashed var(--bd);border-radius:12px;padding:36px 22px;
+  text-align:center;cursor:pointer;transition:all .22s;background:var(--parch);position:relative;}
+.upzone:hover,.upzone.drag{border-color:var(--accent);background:var(--accent-p);}
+.upzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.up-icon{font-size:2.4rem;margin-bottom:12px;}
+.up-lbl{font-size:.92rem;color:var(--body);font-weight:600;}
+.up-hint{font-size:.78rem;color:var(--muted);margin-top:5px;line-height:1.5;}
+.up-prev{margin-top:12px;}
+.up-prev img{width:160px;height:108px;object-fit:cover;border-radius:8px;border:3px solid var(--accent);}
+.up-rm{margin-top:10px;background:var(--err);color:white;border:none;
+  padding:7px 16px;border-radius:8px;font-size:.76rem;cursor:pointer;
+  font-family:var(--body-font);font-weight:600;}
 
 /* Book option cards */
-.book-cards-wrap{display:flex;gap:12px;margin-top:14px;}
-.book-card{flex:1;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 12px;text-align:center;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;}
-.book-card.sel{border-color:var(--orange);background:#FFF8F2;box-shadow:0 4px 20px rgba(244,123,32,.15);}
-.bc-badge{display:inline-block;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-size:8px;font-weight:800;padding:2px 8px;border-radius:8px;margin-bottom:6px;}
-.bc-icon{font-size:26px;margin-bottom:6px;}
-.bc-title{font-size:12px;font-weight:800;color:var(--navy);margin-bottom:3px;}
-.bc-price{font-size:18px;font-weight:800;color:var(--orange);margin-bottom:4px;}
-.bc-desc{font-size:9px;color:var(--muted);line-height:1.5;}
-.bc-samples-link{display:inline-block;margin-top:6px;font-size:9px;color:var(--orange);text-decoration:none;font-weight:700;}
+.book-cards{display:flex;gap:16px;flex-wrap:wrap;}
+.book-card{flex:1;min-width:220px;border:2px solid var(--bd);border-radius:14px;
+  padding:24px 20px;cursor:pointer;transition:all .22s;background:white;position:relative;}
+.book-card:hover,.book-card.sel{border-color:var(--accent);background:var(--accent-p);
+  box-shadow:0 4px 18px var(--accent-sh);}
+.bc-icon{font-size:2rem;margin-bottom:10px;}
+.bc-title{font-family:var(--head-font);font-size:1.1rem;font-weight:700;margin-bottom:6px;color:var(--deep);}
+.bc-price{font-size:1.4rem;font-weight:700;color:var(--accent);margin-bottom:8px;font-family:var(--head-font);}
+.bc-desc{font-size:.8rem;color:var(--muted);line-height:1.6;}
+.bc-badge{position:absolute;top:-10px;right:14px;background:var(--accent);color:white;
+  font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:20px;font-weight:700;}
 
-/* CTA Button */
-.btn-preview{width:100%;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;padding:16px;border-radius:var(--radius);border:none;cursor:pointer;box-shadow:0 6px 24px rgba(244,123,32,.35);margin-top:8px;letter-spacing:.3px;-webkit-tap-highlight-color:transparent;}
-.btn-preview:active{opacity:.9;}
+/* Step footer */
+.step-footer{display:flex;align-items:center;justify-content:space-between;
+  margin-top:32px;padding-top:24px;border-top:1px solid var(--bd-l);flex-wrap:wrap;gap:14px;}
+.step-footer-note{font-size:.8rem;color:var(--muted);}
 
-/* ── LOADING SCREEN ──────────────────────────────────────────── */
-.loading-screen{display:none;position:fixed;inset:0;background:rgba(26,58,92,.85);z-index:500;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+/* ── LOADING OVERLAY ── */
+.loading-screen{display:none;position:fixed;inset:0;z-index:600;
+  background:rgba(20,12,6,.88);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;flex-direction:column;gap:18px;}
 .loading-screen.show{display:flex;}
-.loading-spinner{width:48px;height:48px;border:4px solid rgba(255,255,255,.2);border-top-color:var(--orange);border-radius:50%;animation:spin 1s linear infinite;}
+.loading-spinner{width:48px;height:48px;border:3px solid rgba(201,148,58,.2);
+  border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.loading-msg{color:#fff;font-size:14px;font-weight:700;letter-spacing:.3px;}
+.loading-msg{font-family:var(--head-font);font-size:1.1rem;color:var(--gold);letter-spacing:.1em;}
 
-/* ── STEP 3 — BOOK PREVIEW ───────────────────────────────────── */
-.preview-section{display:none;background:var(--navy-dark);padding:24px 16px;}
+/* ── PREVIEW STEP ── */
+.preview-section{display:none;background:#12100E;padding:48px 0;}
 .preview-section.show{display:block;}
-.preview-header{text-align:center;margin-bottom:16px;}
-.preview-eyebrow{font-size:10px;color:var(--orange);font-weight:800;letter-spacing:2px;margin-bottom:6px;}
-.preview-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:#fff;font-weight:600;}
-.book-scroll-wrap{border-radius:var(--radius);overflow:hidden;background:var(--navy-dark);}
-.book-scroll-label{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.35);text-align:center;padding:10px 0 8px;font-family:'Nunito',sans-serif;}
-.bsv-row{margin-bottom:12px;}
-.bsv-ratio-box{position:relative;overflow:hidden;border-radius:var(--radius-sm);}
+.preview-layout{display:grid;grid-template-columns:1fr 300px;gap:28px;align-items:start;max-width:1120px;margin:0 auto;padding:0 28px;}
+.preview-main{}
+.preview-sidebar{position:sticky;top:90px;}
+
+/* Scroll viewer */
+.book-scroll-wrap{border-radius:12px;overflow:hidden;background:#12100E;}
+.book-scroll-label{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(245,237,224,.45);padding:14px 20px 10px;text-align:center;}
+.bsv-row{margin-bottom:0;}
+.bsv-ratio-box{position:relative;width:100%;overflow:hidden;}
 .bsv-inner{display:flex;align-items:stretch;}
+.bsv-solo{justify-content:center;}
+.bsv-spread{justify-content:center;}
 .bsv-page{width:420px;height:296px;flex-shrink:0;position:relative;overflow:hidden;container-type:inline-size;}
 .bsv-solo .bsv-page{box-shadow:0 8px 32px rgba(0,0,0,.6);}
+.bsv-spread .bsv-page:first-child{border-right:1px solid rgba(0,0,0,.5);box-shadow:-4px 4px 24px rgba(0,0,0,.5);}
+.bsv-spread .bsv-page:last-child{box-shadow:4px 4px 24px rgba(0,0,0,.5);}
 
-/* Preview action bar */
-.preview-actions{padding:16px 0 8px;display:flex;flex-direction:column;gap:10px;}
-.btn-order{width:100%;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;padding:16px;border-radius:var(--radius);border:none;cursor:pointer;box-shadow:0 6px 24px rgba(244,123,32,.35);}
-.btn-back{width:100%;background:transparent;color:rgba(255,255,255,.5);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;padding:10px;border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);cursor:pointer;}
+/* Summary sidebar */
+.summary-card{background:white;border-radius:14px;padding:26px;
+  border:1px solid var(--bd-l);box-shadow:0 3px 16px rgba(0,0,0,.07);}
+.summary-title{font-family:var(--head-font);font-size:1.25rem;margin-bottom:18px;
+  padding-bottom:14px;border-bottom:1px solid var(--bd-l);color:var(--deep);}
+.summary-row{display:flex;justify-content:space-between;align-items:flex-start;
+  font-size:.86rem;margin-bottom:12px;gap:8px;}
+.sr-lbl{color:var(--muted);flex-shrink:0;}
+.sr-val{font-weight:600;text-align:right;word-break:break-word;color:var(--deep);}
+.sr-name{font-family:var(--head-font);font-size:1.15rem;font-weight:700;color:var(--brown);}
+.sr-photo{width:62px;height:44px;object-fit:cover;border-radius:6px;border:2px solid var(--accent);}
+.summary-price{border-top:1px solid var(--bd-l);padding-top:16px;margin-top:16px;}
+.sp-row{display:flex;justify-content:space-between;font-size:.84rem;color:var(--muted);margin-bottom:8px;}
+.sp-total{display:flex;justify-content:space-between;align-items:baseline;font-weight:700;}
+.sp-total-lbl{font-size:.9rem;color:var(--body);}
+.sp-total-val{font-family:var(--head-font);font-size:1.75rem;color:var(--accent);}
+.confirm-btn-wrap{margin-top:20px;}
+.edit-link{font-size:.78rem;color:var(--muted);text-align:center;margin-top:12px;
+  cursor:pointer;text-decoration:underline;display:block;}
+.edit-link:hover{color:var(--accent);}
+@media(max-width:960px){.preview-layout{grid-template-columns:1fr;}.preview-sidebar{position:static;}}
 
-/* ── GCASH MODAL ─────────────────────────────────────────────── */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(13,32,64,.85);z-index:600;align-items:flex-end;justify-content:center;}
-.modal-overlay.show{display:flex;}
-.modal-sheet{background:var(--white);border-radius:24px 24px 0 0;padding:28px 24px 40px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;}
-.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px;}
-.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--navy);font-weight:700;margin-bottom:4px;}
-.modal-sub{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
-.gcash-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
-.gcash-step{display:flex;align-items:center;gap:12px;background:var(--sky);border-radius:var(--radius-sm);padding:12px 14px;}
-.gcash-step-num{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.gcash-step-text{font-size:12px;color:var(--navy);font-weight:600;line-height:1.5;}
-.gcash-num-display{background:var(--navy);color:#fff;border-radius:var(--radius-sm);padding:12px 16px;text-align:center;font-size:18px;font-weight:800;letter-spacing:2px;margin-bottom:16px;}
-.gcash-qr{text-align:center;margin-bottom:16px;}
-.gcash-qr img{max-width:160px;border-radius:var(--radius-sm);border:2px solid var(--border);}
-.order-ref{background:var(--parch);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;text-align:center;margin-bottom:16px;}
-.order-ref-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1px;margin-bottom:2px;}
-.order-ref-val{font-size:16px;font-weight:800;color:var(--navy);letter-spacing:2px;}
-.btn-confirm{width:100%;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;padding:14px;border-radius:var(--radius);border:none;cursor:pointer;margin-bottom:10px;}
-.btn-cancel{width:100%;background:transparent;color:var(--muted);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;padding:10px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;}
+/* ── GCASH MODAL ── */
+.modal-ov{position:fixed;inset:0;z-index:500;background:rgba(20,12,6,.8);
+  backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;
+  padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+.modal-ov.open{opacity:1;pointer-events:all;}
+.modal-ov.show{opacity:1;pointer-events:all;}
+.modal{background:var(--cream);border-radius:16px;max-width:520px;width:100%;
+  padding:40px;position:relative;box-shadow:0 24px 64px rgba(0,0,0,.28);
+  transform:translateY(18px);transition:transform .3s;max-height:90vh;overflow-y:auto;}
+.modal-ov.open .modal,.modal-ov.show .modal{transform:translateY(0);}
+.modal-x{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;
+  border:1px solid var(--bd);background:white;cursor:pointer;font-size:.9rem;
+  color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.modal-x:hover{background:var(--deep);color:white;}
+.modal-tag{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+.modal-h{font-family:var(--head-font);font-size:1.9rem;margin-bottom:6px;color:var(--deep);}
+.modal-sub{font-size:.86rem;color:var(--muted);margin-bottom:18px;line-height:1.6;}
+.gcash-box{background:var(--parch);border:1px solid var(--bd-l);border-radius:12px;
+  padding:20px;text-align:center;margin-bottom:16px;}
+.gcash-qr{width:148px;height:148px;margin:0 auto 10px;background:white;border:1px solid var(--bd);
+  border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;
+  display:none;}
+.gcash-qr img{width:100%;height:100%;object-fit:cover;}
+.gcash-num{font-family:var(--head-font);font-size:1.55rem;font-weight:700;color:var(--deep);}
+.gcash-nm{font-size:.8rem;color:var(--muted);margin-top:3px;}
+.amt-box{background:var(--accent-p);border:1px solid rgba(231,119,55,.22);border-radius:10px;
+  padding:13px 16px;margin-bottom:16px;font-size:.88rem;color:var(--brown);line-height:1.6;}
+.ss-zone{border:2px dashed var(--bd);border-radius:12px;padding:22px;text-align:center;
+  cursor:pointer;position:relative;background:var(--parch);transition:all .2s;}
+.ss-zone:hover{border-color:var(--accent);background:var(--accent-p);}
+.ss-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.order-ref-box{background:var(--warm);border:1px solid var(--bd);border-radius:10px;
+  padding:12px;text-align:center;margin-bottom:16px;}
+.order-ref-label{font-size:.7rem;color:var(--muted);font-weight:700;letter-spacing:.1em;margin-bottom:3px;}
+.order-ref-val{font-family:var(--head-font);font-size:1.2rem;font-weight:700;color:var(--deep);letter-spacing:.1em;}
 
-/* ── SUCCESS SCREEN ──────────────────────────────────────────── */
-.suc{display:none;background:linear-gradient(160deg,#EAF6FF,var(--cream));padding:40px 24px;}
+/* ── SUCCESS ── */
+.suc{display:none;text-align:center;padding:88px 32px;background:#0d0a08;min-height:100vh;color:rgba(245,237,224,.85);}
 .suc.show{display:block;}
-.suc-icon{font-size:60px;text-align:center;margin-bottom:16px;}
-.suc-title{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--navy);font-weight:700;text-align:center;margin-bottom:6px;}
-.suc-ref{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;margin:16px 0;}
-.suc-ref-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1px;margin-bottom:4px;}
-.suc-ref-val{font-size:18px;font-weight:800;color:var(--navy);letter-spacing:2px;}
-.suc-msg{font-size:13px;color:var(--muted);text-align:center;line-height:1.8;margin-bottom:20px;max-width:360px;margin-left:auto;margin-right:auto;}
-.btn-new{display:block;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;padding:14px;border-radius:var(--radius);text-align:center;text-decoration:none;margin-bottom:12px;box-shadow:0 4px 16px rgba(244,123,32,.3);}
 
-/* FAQ */
-.faq{margin-top:24px;}
-.faq-title{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--navy);font-weight:700;margin-bottom:14px;text-align:center;}
-.faq-item{border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;overflow:hidden;background:var(--white);}
-.faq-q{padding:13px 16px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;display:flex;justify-content:space-between;align-items:center;-webkit-tap-highlight-color:transparent;}
-.faq-arrow{color:var(--orange);font-size:12px;transition:transform .2s;flex-shrink:0;}
-.faq-a{font-size:12px;color:var(--muted);line-height:1.7;padding:0 16px;max-height:0;overflow:hidden;transition:all .3s;}
-.faq-a.open{max-height:200px;padding:0 16px 13px;}
-.faq-item.open .faq-arrow{transform:rotate(180deg);}
+/* ── FAQ ── */
+.faq-sec{background:#12100E;padding:56px 0;}
+.faq-list{display:flex;flex-direction:column;gap:8px;}
+.faq-item{background:rgba(255,255,255,.06);border:1px solid rgba(201,148,58,.2);border-radius:10px;overflow:hidden;}
+.faq-q{padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:.88rem;color:rgba(245,237,224,.9);font-weight:500;user-select:none;background:transparent;}
+.faq-q:hover{background:rgba(255,255,255,.04);}
+.faq-icon{color:#C9943A;font-size:1.1rem;flex-shrink:0;transition:transform .25s;}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;padding:0 20px;font-size:.83rem;color:rgba(245,237,224,.7);line-height:1.7;}
+.faq-item.open .faq-a{max-height:500px;padding:0 20px 16px;}
 
-/* FOOTER */
-.site-footer{background:linear-gradient(160deg,var(--navy-dark),var(--navy));padding:32px 24px;margin-top:0;}
-.footer-inner{text-align:center;}
-.footer-logo{font-family:'Cormorant Garamond',serif;font-size:18px;color:#fff;margin-bottom:4px;}
-.footer-logo em{color:var(--orange-light);font-style:italic;}
-.footer-tagline{font-size:9px;color:rgba(255,255,255,.35);letter-spacing:2px;margin-bottom:16px;}
-.footer-social{display:flex;justify-content:center;gap:12px;margin-bottom:14px;}
-.footer-social-link{width:38px;height:38px;background:rgba(255,255,255,.08);border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid rgba(255,255,255,.12);transition:background .2s;}
-.footer-social-link:hover{background:rgba(255,255,255,.15);}
-.footer-links{display:flex;justify-content:center;gap:18px;margin-bottom:10px;flex-wrap:wrap;}
-.footer-link{font-size:11px;color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s;}
-.footer-link:hover{color:var(--orange-light);}
-.footer-copy{font-size:10px;color:rgba(255,255,255,.2);}
+/* ── FOOTER ── */
+.site-footer{background:#0d0a08;border-top:1px solid rgba(201,148,58,.15);padding:32px 20px;}
+.footer-inner{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:14px;}
+.footer-brand{font-family:var(--head-font);font-size:1.1rem;color:rgba(245,237,224,.7);}
+.footer-brand em{color:var(--accent-l);font-style:italic;}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;}
+.footer-link{font-size:.76rem;color:rgba(245,237,224,.4);text-decoration:none;letter-spacing:.05em;transition:color .2s;}
+.footer-link:hover{color:var(--gold);}
+.footer-tagline{font-size:.68rem;color:rgba(245,237,224,.25);letter-spacing:.1em;text-transform:uppercase;}
 
-/* ── UTILS ───────────────────────────────────────────────────── */
-@media(max-width:480px){
-  .hero-h1{font-size:30px;}
-  .sec-title{font-size:22px;}
-  .modal-sheet{border-radius:20px 20px 0 0;}
+/* ── TOAST ── */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:#1a1a1a;color:#fefcfa;padding:12px 22px;border-radius:10px;
+  font-size:.84rem;opacity:0;transition:all .3s;z-index:9000;pointer-events:none;max-width:360px;text-align:center;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#toast.err{background:var(--err);}
+
+@media(max-width:600px){
+  .fcard{padding:28px 20px;}
+  .book-cards{flex-direction:column;}
+  .gender-pills{gap:10px;}
+  .nav{padding:0 18px;}
+  .hero{padding:60px 20px;}
 }
 </style>
 </head>
-<body>
+<body class="loading">
 
-<!-- NAV -->
-<nav class="nav">
-  <a class="nav-brand" href="#">
-    <div class="nav-logo-wrap">
-      <img class="nav-logo-img" id="nav-logo-img" alt="Little Light Storybooks">
-      <div class="nav-logo-fallback" id="nav-logo-fallback">📖</div>
-    </div>
-    <div class="nav-brand-text" id="nav-brand-text">
-      <div class="nav-name">Little <em style="color:var(--orange);font-style:italic;">Light</em></div>
-      <div class="nav-sub">Storybooks</div>
-    </div>
-  </a>
-  <a class="nav-cta-btn" href="#steps" id="nav-cta-btn">Create Their Book</a>
-</nav>
-
-<!-- SECTION 1 — HERO -->
-<div class="hero" id="hero">
-  <img class="hero-bg-img" id="hero-bg-img" alt="" fetchpriority="high" loading="eager">
-  <div class="hero-overlay"></div>
-  <div class="hero-top">
-    <div class="hero-badge" id="hero-badge">✦ PERSONALIZED CHRISTIAN STORYBOOK</div>
-    <div class="name-chip" id="hero-name-chip">Your Child's Name</div>
-    <h1 class="hero-h1" id="hero-h1">Little <em>Book</em><br>of Psalms</h1>
-    <p class="hero-sub-text" id="hero-sub">A beautiful book of God's blessings, written with your child's name on every page.</p>
-    <div class="hero-btns">
-      <a href="#steps" class="hero-btn1" id="hero-btn1">✦ Create Their Book →</a>
-      <a href="samples.html" class="hero-btn2" id="hero-btn2" target="_blank" rel="noopener">See Our Books →</a>
-    </div>
-  </div>
-  <div class="hero-product-wrap" id="hero-product-wrap">
-    <div class="hero-product-empty" id="hero-product-empty">📗</div>
-  </div>
+<!-- LOADING GATE -->
+<div id="app-loader">
+  <div class="loader-logo">Little <em>Book of Psalms</em></div>
+  <div class="loader-dots"><span></span><span></span><span></span></div>
 </div>
 
-<!-- TRUST STRIP -->
-<div class="trust" id="trust-strip">
-  <div class="trust-item">
-    <div id="trust-icon-1-wrap"><div class="trust-icon-fallback" id="trust-icon-1-fallback">🙏</div></div>
-    <div class="trust-label" id="trust-label-1">Christian Values</div>
-  </div>
-  <div class="trust-item">
-    <div id="trust-icon-2-wrap"><div class="trust-icon-fallback" id="trust-icon-2-fallback">⭐</div></div>
-    <div class="trust-label" id="trust-label-2">Personalized</div>
-  </div>
-  <div class="trust-item">
-    <div id="trust-icon-3-wrap"><div class="trust-icon-fallback" id="trust-icon-3-fallback">📦</div></div>
-    <div class="trust-label" id="trust-label-3">Fast Delivery</div>
-  </div>
-</div>
-
-<!-- SECTION 1.1 — SOCIAL PROOF -->
-<div class="social" id="social-section">
-  <div class="social-hdr">
-    <div class="sec-eyebrow" id="sp-eyebrow">✦ HAPPY FAMILIES</div>
-    <div class="sec-title" id="sp-title">Loved by Parents<br>Across the Philippines</div>
-    <div class="sec-sub" id="sp-sub" style="margin-top:4px;">Real families, real books, real joy.</div>
-  </div>
-  <div class="proof-strip" id="proof-strip">
-    <!-- Loaded dynamically from admin -->
-  </div>
-  <div class="proof-hint">← Swipe to see more →</div>
-</div>
-
-<!-- SECTION 1.2 — HOW IT WORKS -->
-<div class="hiw" id="hiw-section">
-  <div class="sec-eyebrow" id="hiw-eyebrow">✦ SIMPLE PROCESS</div>
-  <div class="sec-title" id="hiw-title">How It Works</div>
-  <div class="sec-sub" id="hiw-sub" style="margin-top:4px;">Creating your child's personalized book is easy and takes just minutes.</div>
-  <div class="steps" id="hiw-steps">
-    <!-- Steps loaded dynamically -->
-  </div>
-</div>
-
-<!-- SECTION 2 — FORM -->
-<div class="form-section" id="steps">
-  <div class="form-badge">✦ CREATE YOUR BOOK</div>
-  <div class="form-h2" id="form-title">Let's Make Their Special Book</div>
-  <div class="form-sub" id="form-sub">Fill in the details below and preview their personalized Book of Psalms.</div>
-
-  <!-- Child's Name -->
-  <div class="fgrp">
-    <label class="flbl" for="inp-name">
-      CHILD'S NAME <span class="flbl-req">*</span>
-      <span class="fchar"><span id="char-name">0</span>/15</span>
-    </label>
-    <input class="finput" id="inp-name" type="text" maxlength="15" autocomplete="off"
-      placeholder="e.g. Jeremiah, Hannah..."
-      oninput="onName(this)" onblur="validateName()">
-    <div class="ferr" id="e-name">Please enter your child's name.</div>
-  </div>
-
-  <!-- Gender -->
-  <div class="fgrp">
-    <label class="flbl">GENDER <span class="flbl-req">*</span></label>
-    <div class="gender-pills">
-      <div class="gpill boy" id="pill-boy" onclick="pickGender('boy')">💙 Boy</div>
-      <div class="gpill girl" id="pill-girl" onclick="pickGender('girl')">🌸 Girl</div>
-    </div>
-    <div class="ferr" id="e-gender">Please select a gender.</div>
-  </div>
-
-  <!-- Photo Upload -->
-  <div class="fgrp">
-    <label class="flbl">CHILD'S PHOTO <span class="flbl-req">*</span></label>
-    <div class="photo-zone" id="photo-zone" onclick="document.getElementById('photo-input').click()">
-      <img class="photo-preview" id="photo-preview" alt="Child photo">
-      <div class="photo-icon" id="photo-icon">📷</div>
-      <div class="photo-label" id="photo-label">Tap to upload your child's photo<br><span style="font-size:9px;opacity:.7;">JPG or PNG, max 5MB</span></div>
-      <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="onPhotoSelect(this)">
-    </div>
-    <div class="ferr" id="e-photo">Please upload your child's photo.</div>
-  </div>
-
-  <!-- Dedication -->
-  <div class="fgrp">
-    <label class="flbl" for="inp-ded">
-      DEDICATION MESSAGE <span class="flbl-req">*</span>
-      <span class="fchar"><span id="char-ded">0</span>/700</span>
-    </label>
-    <textarea class="ftextarea" id="inp-ded" rows="4" maxlength="700"
-      placeholder="e.g. A Special Day: Welcomed into God's Love"
-      oninput="onDed(this)" onblur="validateDed()"></textarea>
-    <div class="ferr" id="e-ded">Please enter a dedication message.</div>
-  </div>
-
-  <!-- Giver -->
-  <div class="fgrp">
-    <label class="flbl" for="inp-giver">
-      FROM <span class="flbl-req">*</span>
-      <span class="fchar"><span id="char-giver">0</span>/60</span>
-    </label>
-    <input class="finput" id="inp-giver" type="text" maxlength="60" autocomplete="off"
-      placeholder="e.g. Mama and Papa"
-      oninput="onGiver(this)" onblur="validateGiver()">
-    <div class="ferr" id="e-giver">Please enter who this book is from.</div>
-  </div>
-
-  <!-- Book Option -->
-  <div class="fgrp">
-    <label class="flbl">BOOK OPTION <span class="flbl-req">*</span></label>
-    <div class="book-cards-wrap">
-      <div class="book-card" id="bc-standard" onclick="pickBookOption('standard',this)">
-        <div class="bc-icon">📗</div>
-        <div class="bc-title">Standard</div>
-        <div class="bc-price" id="bt-std-price">₱799</div>
-        <div class="bc-desc">220 GSM Premium Glossy · A5 Landscape · Staple-bound · Vibrant full-color print</div>
-        <a href="samples.html" target="_blank" style="display:inline-block;margin-top:6px;font-size:9px;color:var(--orange);text-decoration:none;font-weight:700;">📷 See photos & video →</a>
-      </div>
-      <div class="book-card" id="bc-hardbound" onclick="pickBookOption('hardbound',this)">
-        <div class="bc-badge">Premium</div>
-        <div class="bc-icon">📘</div>
-        <div class="bc-title">Hardbound</div>
-        <div class="bc-price" id="bt-hb-price">₱1,299</div>
-        <div class="bc-desc">Rigid hardcover · Thick coated pages · Side-stitched — built to last forever</div>
-        <a href="samples.html" target="_blank" style="display:inline-block;margin-top:6px;font-size:9px;color:var(--orange);text-decoration:none;font-weight:700;">📷 See photos & video →</a>
-      </div>
-    </div>
-    <div class="ferr" id="e-book">Please select a book option.</div>
-  </div>
-
-  <!-- Buyer Info -->
-  <div class="fgrp">
-    <label class="flbl" for="inp-buyer">YOUR NAME <span class="flbl-req">*</span></label>
-    <input class="finput" id="inp-buyer" type="text" autocomplete="name"
-      placeholder="Your full name" onblur="validateBuyer()">
-    <div class="ferr" id="e-buyer">Please enter your name.</div>
-  </div>
-
-  <div class="fgrp">
-    <label class="flbl" for="inp-phone">CONTACT NUMBER <span class="flbl-req">*</span></label>
-    <input class="finput" id="inp-phone" type="tel" autocomplete="tel"
-      placeholder="e.g. 09XX XXX XXXX" onblur="validatePhone()">
-    <div class="ferr" id="e-phone">Please enter your contact number.</div>
-  </div>
-
-  <div class="fgrp">
-    <label class="flbl" for="inp-addr">DELIVERY ADDRESS <span class="flbl-req">*</span></label>
-    <textarea class="ftextarea" id="inp-addr" rows="3" autocomplete="street-address"
-      placeholder="Full delivery address including barangay, city, and province" onblur="validateAddr()"></textarea>
-    <div class="ferr" id="e-addr">Please enter your delivery address.</div>
-  </div>
-
-  <button class="btn-preview" onclick="goStep2()">✦ Preview Their Book →</button>
-</div>
-
-<!-- LOADING -->
+<!-- LOADING OVERLAY (book generation) -->
 <div class="loading-screen" id="loading-screen">
   <div class="loading-spinner"></div>
   <div class="loading-msg" id="loading-msg">Creating your story…</div>
 </div>
 
-<!-- SECTION 3 — BOOK PREVIEW -->
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-brand" href="#">
+    <img class="nav-logo-img" id="nav-logo-img" alt="Little Light Storybooks">
+    <span class="nav-logo-fallback" id="nav-logo-fallback">📖</span>
+    <span class="nav-brand-text" id="nav-brand-text">Little <em>Book of Psalms</em></span>
+  </a>
+  <div class="nav-right">
+    <a class="btn btn-gold btn-sm" href="#form-wrap" id="nav-cta-btn">Create Their Book</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero-section">
+  <img class="hero-bg-img" id="hero-bg-img" alt="" fetchpriority="high" loading="eager">
+  <div class="hero-overlay"></div>
+  <div class="hero-stars"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge" id="hero-badge">✦ Personalized Christian Storybook</div>
+      <h1 class="hero-h1" id="hero-h1">
+        <span class="hero-h1-main">Little Book of Psalms:</span>
+        <em class="hero-name-em" id="hero-name-display"><span id="hero-name-chip">Your Child</span></em>
+      </h1>
+      <div class="hero-divider"></div>
+      <p class="hero-sub" id="hero-sub">Every letter of their name receives a Psalm-inspired blessing — woven into a beautiful personalized storybook they'll treasure for life.</p>
+      <div class="hero-cta">
+        <a href="#form-wrap" class="btn btn-gold btn-lg" id="hero-btn1">Create Their Book</a>
+        <a class="btn btn-out btn-lg" id="hero-btn2" href="samples.html">See Preview ↓</a>
+      </div>
+    </div>
+    <div class="hero-product" id="hero-product-wrap">
+      <div class="hero-product-empty" id="hero-product-empty">
+        <span style="font-size:2rem;">📖</span>
+        <span>Product photo<br>uploaded in admin</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust" id="trust-strip">
+  <div class="trust-item">
+    <div class="trust-icon-wrap" id="trust-icon-1-wrap"><div id="trust-icon-1-fallback">✝️</div></div>
+    <div class="trust-label" id="trust-label-1">Faith-Inspired</div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon-wrap" id="trust-icon-2-wrap"><div id="trust-icon-2-fallback">📖</div></div>
+    <div class="trust-label" id="trust-label-2">Psalm Verses</div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon-wrap" id="trust-icon-3-wrap"><div id="trust-icon-3-fallback">🎁</div></div>
+    <div class="trust-label" id="trust-label-3">Perfect Gift</div>
+  </div>
+</div>
+
+<!-- SOCIAL PROOF -->
+<section class="social-sec" id="social-section">
+  <div class="container">
+    <div class="sec-eyebrow" id="sp-eyebrow">✦ Loved by Families</div>
+    <h2 class="sec-title" id="sp-title">Families are Blessing<br>Their Little Ones</h2>
+    <p class="sec-sub" id="sp-sub">See how parents are gifting personalized Psalm-inspired books.</p>
+    <div class="proof-strip" id="proof-strip"></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="hiw-sec" id="hiw-section">
+  <div class="container">
+    <div class="sec-eyebrow" id="hiw-eyebrow">✦ Simple Process</div>
+    <h2 class="sec-title" id="hiw-title">How It Works</h2>
+    <p class="sec-sub" id="hiw-sub">Four simple steps to create a book your child will treasure forever.</p>
+    <div class="hiw-steps" id="hiw-steps"></div>
+  </div>
+</section>
+
+<!-- FORM -->
+<div class="form-wrap" id="form-wrap">
+  <div class="container">
+    <div class="fcard">
+      <div class="fcard-title" id="form-title">✦ Create Their Book</div>
+      <div class="fcard-sub" id="form-sub">Fill in the details below and preview your personalized Little Book of Psalms.</div>
+
+      <!-- Child's Name -->
+      <div class="fgrp">
+        <label class="flbl">Child's Name <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
+        <input class="finput" id="inp-name" type="text" maxlength="15"
+          placeholder="e.g. Jeremiah, Hannah..." oninput="onName(this)" autocomplete="off">
+        <div class="fcc" id="char-name-cc"><span id="char-name">0</span> / 15 letters</div>
+        <div class="fhint">Spaces are allowed and not counted in pricing.</div>
+        <div class="ferr" id="e-name">Please enter your child's name.</div>
+      </div>
+
+      <!-- Gender -->
+      <div class="fgrp">
+        <label class="flbl">Gender <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
+        <div class="gender-pills">
+          <div class="gpill sel" id="pill-girl" onclick="pickGender('girl')">
+            <div class="gpill-icon">👧🏻</div>Girl
+          </div>
+          <div class="gpill" id="pill-boy" onclick="pickGender('boy')">
+            <div class="gpill-icon">👦🏻</div>Boy
+          </div>
+        </div>
+        <div class="ferr" id="e-gender">Please select a gender.</div>
+      </div>
+
+      <!-- Photo -->
+      <div class="fgrp">
+        <label class="flbl">Child's Photo <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
+        <div class="upzone" id="up-zone">
+          <input type="file" id="photo-input" accept="image/*" onchange="onPhotoSelect(this)">
+          <div id="up-placeholder">
+            <div class="up-icon" id="photo-icon">📷</div>
+            <div class="up-lbl" id="photo-label">Tap to upload a photo</div>
+            <div class="up-hint">JPG or PNG · Max 10MB · Landscape works best</div>
+          </div>
+          <div class="up-prev" id="up-preview" style="display:none;text-align:center;">
+            <img id="photo-preview" src="" alt="" style="display:none;">
+            <button class="up-rm" onclick="rmPhoto(event)">✕ Remove Photo</button>
+          </div>
+        </div>
+        <div class="ferr" id="e-photo">Please upload your child's photo.</div>
+      </div>
+
+      <!-- Book Option -->
+      <div class="fgrp">
+        <label class="flbl">Book Option <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
+        <div class="book-cards">
+          <div class="book-card sel" id="bc-standard" onclick="pickBookOption('standard',this)">
+            <div class="bc-icon">📖</div>
+            <div class="bc-title">Standard</div>
+            <div class="bc-price" id="bt-std-price">₱599</div>
+            <div class="bc-desc"><strong>A5 Landscape</strong><br>220 GSM Premium Glossy · Staple-bound · Vibrant print quality.</div>
+            <a href="samples.html" target="_blank" style="display:inline-block;margin-top:8px;font-size:.78rem;color:var(--gold);text-decoration:none;">📷 See samples →</a>
+          </div>
+          <div class="book-card" id="bc-hardbound" onclick="pickBookOption('hardbound',this)">
+            <div class="bc-badge">Premium</div>
+            <div class="bc-icon">📚</div>
+            <div class="bc-title">Hardbound</div>
+            <div class="bc-price" id="bt-hb-price">₱2,199</div>
+            <div class="bc-desc"><strong>A5 Landscape</strong><br>Sturdy hard cover · Thick coated pages · Side-stitched — built to last.</div>
+            <a href="samples.html" target="_blank" style="display:inline-block;margin-top:8px;font-size:.78rem;color:var(--gold);text-decoration:none;">📷 See samples →</a>
+          </div>
+        </div>
+        <div class="ferr" id="e-book">Please select a book option.</div>
+      </div>
+
+      <!-- Dedication -->
+      <div class="fgrp">
+        <label class="flbl">Dedication Message <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
+        <textarea class="ftextarea" id="inp-ded" rows="5" maxlength="700"
+          placeholder="Write a heartfelt message for your child. This will appear on the dedication page.&#10;&#10;Example:&#10;To our little miracle — you are God's greatest gift to us. We love you beyond words."
+          oninput="onDed(this)"></textarea>
+        <div class="fcc"><span id="char-ded">0</span> / 700 characters</div>
+        <div class="ferr" id="e-ded">Please write a dedication message.</div>
+      </div>
+
+      <!-- Giver -->
+      <div class="fgrp">
+        <label class="flbl">Who is this book from? <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
+        <input class="finput" id="inp-giver" type="text"
+          placeholder="e.g. Mama and Papa" maxlength="60" oninput="onGiver(this)">
+        <div class="fcc"><span id="char-giver">0</span> / 60 characters</div>
+        <div class="ferr" id="e-giver">Please fill in who this book is from.</div>
+      </div>
+
+      <!-- Buyer Name -->
+      <div class="fgrp">
+        <label class="flbl">Your Name (for delivery) <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
+        <input class="finput" id="inp-buyer" type="text" maxlength="80"
+          placeholder="Full name of the recipient">
+        <div class="ferr" id="e-buyer">Please enter your name.</div>
+      </div>
+
+      <!-- Phone -->
+      <div class="fgrp">
+        <label class="flbl">Contact Number <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
+        <input class="finput" id="inp-phone" type="tel" maxlength="15"
+          placeholder="e.g. 09XX XXX XXXX">
+        <div class="ferr" id="e-phone">Please enter your contact number.</div>
+      </div>
+
+      <!-- Address -->
+      <div class="fgrp">
+        <label class="flbl">Delivery Address <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
+        <textarea class="ftextarea" id="inp-addr" rows="3" maxlength="300"
+          placeholder="House/Unit No., Street, Barangay, City, Province"></textarea>
+        <div class="ferr" id="e-addr">Please enter your delivery address.</div>
+      </div>
+
+      <div class="step-footer">
+        <div class="step-footer-note">All fields marked * are required.</div>
+        <button class="btn btn-gold" onclick="goStep2()">Preview Their Book →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PREVIEW SECTION -->
 <div class="preview-section" id="preview-section">
-  <div class="preview-header">
-    <div class="preview-eyebrow">✦ YOUR PERSONALIZED BOOK</div>
-    <div class="preview-title" id="preview-title">Here's Their Book!</div>
-  </div>
-  <div class="book-scroll-wrap">
-    <div class="book-scroll-label" id="spread-label">Book Preview</div>
-    <div id="book-scroll-pages"></div>
-  </div>
-  <div class="preview-actions">
-    <button class="btn-order" id="order-now-btn" onclick="openPayment()">✦ Order Now →</button>
-    <button class="btn-back" onclick="goStep1()">← Edit Details</button>
+  <div class="preview-layout">
+    <!-- Scroll viewer -->
+    <div class="preview-main">
+      <div class="book-scroll-wrap">
+        <div class="book-scroll-label" id="spread-label">Book Preview</div>
+        <div id="book-scroll-pages"></div>
+      </div>
+    </div>
+    <!-- Sidebar -->
+    <div class="preview-sidebar">
+      <div class="summary-card">
+        <div class="summary-title">Order Summary</div>
+        <div class="summary-row"><span class="sr-lbl">Name</span><span class="sr-val sr-name" id="sum-name">—</span></div>
+        <div class="summary-row"><span class="sr-lbl">Gender</span><span class="sr-val" id="sum-gender">—</span></div>
+        <div class="summary-row"><span class="sr-lbl">Book</span><span class="sr-val" id="sum-book">—</span></div>
+        <div class="summary-price">
+          <div class="sp-total">
+            <span class="sp-total-lbl">Total</span>
+            <span class="sp-total-val" id="sum-total">₱599</span>
+          </div>
+        </div>
+        <div class="confirm-btn-wrap">
+          <button class="btn btn-gold btn-full" onclick="openPayment()">Order Now — Pay via GCash</button>
+        </div>
+        <a class="edit-link" onclick="goStep1()">← Edit Details</a>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- GCASH MODAL -->
-<div class="modal-overlay" id="gcash-modal" onclick="if(event.target===this)closeModal()">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Complete Your Payment</div>
-    <div class="modal-sub">Send your payment via GCash and confirm your order below.</div>
-    <div class="order-ref">
+<div class="modal-ov" id="gcash-modal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal()">✕</button>
+    <div class="modal-tag">Payment</div>
+    <div class="modal-h">Pay via GCash</div>
+    <div class="modal-sub">Send payment to the GCash number below, then upload your screenshot to confirm.</div>
+    <div class="gcash-box">
+      <div id="gcash-qr-wrap" style="display:none;">
+        <div class="gcash-qr"><img id="gcash-qr-img" src="" alt="GCash QR"></div>
+      </div>
+      <div class="gcash-num" id="gcash-number">—</div>
+      <div class="gcash-nm">Little Light Storybooks</div>
+    </div>
+    <div class="order-ref-box">
       <div class="order-ref-label">YOUR ORDER REFERENCE</div>
       <div class="order-ref-val" id="modal-ref">—</div>
     </div>
-    <div class="gcash-steps">
-      <div class="gcash-step">
-        <div class="gcash-step-num">1</div>
-        <div class="gcash-step-text">Open GCash and tap <strong>Send Money</strong></div>
-      </div>
-      <div class="gcash-step">
-        <div class="gcash-step-num">2</div>
-        <div class="gcash-step-text">Send to this number:</div>
-      </div>
+    <div class="amt-box">
+      Send exactly <strong id="modal-amount">—</strong> and use your reference number as the payment note.
     </div>
-    <div class="gcash-num-display" id="gcash-number">0XXX XXX XXXX</div>
-    <div class="gcash-qr" id="gcash-qr-wrap" style="display:none;">
-      <img id="gcash-qr-img" src="" alt="GCash QR">
+    <div class="ss-zone">
+      <input type="file" id="ss-input" accept="image/*" onchange="onSSSelect(this)">
+      <div id="ss-icon" style="font-size:1.8rem;margin-bottom:8px;">📸</div>
+      <div id="ss-label" style="font-size:.9rem;font-weight:600;color:var(--body);">Upload Payment Screenshot</div>
+      <div style="font-size:.76rem;color:var(--muted);margin-top:4px;">Tap to attach your GCash screenshot</div>
     </div>
-    <div class="gcash-steps">
-      <div class="gcash-step">
-        <div class="gcash-step-num">3</div>
-        <div class="gcash-step-text">Amount: <strong id="modal-amount">₱799</strong> — Add your order reference in the message</div>
-      </div>
-      <div class="gcash-step">
-        <div class="gcash-step-num">4</div>
-        <div class="gcash-step-text">Take a screenshot of your payment and upload it below</div>
-      </div>
+    <div class="ferr" id="e-ss" style="margin-top:8px;">Please upload your payment screenshot.</div>
+    <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
+      <button class="btn btn-gold btn-full" onclick="confirmOrder()">Confirm My Order ✓</button>
+      <button class="btn btn-out btn-full" style="color:var(--muted);border-color:var(--bd);" onclick="closeModal()">Cancel</button>
     </div>
-    <div class="fgrp" style="margin-bottom:14px;">
-      <label class="flbl">PAYMENT SCREENSHOT <span class="flbl-req">*</span></label>
-      <div class="photo-zone" style="padding:14px;" onclick="document.getElementById('ss-input').click()">
-        <div class="photo-icon" id="ss-icon">📸</div>
-        <div class="photo-label" id="ss-label">Tap to upload your payment screenshot</div>
-        <input type="file" id="ss-input" accept="image/*" style="display:none" onchange="onSSSelect(this)">
-      </div>
-      <div class="ferr" id="e-ss">Please upload your payment screenshot.</div>
-    </div>
-    <button class="btn-confirm" onclick="confirmOrder()">✦ Confirm My Order</button>
-    <button class="btn-cancel" onclick="closeModal()">Cancel</button>
   </div>
 </div>
 
 <!-- SUCCESS SCREEN -->
 <div class="suc" id="suc-screen">
-  <div class="suc-icon">🙏</div>
-  <div class="suc-title">Order Confirmed!</div>
-  <div class="suc-ref">
-    <div class="suc-ref-label">YOUR ORDER REFERENCE</div>
-    <div class="suc-ref-val" id="suc-ref">—</div>
+  <div style="font-size:4rem;margin-bottom:20px;">🙏</div>
+  <div style="font-family:var(--head-font);font-size:2.2rem;color:var(--gold);margin-bottom:12px;">Order Received!</div>
+  <div style="font-size:1rem;color:rgba(245,237,224,.7);margin-bottom:8px;">Your reference number:</div>
+  <div style="font-family:var(--head-font);font-size:1.6rem;color:white;margin-bottom:24px;letter-spacing:.1em;" id="suc-ref">—</div>
+  <div style="max-width:480px;margin:0 auto 32px;font-size:.92rem;color:rgba(245,237,224,.65);line-height:1.8;" id="suc-msg">
+    We've received your order and will confirm via message shortly. Your Little Book of Psalms will be printed with care and delivered to you.
   </div>
-  <div class="suc-msg" id="suc-msg">Thank you! We have received your order and payment. We will review and confirm your order shortly. God bless you and your little one! 🙏</div>
-  <a href="#" class="btn-new" onclick="location.reload()">✦ Create Another Book</a>
-
-  <!-- FAQ -->
-  <div class="faq">
-    <div class="faq-title">Frequently Asked Questions</div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFaq(this)">How long does delivery take? <span class="faq-arrow">▼</span></div>
-      <div class="faq-a">Standard delivery takes 5–10 business days after order confirmation. We will notify you once your book is shipped.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFaq(this)">Can I change my child's photo after ordering? <span class="faq-arrow">▼</span></div>
-      <div class="faq-a">Once your order is confirmed and in production, we are unable to change the photo. Please double-check your photo before confirming.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFaq(this)">What payment methods do you accept? <span class="faq-arrow">▼</span></div>
-      <div class="faq-a">We accept GCash and bank transfer. Payment instructions are provided after you click Order Now.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFaq(this)">Is the photo of my child safe? <span class="faq-arrow">▼</span></div>
-      <div class="faq-a">Yes. Your child's photo is used only to create your personalized book and is never shared with third parties. Please read our Privacy Policy for full details.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFaq(this)">Can I order as a gift? <span class="faq-arrow">▼</span></div>
-      <div class="faq-a">Absolutely! Many of our books are ordered as baptism gifts, birthday gifts, and Christmas gifts. You can customize the dedication message for any occasion.</div>
-    </div>
-  </div>
-
-  <!-- Footer inside success -->
-  <footer class="site-footer" style="margin:28px -24px -40px;border-radius:0;">
-    <div class="footer-inner">
-      <div class="footer-logo">Little <em>Light</em> Storybooks</div>
-      <div class="footer-tagline">LITTLE BOOK OF PSALMS</div>
-      <div class="footer-social">
-        <a href="https://www.facebook.com/littlelightstorybooks" target="_blank" rel="noopener" class="footer-social-link" aria-label="Facebook">
-          <svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-        </a>
-        <a href="https://www.instagram.com/littlelightstorybooks" target="_blank" rel="noopener" class="footer-social-link" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-        </a>
-      </div>
-      <div class="footer-links">
-        <a href="privacy.html" class="footer-link">Privacy Policy</a>
-        <a href="samples.html" class="footer-link">See Our Books</a>
-      </div>
-      <div class="footer-copy">© 2026 Little Light Storybooks. All rights reserved.</div>
-    </div>
-  </footer>
+  <button class="btn btn-gold" onclick="location.reload()">Create Another Book</button>
 </div>
 
-<script src="letters.js?v=1"></script>
-<script src="engine.js?v=1"></script>
+<!-- FAQ -->
+<section class="faq-sec" id="faq-section">
+  <div class="container" style="max-width:700px;">
+    <div class="sec-eyebrow" style="color:rgba(201,148,58,.7);">✦ Questions</div>
+    <h2 class="sec-title" style="color:rgba(245,237,224,.85);margin-bottom:32px;">Frequently Asked Questions</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">How long does delivery take? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Standard processing is 3–5 business days after payment confirmation, plus shipping time depending on your location.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What is the maximum name length? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Up to 8 letters at the standard price. Each additional letter is charged separately. Spaces are free.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Can I give this as a gift? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Absolutely! The Little Book of Psalms makes a beautiful gift for baptisms, birthdays, baby showers, and dedications.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What photo should I upload? <span class="faq-icon">+</span></div>
+        <div class="faq-a">A clear, well-lit photo of your child's face works best. Landscape orientation is ideal. JPG or PNG up to 10MB.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">Little <em>Book of Psalms</em></div>
+    <div class="footer-links">
+      <a class="footer-link" href="privacy.html">Privacy Policy</a>
+      <a class="footer-link" href="samples.html">Samples</a>
+    </div>
+    <div class="footer-tagline">© 2025 Little Light Storybooks</div>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script src="engine.js"></script>
+<script src="letters.js"></script>
 <script>
 // ── GLOBAL STATE ──────────────────────────────────────────────
-var _gender = null;
+var _gender = 'girl';
 var _photoFile = null;
 var _photoDataUrl = null;
 var _ssFile = null;
-var _bookOption = null;
+var _bookOption = 'standard';
 var _userData = {};
 var _state = null;
 var S = {}; // current order state
@@ -575,6 +755,10 @@ document.addEventListener('DOMContentLoaded', function() {
     _state = state;
     applySettings(state);
     applyDynamicSections(state);
+    // Fade out loader
+    var loader = document.getElementById('app-loader');
+    if (loader) { loader.classList.add('fade-out'); setTimeout(function(){ loader.style.display='none'; }, 300); }
+    document.body.classList.remove('loading');
   });
 });
 
@@ -654,7 +838,7 @@ function applySettings(state) {
     var pi = document.createElement('img');
     pi.className='hero-product-img';
     pi.alt='Little Book of Psalms';
-    pi.style.cssText='max-width:100%;max-height:260px;object-fit:contain;filter:drop-shadow(0 12px 32px rgba(0,0,0,.18));border-radius:4px;animation:float 4s ease-in-out infinite;';
+    pi.style.cssText='max-width:100%;max-height:480px;object-fit:contain;filter:drop-shadow(0 20px 48px rgba(0,0,0,.45));border-radius:4px;animation:float 4s ease-in-out infinite;';
     pi.setAttribute('loading','eager');
     pi.src=LL.resolveImg(ps.productImgSrc,600);
     if (pw) pw.appendChild(pi);
@@ -690,7 +874,7 @@ function applySettings(state) {
   if (cfg.pixelId) LL.initPixel(cfg.pixelId);
 }
 
-// ── APPLY ICON (trust strip + steps) ─────────────────────────
+// ── APPLY ICON ────────────────────────────────────────────────
 function applyIcon(wrapId, fallbackId, src) {
   if (!src) return;
   var wrap = document.getElementById(wrapId);
@@ -711,17 +895,14 @@ function applyDynamicSections(state) {
   var ps  = (state && state.pageSettings) || {};
   var lp  = (state && state.landingPage)  || {};
 
-  // Trust strip text
   if (ps.trustLabel1) { var el=document.getElementById('trust-label-1'); if(el) el.textContent=ps.trustLabel1; }
   if (ps.trustLabel2) { var el=document.getElementById('trust-label-2'); if(el) el.textContent=ps.trustLabel2; }
   if (ps.trustLabel3) { var el=document.getElementById('trust-label-3'); if(el) el.textContent=ps.trustLabel3; }
 
-  // Social proof section text
   if (lp.spEyebrow) { var el=document.getElementById('sp-eyebrow'); if(el) el.textContent=lp.spEyebrow; }
   if (lp.spTitle)   { var el=document.getElementById('sp-title');   if(el) el.innerHTML=lp.spTitle; }
   if (lp.spSub)     { var el=document.getElementById('sp-sub');     if(el) el.textContent=lp.spSub; }
 
-  // Social proof cards
   var strip = document.getElementById('proof-strip');
   if (strip && lp.spCards && lp.spCards.length) {
     strip.innerHTML = lp.spCards.map(function(card) {
@@ -741,16 +922,14 @@ function applyDynamicSections(state) {
     }).join('');
   }
 
-  // How it works text
   if (lp.hiwEyebrow) { var el=document.getElementById('hiw-eyebrow'); if(el) el.textContent=lp.hiwEyebrow; }
   if (lp.hiwTitle)   { var el=document.getElementById('hiw-title');   if(el) el.textContent=lp.hiwTitle; }
   if (lp.hiwSub)     { var el=document.getElementById('hiw-sub');     if(el) el.textContent=lp.hiwSub; }
 
-  // How it works steps
   var stepsWrap = document.getElementById('hiw-steps');
   var defaultSteps = [
     {icon:'✏️', title:'Personalize Their Book', desc:'Enter your child\'s name, gender, photo, and dedication message.'},
-    {icon:'👀', title:'Instantly Preview',       desc:'See your personalized Christian storybook come to life right before your eyes.'},
+    {icon:'👀', title:'Instantly Preview',       desc:'See your personalized Psalm storybook come to life right before your eyes.'},
     {icon:'💚', title:'Order via GCash',         desc:'Click "Order Now" and pay easily via GCash or bank transfer.'},
     {icon:'🖨️', title:'We Print with Care',      desc:'We confirm your order and place it in our production queue.'},
     {icon:'📦', title:'Delivered to Your Door',  desc:'Your book is printed, bound, and shipped with love and care.'},
@@ -806,12 +985,27 @@ function onPhotoSelect(input) {
     var prev = document.getElementById('photo-preview');
     var icon = document.getElementById('photo-icon');
     var lbl  = document.getElementById('photo-label');
-    if (prev) { prev.src=_photoDataUrl; prev.classList.add('show'); }
+    var upPrev = document.getElementById('up-preview');
+    if (prev) { prev.src=_photoDataUrl; prev.style.display='block'; }
+    if (upPrev) upPrev.style.display='block';
     if (icon) icon.style.display='none';
     if (lbl)  lbl.textContent='Photo selected ✓';
     hideErr('e-photo');
   };
   reader.readAsDataURL(f);
+}
+function rmPhoto(e) {
+  e.preventDefault(); e.stopPropagation();
+  _photoFile=null; _photoDataUrl=null;
+  var prev=document.getElementById('photo-preview');
+  var upPrev=document.getElementById('up-preview');
+  var icon=document.getElementById('photo-icon');
+  var lbl=document.getElementById('photo-label');
+  if(prev){prev.src='';prev.style.display='none';}
+  if(upPrev) upPrev.style.display='none';
+  if(icon) icon.style.display='';
+  if(lbl) lbl.textContent='Tap to upload a photo';
+  document.getElementById('photo-input').value='';
 }
 function onSSSelect(input) {
   var f = input.files[0]; if (!f) return;
@@ -826,35 +1020,28 @@ function onSSSelect(input) {
 // ── VALIDATION ────────────────────────────────────────────────
 function showErr(id){ var el=document.getElementById(id); if(el) el.classList.add('show'); }
 function hideErr(id){ var el=document.getElementById(id); if(el) el.classList.remove('show'); }
-function validateName(){ var v=document.getElementById('inp-name').value.trim(); if(!v){showErr('e-name');return false;} hideErr('e-name');return true; }
-function validateDed(){ var v=document.getElementById('inp-ded').value.trim(); if(!v){showErr('e-ded');return false;} hideErr('e-ded');return true; }
-function validateGiver(){ if(!document.getElementById('inp-giver').value.trim()){showErr('e-giver');return false;} hideErr('e-giver');return true; }
-function validateBuyer(){ if(!document.getElementById('inp-buyer').value.trim()){showErr('e-buyer');return false;} hideErr('e-buyer');return true; }
-function validatePhone(){ if(!document.getElementById('inp-phone').value.trim()){showErr('e-phone');return false;} hideErr('e-phone');return true; }
-function validateAddr(){ if(!document.getElementById('inp-addr').value.trim()){showErr('e-addr');return false;} hideErr('e-addr');return true; }
-
 function validateAll() {
   var ok = true;
-  if (!validateName())  ok = false;
+  if (!document.getElementById('inp-name').value.trim()) { showErr('e-name'); ok=false; } else hideErr('e-name');
   if (!_gender)         { showErr('e-gender'); ok=false; }
   if (!_photoFile)      { showErr('e-photo');  ok=false; }
-  if (!validateDed())   ok = false;
-  if (!validateGiver()) ok = false;
+  if (!document.getElementById('inp-ded').value.trim())   { showErr('e-ded');   ok=false; } else hideErr('e-ded');
+  if (!document.getElementById('inp-giver').value.trim()) { showErr('e-giver'); ok=false; } else hideErr('e-giver');
   if (!_bookOption)     { showErr('e-book');   ok=false; }
-  if (!validateBuyer()) ok = false;
-  if (!validatePhone()) ok = false;
-  if (!validateAddr())  ok = false;
+  if (!document.getElementById('inp-buyer').value.trim()) { showErr('e-buyer'); ok=false; } else hideErr('e-buyer');
+  if (!document.getElementById('inp-phone').value.trim()) { showErr('e-phone'); ok=false; } else hideErr('e-phone');
+  if (!document.getElementById('inp-addr').value.trim())  { showErr('e-addr');  ok=false; } else hideErr('e-addr');
   return ok;
 }
 
 // ── STEP 2 — PREVIEW ──────────────────────────────────────────
 function goStep2() {
   if (!validateAll()) {
-    document.querySelector('.ferr.show') && document.querySelector('.ferr.show').scrollIntoView({behavior:'smooth',block:'center'});
+    var firstErr = document.querySelector('.ferr.show');
+    if (firstErr) firstErr.scrollIntoView({behavior:'smooth',block:'center'});
     return;
   }
 
-  // Collect user data
   _userData = {
     name:    document.getElementById('inp-name').value.trim(),
     gender:  _gender,
@@ -867,13 +1054,16 @@ function goStep2() {
     addr:    document.getElementById('inp-addr').value.trim(),
   };
 
-  // Show loading
-  showLoading();
+  // Update sidebar summary
+  var sn=document.getElementById('sum-name'); if(sn) sn.textContent=_userData.name;
+  var sg=document.getElementById('sum-gender'); if(sg) sg.textContent=_gender==='boy'?'Boy':'Girl';
+  var sb=document.getElementById('sum-book'); if(sb) sb.textContent=_bookOption==='hardbound'?'Hardbound':'Standard';
+  var st=document.getElementById('sum-total');
+  if(st) st.textContent='₱'+(_bookOption==='hardbound'?LL.PRICING.hardbound.base:LL.PRICING.standard.base);
 
-  // Fire ViewContent pixel
+  showLoading();
   try { if(typeof fbq!=='undefined') fbq('track','ViewContent',{content_name:'Book Preview',content_category:'Personalized Storybook'}); } catch(e){}
 
-  // Load state and build book
   LL.loadRemoteState(function(state) {
     _state = state;
     var pages = LL.buildPageModel(state || LL._readLocalState(), _userData);
@@ -881,7 +1071,6 @@ function goStep2() {
     var backCoverPage  = pages.pop();
     var innerPages     = pages;
 
-    // Build pairs for _spreads compat
     _spreads = [];
     for (var i=0;i<innerPages.length;i+=2) {
       _spreads.push({left:innerPages[i],right:innerPages[i+1]||null});
@@ -890,9 +1079,9 @@ function goStep2() {
     renderBookScroll(frontCoverPage, innerPages, backCoverPage, _userData.name);
     hideLoading();
 
-    document.getElementById('form-section') && (document.getElementById('form-section').style.display='none');
-    document.getElementById('social-section') && (document.getElementById('social-section').style.display='none');
-    document.getElementById('hiw-section') && (document.getElementById('hiw-section').style.display='none');
+    document.getElementById('form-wrap').style.display='none';
+    document.getElementById('social-section').style.display='none';
+    document.getElementById('hiw-section').style.display='none';
     var prev = document.getElementById('preview-section');
     if (prev) { prev.classList.add('show'); prev.scrollIntoView({behavior:'smooth'}); }
   });
@@ -900,10 +1089,10 @@ function goStep2() {
 
 function goStep1() {
   document.getElementById('preview-section').classList.remove('show');
-  document.getElementById('form-section').style.display='';
+  document.getElementById('form-wrap').style.display='';
   document.getElementById('social-section').style.display='';
   document.getElementById('hiw-section').style.display='';
-  document.getElementById('steps').scrollIntoView({behavior:'smooth'});
+  document.getElementById('form-wrap').scrollIntoView({behavior:'smooth'});
 }
 
 // ── LOADING ───────────────────────────────────────────────────
@@ -1002,10 +1191,8 @@ function openPayment() {
     return;
   }
 
-  // Fire InitiateCheckout
   try { if(typeof fbq!=='undefined') fbq('track','InitiateCheckout'); } catch(e){}
 
-  // Generate ref
   var now=new Date();
   var mm=String(now.getMonth()+1).padStart(2,'0');
   var dd=String(now.getDate()).padStart(2,'0');
@@ -1014,7 +1201,6 @@ function openPayment() {
   var uid='';for(var ci=0;ci<3;ci++) uid+=chars.charAt(Math.floor(Math.random()*chars.length));
   S.ref = 'BOP-'+yy+mm+dd+'-'+uid;
 
-  // Update modal
   var mr=document.getElementById('modal-ref'); if(mr) mr.textContent=S.ref;
   var ma=document.getElementById('modal-amount');
   if (ma) {
@@ -1023,11 +1209,11 @@ function openPayment() {
     S.total=price;
   }
 
-  document.getElementById('gcash-modal').classList.add('show');
+  document.getElementById('gcash-modal').classList.add('open');
 }
 
 function closeModal() {
-  document.getElementById('gcash-modal').classList.remove('show');
+  document.getElementById('gcash-modal').classList.remove('open');
 }
 
 function confirmOrder() {
@@ -1035,7 +1221,6 @@ function confirmOrder() {
 
   var cfg = (_state&&_state.config)||{};
 
-  // Upload screenshot then save order
   LL.uploadToCloudinary(_ssFile, 'bookofpsalms_uploads/customers', null, 'customer-screenshot').then(function(ssUrl) {
     var order = {
       ref:    S.ref,
@@ -1053,7 +1238,6 @@ function confirmOrder() {
       ss:     ssUrl,
     };
 
-    // Upload child photo
     if (_photoFile) {
       LL.uploadToCloudinary(_photoFile,'bookofpsalms_uploads/customers',null,'customer-photo').then(function(photoUrl){
         order.photo=photoUrl;
@@ -1065,17 +1249,21 @@ function confirmOrder() {
   }).catch(function(e){ LL.toast('Upload failed: '+e.message,'err'); });
 }
 
+// ── SAVE ORDER (fixed — fetch-then-save pattern) ──────────────
 function saveOrder(order, cfg) {
   LL.loadRemoteState(function(state) {
-    var orders = (state&&state.orders)||[];
-    orders.unshift(order);
-    state.orders=orders;
+    // Merge into existing orders array — never overwrite
+    var existing = (state && Array.isArray(state.orders)) ? state.orders : [];
+    // Dedupe by ref in case of retry
+    existing = existing.filter(function(o){ return o.ref !== order.ref; });
+    existing.unshift(order);
+    state = state || {};
+    state.orders = existing;
+
     LL.saveRemoteState(state, function(ok){
       if (!ok) { LL.toast('Could not save order. Please try again.','err'); return; }
 
-      // CAPI
       LL.firePixel(order.total, order.ref, window.location.href);
-
       sessionStorage.setItem('bop_order_placed','1');
       closeModal();
       showSuccess(order, cfg);
