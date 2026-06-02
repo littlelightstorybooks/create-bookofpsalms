@@ -1796,10 +1796,10 @@ function updateLetterPreview(){
   var l=_currentLetter, lData=(D().letters||{})[l]||{}, vars=lData.variations||[];
   var variation=vars[_currentVariation]||{}, ly=variation.layout||{}, tc=variation.text||{};
   var meanings=(lData.meanings&&lData.meanings.length)?lData.meanings:(typeof DEFAULT_MEANINGS!=='undefined'&&DEFAULT_MEANINGS[l])||[];
-  var meaning=meanings[0]||{title:'',text:'',verse:''};
+  var meaning=meanings[0]||{title:'',message:'',verse:''};
   rEl.innerHTML=LL.renderPage({type:'letter-r',image:LL.resolveImg(variation.rightImg),
     title:tc.blessing||meaning.title||'',
-    message:tc.message||meaning.text||'',
+    message:tc.message||meaning.message||'',
     verse:tc.verse||meaning.verse||'',
     meta:{letter:l,layout:ly,nameLen:5}},'Ryne','Sample Giver');
   requestAnimationFrame(function(){ applyLpZoom(rEl.closest('.lp-wrap')); });
