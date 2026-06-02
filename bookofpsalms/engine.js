@@ -42,24 +42,37 @@ LL.loadOrders = function(onDone) {
       try {
         var data = JSON.parse(xhr.responseText);
         var orders = Array.isArray(data.orders) ? data.orders : [];
-        localStorage.setItem('ht_orders', JSON.stringify(orders));
+        localStorage.setItem('bop_orders', JSON.stringify(orders));
         if (onDone) onDone(orders);
         return;
       } catch(e) {}
     }
     var local = [];
-    try { local = JSON.parse(localStorage.getItem('ht_orders') || '[]'); } catch(e) {}
+    try { local = JSON.parse(localStorage.getItem('bop_orders') || '[]'); } catch(e) {}
     if (onDone) onDone(local);
   };
   xhr.onerror = function() {
     var local = [];
-    try { local = JSON.parse(localStorage.getItem('ht_orders') || '[]'); } catch(e) {}
+    try { local = JSON.parse(localStorage.getItem('bop_orders') || '[]'); } catch(e) {}
     if (onDone) onDone(local);
   };
   xhr.send();
 };
 
 LL.saveOrder = function(order, onDone) {
+  // Strip base64 images from order before saving to KV (too large)
+  var safeOrder = JSON.parse(JSON.stringify(order));
+  if (safeOrder.child && safeOrder.child.photo && 
+      typeof safeOrder.child.photo === 'string' && 
+      safeOrder.child.photo.startsWith('data:')) {
+    safeOrder.child.photo = '__img__'; // sentinel — replaced by Cloudinary URL later
+  }
+  if (safeOrder.payment && safeOrder.payment.screenshot && 
+      typeof safeOrder.payment.screenshot === 'string' && 
+      safeOrder.payment.screenshot.startsWith('data:')) {
+    safeOrder.payment.screenshot = '__img__';
+  }
+
   // Step 1: fetch full bin to preserve boy/girl layout data
   var xhr1 = new XMLHttpRequest();
   xhr1.open('GET', LL.WORKER_URL + '/db/get');
@@ -69,8 +82,8 @@ LL.saveOrder = function(order, onDone) {
     try { binData = JSON.parse(xhr1.responseText); } catch(e) {}
     // Prepend new order, dedupe by ref — only touch 'orders' key
     var existing = Array.isArray(binData.orders) ? binData.orders : [];
-    existing = existing.filter(function(o) { return o.ref !== order.ref; });
-    existing.unshift(order);
+    existing = existing.filter(function(o) { return o.ref !== safeOrder.ref; });
+    existing.unshift(safeOrder);
     binData.orders = existing;
     // Step 2: write back full bin with updated orders
     var xhr2 = new XMLHttpRequest();
@@ -82,7 +95,6 @@ LL.saveOrder = function(order, onDone) {
     xhr2.send(JSON.stringify(binData));
   };
   xhr1.onerror = function() {
-    // Network error — order could not be saved, notify caller
     console.error('[LL] Order save failed — network error');
     if (onDone) onDone(null);
   };
@@ -321,7 +333,7 @@ LL.buildPageModel = function(state, userData, opts) {
         type:    'letter-r',
         image:   imgFn(variation ? variation.rightImg : null),
         title:   vText.blessing || meaning.title || '',
-        message: vText.message  || meaning.text  || '',
+        message: vText.message  || meaning.message || '',
         verse:   vText.verse    || meaning.verse  || '',
         meta:    { letter: l, layout: vLayout, nameLen: letters.replace(/\s/g, '').length },
       });
@@ -483,6 +495,8 @@ LL.renderPage = function(page, name, giver) {
         var dOutline = LL.outlineStyle({ outlineEnabled: ly.dedOutlineEnabled, outlineColor: ly.dedOutlineColor, outlineWidth: ly.dedOutlineWidth });
         var isPlaceholder = !dedText.trim();
         var dedContent = dedText.trim() || 'Sample dedication text';
+        // Collapse multiple line breaks into single to prevent overflow
+        dedContent = dedContent.replace(/\n{2,}/g, '\n');
         dedHtml = '<div style="'+dBox+'">'
           + '<div style="font-family:'+dFnt+';font-size:'+dSz+';font-weight:'+dWgt+';'
           + 'color:'+dCol+';font-style:italic;line-height:1.75;word-break:break-word;white-space:pre-wrap;'
@@ -1031,7 +1045,7 @@ LL.uploadToCloudinary = function(file, folder, onProgress, uploadType) {
   return new Promise(function(resolve, reject) {
     var formData = new FormData();
     formData.append('file',   file);
-    formData.append('folder', folder || 'bookofpsalms_uploads');
+    formData.append('folder', folder || 'littlehero_uploads');
     if (uploadType) formData.append('uploadType', uploadType);
     // upload_preset and final folder enforced server-side by Cloudflare Worker
 
@@ -1118,7 +1132,7 @@ LL.initPixel = function(id) {
   fbq('init', id); fbq('track', 'PageView');
 };
 
-LL.firePixel = function(val, ref, url) {
+LL.firePixel = function(val, ref, url, orderData) {
   // Browser-side Pixel
   try { if (typeof fbq !== 'undefined') fbq('track', 'Purchase', { value: val, currency: 'PHP' }); } catch(e) {}
 
@@ -1141,4 +1155,18 @@ LL.firePixel = function(val, ref, url) {
       }),
     });
   } catch(e) {}
+
+  // Backup order to separate KV namespace
+  if (orderData && ref) {
+    try {
+      fetch(LL.WORKER_URL + '/order/backup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-App-Token': LL.APP_TOKEN,
+        },
+        body: JSON.stringify(orderData),
+      });
+    } catch(e) {}
+  }
 };
