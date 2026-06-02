@@ -1431,7 +1431,7 @@ function confirmOrder() {
     suc.classList.add('on');
     suc.style.display = 'block';
     document.querySelector('.steps-wrap').parentElement.appendChild(suc);
-    suc.scrollIntoView({behavior:"smooth"});
+    setTimeout(function(){ window.scrollTo(0, suc.offsetTop); }, 50);
     document.body.style.background = '#0d0a08';
     document.body.style.margin = '0';
     renderFAQ();
