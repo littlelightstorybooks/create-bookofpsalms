@@ -696,7 +696,7 @@ LL._sanitizeLayouts = function(state) {
     }
   });
   // Also sanitize localStorage immediately
-  try { localStorage.setItem('ht_state', JSON.stringify(state)); } catch(e) {}
+  try { localStorage.setItem('bop_state', JSON.stringify(state)); } catch(e) {}
 };
 
 LL.loadRemoteState = function(onDone) {
@@ -724,7 +724,7 @@ LL.loadRemoteState = function(onDone) {
           // written by a previous bad session. Safe to run every load — no-op if clean.
           LL._sanitizeLayouts(merged);
           // Write merged back to localStorage so it's current
-          localStorage.setItem('ht_state', JSON.stringify(merged));
+          localStorage.setItem('bop_state', JSON.stringify(merged));
           if (onDone) onDone(merged);
           return;
         }
@@ -854,7 +854,7 @@ LL.mergeStateWithLocalImages = function(remoteState, localState) {
 LL.saveRemoteState = function(state, onDone) {
   // Layer 1: Always save FULL state to localStorage (including images)
   try {
-    localStorage.setItem('ht_state', JSON.stringify(state));
+    localStorage.setItem('bop_state', JSON.stringify(state));
   } catch(e) {
     console.error('[LL] localStorage save failed:', e.message);
   }
@@ -913,7 +913,7 @@ LL.saveRemoteState = function(state, onDone) {
 
 LL._readLocalState = function() {
   try {
-    var raw = localStorage.getItem('ht_state');
+    var raw = localStorage.getItem('bop_state');
     if (raw) { var p = JSON.parse(raw); if (p && typeof p === 'object') return p; }
   } catch(e) {}
   return {};
@@ -1031,7 +1031,7 @@ LL.uploadToCloudinary = function(file, folder, onProgress, uploadType) {
   return new Promise(function(resolve, reject) {
     var formData = new FormData();
     formData.append('file',   file);
-    formData.append('folder', folder || 'littlehero_uploads');
+    formData.append('folder', folder || 'bookofpsalms_uploads');
     if (uploadType) formData.append('uploadType', uploadType);
     // upload_preset and final folder enforced server-side by Cloudflare Worker
 
