@@ -646,8 +646,8 @@ LL.renderPage = function(page, name, giver) {
 
     var rows = '';
     if ((page.title   || '').trim()) rows += '<div style="margin-bottom:8px;font-family:' + bFnt + ';font-size:' + bSz + ';font-weight:' + bWgt + ';color:' + bCol + ';line-height:1.55;text-align:center;white-space:pre-wrap;' + bOutline + '">' + sub(page.title)   + '</div>';
-    if ((page.message || '').trim()) rows += '<div style="margin-bottom:8px;font-family:' + mFnt + ';font-size:' + mSz + ';font-weight:' + mWgt + ';color:' + mCol + ';line-height:1.6;text-align:center;white-space:pre-wrap;'  + mOutline + '">'  + sub(page.message) + '</div>';
-    if ((page.verse   || '').trim()) rows += '<div style="font-family:' + vFnt + ';font-size:' + vSz + ';font-weight:' + vWgt + ';color:' + vCol + ';line-height:1.5;text-align:center;font-style:italic;white-space:pre-wrap;' + vOutline + '">' + sub(page.verse) + '</div>';
+    if ((page.verse   || '').trim()) rows += '<div style="margin-bottom:8px;font-family:' + vFnt + ';font-size:' + vSz + ';font-weight:' + vWgt + ';color:' + vCol + ';line-height:1.5;text-align:center;font-style:italic;white-space:pre-wrap;' + vOutline + '">' + sub(page.verse) + '</div>';
+    if ((page.message || '').trim()) rows += '<div style="font-family:' + mFnt + ';font-size:' + mSz + ';font-weight:' + mWgt + ';color:' + mCol + ';line-height:1.6;text-align:center;white-space:pre-wrap;'  + mOutline + '">'  + sub(page.message) + '</div>';
 
     // Position controls — always use explicit X/Y/maxWidth for letter-R
     var mw  = (ly.maxWidth != null ? ly.maxWidth : 80) + '%';
