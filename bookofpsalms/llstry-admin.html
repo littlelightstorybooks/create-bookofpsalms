@@ -328,7 +328,6 @@ tr:hover td{background:var(--gold-p);}
 
   <div class="sb-sec">Store</div>
   <button class="sbtn" onclick="showView('orders',this)"><span class="si">📦</span>Orders<span class="sbadge" id="sb-orders-badge">0</span></button>
-  <button class="sbtn" onclick="showView('landing',this)"><span class="si">🏠</span>Landing Page</button>
   <button class="sbtn" onclick="showView('samples',this)"><span class="si">🎬</span>Samples Page</button>
   <button class="sbtn" onclick="showView('config',this)"><span class="si">⚙️</span>Settings</button>
 
@@ -518,81 +517,6 @@ tr:hover td{background:var(--gold-p);}
   </div>
 </div>
 
-
-<!-- LANDING PAGE -->
-<div class="view" id="view-landing">
-
-  <!-- TRUST STRIP -->
-  <div class="card">
-    <div class="card-title">Trust Strip — 3 Items</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
-      <div id="trust-item-1">
-        <div class="fgrp"><label class="flbl">Icon 1</label>
-          <div class="img-zone" style="height:56px;" onclick="document.getElementById('trust-icon-1-file').click()">
-            <input type="file" id="trust-icon-1-file" accept="image/*" style="display:none" onchange="uploadTrustIcon(1,this)">
-            <img class="iz-img" id="iz-trust-1" style="object-fit:contain;display:none;max-height:48px;" src="" alt="">
-            <span id="iz-lbl-trust-1" style="font-size:.72rem;color:var(--muted);">Upload Icon</span>
-          </div>
-        </div>
-        <div class="fgrp"><input class="finput" id="trust-label-1" placeholder="e.g. Christian Values" oninput="markUnsaved()"></div>
-      </div>
-      <div id="trust-item-2">
-        <div class="fgrp"><label class="flbl">Icon 2</label>
-          <div class="img-zone" style="height:56px;" onclick="document.getElementById('trust-icon-2-file').click()">
-            <input type="file" id="trust-icon-2-file" accept="image/*" style="display:none" onchange="uploadTrustIcon(2,this)">
-            <img class="iz-img" id="iz-trust-2" style="object-fit:contain;display:none;max-height:48px;" src="" alt="">
-            <span id="iz-lbl-trust-2" style="font-size:.72rem;color:var(--muted);">Upload Icon</span>
-          </div>
-        </div>
-        <div class="fgrp"><input class="finput" id="trust-label-2" placeholder="e.g. Personalized" oninput="markUnsaved()"></div>
-      </div>
-      <div id="trust-item-3">
-        <div class="fgrp"><label class="flbl">Icon 3</label>
-          <div class="img-zone" style="height:56px;" onclick="document.getElementById('trust-icon-3-file').click()">
-            <input type="file" id="trust-icon-3-file" accept="image/*" style="display:none" onchange="uploadTrustIcon(3,this)">
-            <img class="iz-img" id="iz-trust-3" style="object-fit:contain;display:none;max-height:48px;" src="" alt="">
-            <span id="iz-lbl-trust-3" style="font-size:.72rem;color:var(--muted);">Upload Icon</span>
-          </div>
-        </div>
-        <div class="fgrp"><input class="finput" id="trust-label-3" placeholder="e.g. Fast Delivery" oninput="markUnsaved()"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SOCIAL PROOF -->
-  <div class="card">
-    <div class="card-title">Social Proof — Horizontal Scroll</div>
-    <div class="fgrp"><label class="flbl">Section Eyebrow</label><input class="finput" id="sp-eyebrow-lp" placeholder="✦ HAPPY FAMILIES" oninput="markUnsaved()"></div>
-    <div class="fgrp"><label class="flbl">Section Title</label><input class="finput" id="sp-title-lp" placeholder="Loved by Parents Across the Philippines" oninput="markUnsaved()"></div>
-    <div class="fgrp"><label class="flbl">Section Subtitle</label><input class="finput" id="sp-sub-lp" placeholder="Real families, real books, real joy." oninput="markUnsaved()"></div>
-    <div class="card-title" style="margin-top:16px;">Testimonial Cards</div>
-    <div id="sp-cards-wrap" style="display:flex;flex-direction:column;gap:12px;margin-top:8px;"></div>
-    <button class="btn btn-gold" style="margin-top:12px;" onclick="addSocialProofCard()">+ Add Card</button>
-  </div>
-
-  <!-- HOW IT WORKS -->
-  <div class="card">
-    <div class="card-title">How It Works — 5 Steps</div>
-    <div class="fgrp"><label class="flbl">Section Eyebrow</label><input class="finput" id="hiw-eyebrow-lp" placeholder="✦ SIMPLE PROCESS" oninput="markUnsaved()"></div>
-    <div class="fgrp"><label class="flbl">Section Title</label><input class="finput" id="hiw-title-lp" placeholder="How It Works" oninput="markUnsaved()"></div>
-    <div class="fgrp"><label class="flbl">Section Subtitle</label><input class="finput" id="hiw-sub-lp" placeholder="Creating your child's personalized book is easy." oninput="markUnsaved()"></div>
-    <div id="hiw-steps-wrap" style="display:flex;flex-direction:column;gap:12px;margin-top:12px;"></div>
-  </div>
-
-  <!-- FORM SECTION TEXT -->
-  <div class="card">
-    <div class="card-title">Form Section Text</div>
-    <div class="fgrp"><label class="flbl">Form Title</label><input class="finput" id="form-title-lp" placeholder="Let's Make Their Special Book" oninput="markUnsaved()"></div>
-    <div class="fgrp"><label class="flbl">Form Subtitle</label><input class="finput" id="form-sub-lp" placeholder="Fill in the details below and preview their personalized Book of Psalms." oninput="markUnsaved()"></div>
-    <div class="fgrp"><label class="flbl">Name Placeholder</label><input class="finput" id="ph-name-lp" placeholder="e.g. Jeremiah, Hannah..." oninput="markUnsaved()"></div>
-    <div class="fgrp"><label class="flbl">Dedication Placeholder</label><input class="finput" id="ph-ded-lp" placeholder="e.g. A Special Day: Welcomed into God's Love" oninput="markUnsaved()"></div>
-    <div class="fgrp"><label class="flbl">From/Giver Placeholder</label><input class="finput" id="ph-giver-lp" placeholder="e.g. Mama and Papa" oninput="markUnsaved()"></div>
-  </div>
-
-  <div style="padding:0 0 24px;">
-    <button class="btn btn-gold btn-lg" onclick="saveLandingPage()">Save Landing Page</button>
-  </div>
-</div>
 
 <!-- SAMPLES PAGE -->
 <div class="view" id="view-samples">
@@ -1056,7 +980,7 @@ function showView(id, btn) {
   if (btn) btn.classList.add('act');
   var titles = { dash:'Dashboard','page-settings':'Page Settings',intro:'Intro Pages',
     letters:'Letters A-Z',outro:'Outro Pages',orders:'Orders',config:'Settings',
-    samples:'Samples Page',landing:'Landing Page',recovery:'Recovery Tool' };
+    samples:'Samples Page',recovery:'Recovery Tool' };
   setText('tb-title-text', titles[id] || id);
   if (id === 'letters') { renderLetterNav(); renderLetterEditor(); }
   if (id === 'intro')   { renderIntroNav();  if (_introIdx >= 0) selectIntroPage(_introIdx); }
@@ -1064,7 +988,6 @@ function showView(id, btn) {
   if (id === 'orders')  renderOrders();
   if (id === 'dash')    renderDashboard();
   if (id === 'samples') renderSamplesEditor();
-  if (id === 'landing') renderLandingEditor();
 }
 
 // ----------------------------------------------------------------
@@ -2300,181 +2223,6 @@ function saveSamples() {
   });
 }
 
-// ── LANDING PAGE ─────────────────────────────────────────────
-var _spCards = [];
-var _hiwSteps = [
-  {icon:'✏️', title:'Personalize Their Book', desc:'Enter your child\'s name, gender, photo, and dedication message.'},
-  {icon:'👀', title:'Instantly Preview',       desc:'See your personalized Christian storybook come to life right before your eyes.'},
-  {icon:'💚', title:'Order via GCash',         desc:'Click "Order Now" and pay easily via GCash or bank transfer.'},
-  {icon:'🖨️', title:'We Print with Care',      desc:'We confirm your order and place it in our production queue.'},
-  {icon:'📦', title:'Delivered to Your Door',  desc:'Your book is printed, bound, and shipped with love and care.'},
-];
-
-function renderLandingEditor() {
-  var lp = ST.landingPage || {};
-  var ps = ST.pageSettings || {};
-
-  // Trust strip
-  function setVal(id, val) { var el=document.getElementById(id); if(el) el.value=val||''; }
-  setVal('trust-label-1', ps.trustLabel1 || 'Christian Values');
-  setVal('trust-label-2', ps.trustLabel2 || 'Personalized');
-  setVal('trust-label-3', ps.trustLabel3 || 'Fast Delivery');
-
-  // Trust icons preview
-  [1,2,3].forEach(function(i) {
-    var src = ps['trustIcon'+i];
-    if (src) {
-      var img = document.getElementById('iz-trust-'+i);
-      var lbl = document.getElementById('iz-lbl-trust-'+i);
-      if (img) { img.src=LL.resolveImg(src,60); img.style.display='block'; }
-      if (lbl) lbl.style.display='none';
-    }
-  });
-
-  // Social proof
-  setVal('sp-eyebrow-lp', lp.spEyebrow || '✦ HAPPY FAMILIES');
-  setVal('sp-title-lp',   lp.spTitle   || 'Loved by Parents Across the Philippines');
-  setVal('sp-sub-lp',     lp.spSub     || 'Real families, real books, real joy.');
-  _spCards = (lp.spCards && lp.spCards.length) ? lp.spCards : [];
-  renderSocialProofCards();
-
-  // How it works
-  setVal('hiw-eyebrow-lp', lp.hiwEyebrow || '✦ SIMPLE PROCESS');
-  setVal('hiw-title-lp',   lp.hiwTitle   || 'How It Works');
-  setVal('hiw-sub-lp',     lp.hiwSub     || 'Creating your child\'s personalized book is easy and takes just minutes.');
-  if (lp.hiwSteps && lp.hiwSteps.length) _hiwSteps = lp.hiwSteps;
-  renderHiwSteps();
-
-  // Form text
-  setVal('form-title-lp',  lp.formTitle  || 'Let\'s Make Their Special Book');
-  setVal('form-sub-lp',    lp.formSub    || 'Fill in the details below and preview their personalized Book of Psalms.');
-  setVal('ph-name-lp',     lp.phName     || 'e.g. Jeremiah, Hannah...');
-  setVal('ph-ded-lp',      lp.phDed      || 'e.g. A Special Day: Welcomed into God\'s Love');
-  setVal('ph-giver-lp',    lp.phGiver    || 'e.g. Mama and Papa');
-}
-
-// Trust icon upload
-function uploadTrustIcon(num, input) {
-  var f = input.files[0]; if (!f) return;
-  toast('Uploading icon...', 'ok');
-  LL.uploadToCloudinary(f, 'bookofpsalms_uploads', null, 'template').then(function(url) {
-    if (!ST.pageSettings) ST.pageSettings = {};
-    ST.pageSettings['trustIcon'+num] = url;
-    var img = document.getElementById('iz-trust-'+num);
-    var lbl = document.getElementById('iz-lbl-trust-'+num);
-    if (img) { img.src=LL.resolveImg(url,60); img.style.display='block'; }
-    if (lbl) lbl.style.display='none';
-    markUnsaved();
-    toast('Icon uploaded!', 'ok');
-  }).catch(function(e){ toast('Upload failed: '+e.message, 'err'); });
-}
-
-// Social proof cards
-function renderSocialProofCards() {
-  var wrap = document.getElementById('sp-cards-wrap'); if (!wrap) return;
-  wrap.innerHTML = _spCards.map(function(card, i) {
-    var photoHtml = card.photo
-      ? '<img src="'+LL.resolveImg(card.photo,80)+'" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);flex-shrink:0;">'
-      : '<div style="width:60px;height:60px;border-radius:50%;background:var(--card-bg);border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;" onclick="document.getElementById(\'sp-photo-'+i+'\').click()">📸<input type=\'file\' id=\'sp-photo-'+i+'\' accept=\'image/*\' style=\'display:none\' onchange=\'uploadSPPhoto('+i+',this)\'></div>';
-    return '<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;gap:12px;align-items:center;">'
-      + photoHtml
-      + '<div style="flex:1;display:flex;flex-direction:column;gap:6px;">'
-      + '<input class="finput" placeholder="Short quote e.g. My son cried happy tears!" value="'+LL.escHtml(card.quote||'')+'" oninput="_spCards['+i+'].quote=this.value;markUnsaved()">'
-      + '<input class="finput" placeholder="Name e.g. Ate Maria, QC" value="'+LL.escHtml(card.name||'')+'" oninput="_spCards['+i+'].name=this.value;markUnsaved()">'
-      + '</div>'
-      + '<button class="rm" onclick="removeSPCard('+i+')">✕</button>'
-      + '</div>';
-  }).join('');
-}
-
-function addSocialProofCard() {
-  _spCards.push({photo:'', quote:'', name:''});
-  renderSocialProofCards();
-  markUnsaved();
-}
-
-function removeSPCard(i) {
-  _spCards.splice(i, 1);
-  renderSocialProofCards();
-  markUnsaved();
-}
-
-function uploadSPPhoto(idx, input) {
-  var f = input.files[0]; if (!f) return;
-  toast('Uploading photo...', 'ok');
-  LL.uploadToCloudinary(f, 'bookofpsalms_uploads', null, 'template').then(function(url) {
-    _spCards[idx].photo = url;
-    renderSocialProofCards();
-    markUnsaved();
-    toast('Photo uploaded!', 'ok');
-  }).catch(function(e){ toast('Upload failed: '+e.message, 'err'); });
-}
-
-// How it works steps
-function renderHiwSteps() {
-  var wrap = document.getElementById('hiw-steps-wrap'); if (!wrap) return;
-  wrap.innerHTML = _hiwSteps.map(function(step, i) {
-    var iconHtml = step.iconSrc
-      ? '<img src="'+LL.resolveImg(step.iconSrc,48)+'" style="width:40px;height:40px;object-fit:contain;border-radius:8px;cursor:pointer;" onclick="document.getElementById(\'hiw-icon-'+i+'\').click()">'
-      : '<div style="width:40px;height:40px;background:var(--card-bg);border:1.5px dashed var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;" onclick="document.getElementById(\'hiw-icon-'+i+'\').click()">'+LL.escHtml(step.icon||'✦')+'</div>';
-    return '<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:12px;">'
-      + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">'
-      + '<div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#c4830a);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+(i+1)+'</div>'
-      + iconHtml
-      + '<input type="file" id="hiw-icon-'+i+'" accept="image/*" style="display:none" onchange="uploadHiwIcon('+i+',this)">'
-      + '<span style="font-size:10px;color:var(--muted);">Click icon to upload custom image</span>'
-      + '</div>'
-      + '<div class="fgrp"><input class="finput" placeholder="Step title" value="'+LL.escHtml(step.title||'')+'" oninput="_hiwSteps['+i+'].title=this.value;markUnsaved()"></div>'
-      + '<div class="fgrp" style="margin-bottom:0;"><input class="finput" placeholder="Step description" value="'+LL.escHtml(step.desc||'')+'" oninput="_hiwSteps['+i+'].desc=this.value;markUnsaved()"></div>'
-      + '</div>';
-  }).join('');
-}
-
-function uploadHiwIcon(idx, input) {
-  var f = input.files[0]; if (!f) return;
-  toast('Uploading icon...', 'ok');
-  LL.uploadToCloudinary(f, 'bookofpsalms_uploads', null, 'template').then(function(url) {
-    _hiwSteps[idx].iconSrc = url;
-    renderHiwSteps();
-    markUnsaved();
-    toast('Icon uploaded!', 'ok');
-  }).catch(function(e){ toast('Upload failed: '+e.message, 'err'); });
-}
-
-// Save Landing Page
-function saveLandingPage() {
-  if (!ST.pageSettings) ST.pageSettings = {};
-  if (!ST.landingPage)  ST.landingPage  = {};
-
-  // Trust strip labels
-  ST.pageSettings.trustLabel1 = document.getElementById('trust-label-1').value;
-  ST.pageSettings.trustLabel2 = document.getElementById('trust-label-2').value;
-  ST.pageSettings.trustLabel3 = document.getElementById('trust-label-3').value;
-
-  // Social proof
-  ST.landingPage.spEyebrow = document.getElementById('sp-eyebrow-lp').value;
-  ST.landingPage.spTitle   = document.getElementById('sp-title-lp').value;
-  ST.landingPage.spSub     = document.getElementById('sp-sub-lp').value;
-  ST.landingPage.spCards   = _spCards;
-
-  // How it works
-  ST.landingPage.hiwEyebrow = document.getElementById('hiw-eyebrow-lp').value;
-  ST.landingPage.hiwTitle   = document.getElementById('hiw-title-lp').value;
-  ST.landingPage.hiwSub     = document.getElementById('hiw-sub-lp').value;
-  ST.landingPage.hiwSteps   = _hiwSteps;
-
-  // Form text — stored in pageSettings so index.html can read them
-  ST.pageSettings.formTitle  = document.getElementById('form-title-lp').value;
-  ST.pageSettings.formSub    = document.getElementById('form-sub-lp').value;
-  ST.pageSettings.phName     = document.getElementById('ph-name-lp').value;
-  ST.pageSettings.phDed      = document.getElementById('ph-ded-lp').value;
-  ST.pageSettings.phGiver    = document.getElementById('ph-giver-lp').value;
-
-  LL.saveRemoteState(ST, function(ok) {
-    if (ok) { toast('Landing page saved!', 'ok'); }
-    else toast('Save failed — try again', 'err');
-  });
-}
 </script>
 </body>
 </html>

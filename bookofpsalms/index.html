@@ -62,6 +62,15 @@ body.loading{overflow:hidden;}
 .loader-dots span:nth-child(3){animation-delay:.36s;}
 @keyframes ldot{0%,80%,100%{opacity:.3;transform:scale(.85);}40%{opacity:1;transform:scale(1);}}
 
+/* ── PDF PROGRESS ── */
+.pdf-progress{display:none;position:fixed;inset:0;z-index:800;
+  background:rgba(10,6,3,.88);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;flex-direction:column;gap:18px;}
+.pdf-progress.show{display:flex;}
+.pdf-progress-bar-wrap{width:260px;height:6px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden;}
+.pdf-progress-bar{height:100%;background:var(--accent);border-radius:10px;transition:width .3s ease;width:0%;}
+.pdf-progress-lbl{font-size:.8rem;color:rgba(245,237,224,.6);letter-spacing:.06em;}
+
 /* ── NAV ── */
 .nav{height:70px;display:flex;align-items:center;justify-content:space-between;
   padding:0 36px;background:#2b1f14;position:sticky;top:0;z-index:100;
@@ -69,7 +78,6 @@ body.loading{overflow:hidden;}
 .nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
 .nav-logo-img{height:38px;display:none;}
 .nav-logo-img.show{display:block;}
-.nav-logo-fallback{font-size:1.4rem;}
 .nav-brand-text{font-family:var(--head-font);font-size:1.2rem;color:#f5ede0;letter-spacing:.01em;}
 .nav-brand-text em{font-style:italic;color:var(--accent-l);}
 .nav-right{display:flex;align-items:center;gap:18px;}
@@ -96,7 +104,7 @@ body.loading{overflow:hidden;}
 .hero-inner{position:relative;z-index:2;max-width:1080px;margin:0 auto;width:100%;
   display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:center;text-align:left;}
 .hero-product{position:relative;display:flex;align-items:center;justify-content:center;}
-.hero-product img{max-width:100%;max-height:480px;object-fit:contain;
+.hero-product-img{max-width:100%;max-height:480px;object-fit:contain;
   filter:drop-shadow(0 20px 48px rgba(0,0,0,.45));border-radius:4px;
   animation:float 4s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
@@ -123,11 +131,10 @@ body.loading{overflow:hidden;}
 .hero-sub{font-family:var(--body-font);color:rgba(245,237,224,.72);font-size:1.05rem;
   line-height:1.9;margin-bottom:46px;max-width:520px;}
 .hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
-.hero-name-chip{display:inline-block;font-style:italic;color:var(--accent-l);}
 @media(max-width:860px){
   .hero-inner{grid-template-columns:1fr;text-align:center;max-width:600px;gap:40px;}
   .hero-product{order:-1;}
-  .hero-product img{max-height:260px;}
+  .hero-product-img{max-height:260px;}
   .hero-cta{justify-content:center;}
   .hero-divider,.hero-sub{margin-left:auto;margin-right:auto;}
 }
@@ -146,61 +153,24 @@ body.loading{overflow:hidden;}
 .btn-full{width:100%;display:flex;justify-content:center;}
 .btn:disabled{opacity:.38;cursor:not-allowed;transform:none!important;}
 
-/* ── TRUST STRIP ── */
-.trust{display:flex;justify-content:center;align-items:stretch;
-  background:var(--parch);border-bottom:1px solid var(--bd);}
-.trust-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;
-  padding:18px 12px;border-right:1px solid var(--bd);text-align:center;}
-.trust-item:last-child{border-right:none;}
-.trust-icon-wrap{font-size:1.5rem;min-height:28px;display:flex;align-items:center;justify-content:center;}
-.trust-icon{width:28px;height:28px;object-fit:contain;}
-.trust-label{font-size:.72rem;font-weight:700;color:var(--body);letter-spacing:.04em;line-height:1.4;}
-
-/* ── LANDING SECTIONS ── */
-.steps-wrap{background:var(--warm);padding:72px 0;}
+/* ── STEPS WRAP ── */
+.steps-wrap{background:var(--warm);min-height:80vh;padding:72px 0;}
 .container{max-width:1120px;margin:0 auto;padding:0 28px;}
-.sec-eyebrow{font-size:.72rem;font-weight:700;color:var(--accent);letter-spacing:.22em;
-  text-align:center;margin-bottom:10px;text-transform:uppercase;}
-.sec-title{font-family:var(--head-font);font-size:clamp(1.6rem,3vw,2.4rem);color:var(--deep);
-  font-weight:700;text-align:center;line-height:1.3;margin-bottom:8px;}
-.sec-sub{font-size:.9rem;color:var(--muted);text-align:center;line-height:1.7;
-  max-width:500px;margin:0 auto 40px;}
+.step-indicator{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:56px;}
+.si-item{display:flex;align-items:center;gap:12px;}
+.si-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:.78rem;font-weight:700;border:2px solid var(--bd);
+  color:var(--muted);transition:all .3s;}
+.si-num.act{border-color:var(--accent);background:var(--accent);color:#fff;}
+.si-num.done{border-color:var(--ok);background:var(--ok);color:#fff;}
+.si-lbl{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+.si-lbl.act{color:var(--deep);font-weight:600;}
+.si-line{width:64px;height:2px;background:var(--bd);margin:0 10px;border-radius:2px;}
+.si-line.done{background:var(--ok);}
+.step-panel{display:none;}
+.step-panel.act{display:block;}
 
-/* Social proof */
-.social-sec{background:white;padding:56px 0;border-bottom:1px solid var(--bd-l);}
-.proof-strip{display:flex;gap:16px;overflow-x:auto;padding:4px 0 8px;
-  scrollbar-width:none;-webkit-overflow-scrolling:touch;}
-.proof-strip::-webkit-scrollbar{display:none;}
-.proof-card{flex-shrink:0;width:180px;background:var(--warm);border-radius:12px;
-  border:1px solid var(--bd);overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.05);}
-.proof-card-photo{width:180px;height:160px;object-fit:cover;display:block;}
-.proof-card-photo-empty{width:180px;height:160px;background:var(--parch);
-  display:flex;align-items:center;justify-content:center;font-size:2.5rem;}
-.proof-card-body{padding:12px 14px;}
-.proof-stars{color:var(--accent);font-size:.8rem;margin-bottom:4px;}
-.proof-quote{font-size:.78rem;color:var(--body);line-height:1.5;font-style:italic;margin-bottom:5px;}
-.proof-name{font-size:.7rem;color:var(--muted);font-weight:700;}
-
-/* How it works */
-.hiw-sec{background:var(--warm);padding:56px 0;border-bottom:1px solid var(--bd-l);}
-.hiw-steps{display:flex;flex-direction:column;align-items:center;gap:0;margin-top:8px;}
-.step{display:flex;align-items:flex-start;gap:16px;background:white;border-radius:12px;
-  padding:18px 20px;border:1px solid var(--bd-l);box-shadow:0 2px 10px rgba(0,0,0,.04);
-  width:100%;max-width:500px;}
-.step-num{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;
-  font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;margin-top:2px;}
-.step-icon-wrap{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.step-icon-emoji{font-size:1.5rem;line-height:1;}
-.step-icon-img{width:28px;height:28px;object-fit:contain;}
-.step-body{flex:1;}
-.step-title{font-size:.9rem;font-weight:700;color:var(--deep);margin-bottom:3px;}
-.step-desc{font-size:.8rem;color:var(--muted);line-height:1.6;}
-.step-connector{width:2px;height:14px;background:linear-gradient(180deg,var(--accent),var(--accent-l));
-  border-radius:2px;opacity:.3;margin:0 auto;}
-
-/* ── FORM AREA ── */
-.form-wrap{background:var(--warm);padding:72px 0;}
+/* ── FORM CARD ── */
 .fcard{background:white;border-radius:16px;padding:44px 40px;
   border:1px solid var(--bd-l);box-shadow:0 4px 24px rgba(0,0,0,.06);
   max-width:660px;margin:0 auto;}
@@ -227,13 +197,20 @@ body.loading{overflow:hidden;}
   font-size:1.7rem;font-family:var(--head-font);color:var(--deep);background:white;
   outline:none;letter-spacing:.06em;transition:border-color .2s,box-shadow .2s;}
 .name-big:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(231,119,55,.1);}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px;min-height:16px;}
+.chip{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;
+  justify-content:center;font-family:var(--head-font);font-size:.95rem;font-weight:700;}
+.chip-ok{background:var(--accent-p);border:1.5px solid var(--accent);color:var(--brown);}
+.chip-ex{background:#fdecea;border:1.5px solid var(--err);color:var(--err);}
+.chip-sp{background:transparent;border:1.5px dashed var(--bd);color:var(--muted);font-size:.44rem;}
 
-/* Gender pills */
-.gender-pills{display:flex;gap:14px;}
-.gpill{flex:1;padding:18px 14px;border:1.5px solid var(--bd);border-radius:12px;
-  cursor:pointer;text-align:center;transition:all .2s;background:white;font-size:.9rem;font-weight:600;color:var(--deep);}
-.gpill:hover,.gpill.sel{border-color:var(--accent);background:var(--accent-p);}
-.gpill-icon{font-size:2rem;margin-bottom:6px;}
+/* Gender cards */
+.gcards{display:flex;gap:14px;}
+.gcard{flex:1;padding:20px 14px;border:1.5px solid var(--bd);border-radius:12px;
+  cursor:pointer;text-align:center;transition:all .2s;background:white;}
+.gcard:hover,.gcard.sel{border-color:var(--accent);background:var(--accent-p);}
+.gcard-icon{font-size:2.2rem;margin-bottom:8px;}
+.gcard-lbl{font-size:.9rem;font-weight:600;color:var(--deep);}
 
 /* Photo upload */
 .upzone{border:2px dashed var(--bd);border-radius:12px;padding:36px 22px;
@@ -244,7 +221,7 @@ body.loading{overflow:hidden;}
 .up-lbl{font-size:.92rem;color:var(--body);font-weight:600;}
 .up-hint{font-size:.78rem;color:var(--muted);margin-top:5px;line-height:1.5;}
 .up-prev{margin-top:12px;}
-.up-prev img{width:160px;height:108px;object-fit:cover;border-radius:8px;border:3px solid var(--accent);}
+.up-prev img{width:190px;height:126px;object-fit:cover;border-radius:8px;border:3px solid var(--accent);}
 .up-rm{margin-top:10px;background:var(--err);color:white;border:none;
   padding:7px 16px;border-radius:8px;font-size:.76rem;cursor:pointer;
   font-family:var(--body-font);font-weight:600;}
@@ -267,28 +244,18 @@ body.loading{overflow:hidden;}
   margin-top:32px;padding-top:24px;border-top:1px solid var(--bd-l);flex-wrap:wrap;gap:14px;}
 .step-footer-note{font-size:.8rem;color:var(--muted);}
 
-/* ── LOADING OVERLAY ── */
-.loading-screen{display:none;position:fixed;inset:0;z-index:600;
-  background:rgba(20,12,6,.88);backdrop-filter:blur(4px);
-  align-items:center;justify-content:center;flex-direction:column;gap:18px;}
-.loading-screen.show{display:flex;}
-.loading-spinner{width:48px;height:48px;border:3px solid rgba(201,148,58,.2);
-  border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.loading-msg{font-family:var(--head-font);font-size:1.1rem;color:var(--gold);letter-spacing:.1em;}
-
-/* ── PREVIEW STEP ── */
-.preview-section{display:none;background:#12100E;padding:48px 0;}
-.preview-section.show{display:block;}
-.preview-layout{display:grid;grid-template-columns:1fr 300px;gap:28px;align-items:start;max-width:1120px;margin:0 auto;padding:0 28px;}
-.preview-main{}
+/* ── PREVIEW STEP 2 ── */
+.preview-layout{display:grid;grid-template-columns:1fr 300px;gap:28px;align-items:start;}
+.preview-main{position:relative;}
 .preview-sidebar{position:sticky;top:90px;}
 
-/* Scroll viewer */
+/* ── VERTICAL SCROLL VIEWER ── */
 .book-scroll-wrap{border-radius:12px;overflow:hidden;background:#12100E;}
 .book-scroll-label{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
   color:rgba(245,237,224,.45);padding:14px 20px 10px;text-align:center;}
 .bsv-row{margin-bottom:0;}
+.bsv-row-label{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(245,237,224,.35);padding:10px 0 5px;text-align:center;}
 .bsv-ratio-box{position:relative;width:100%;overflow:hidden;}
 .bsv-inner{display:flex;align-items:stretch;}
 .bsv-solo{justify-content:center;}
@@ -305,6 +272,7 @@ body.loading{overflow:hidden;}
   padding-bottom:14px;border-bottom:1px solid var(--bd-l);color:var(--deep);}
 .summary-row{display:flex;justify-content:space-between;align-items:flex-start;
   font-size:.86rem;margin-bottom:12px;gap:8px;}
+.summary-row:last-child{margin-bottom:0;}
 .sr-lbl{color:var(--muted);flex-shrink:0;}
 .sr-val{font-weight:600;text-align:right;word-break:break-word;color:var(--deep);}
 .sr-name{font-family:var(--head-font);font-size:1.15rem;font-weight:700;color:var(--brown);}
@@ -325,11 +293,10 @@ body.loading{overflow:hidden;}
   backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;
   padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
 .modal-ov.open{opacity:1;pointer-events:all;}
-.modal-ov.show{opacity:1;pointer-events:all;}
 .modal{background:var(--cream);border-radius:16px;max-width:520px;width:100%;
   padding:40px;position:relative;box-shadow:0 24px 64px rgba(0,0,0,.28);
   transform:translateY(18px);transition:transform .3s;max-height:90vh;overflow-y:auto;}
-.modal-ov.open .modal,.modal-ov.show .modal{transform:translateY(0);}
+.modal-ov.open .modal{transform:translateY(0);}
 .modal-x{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;
   border:1px solid var(--bd);background:white;cursor:pointer;font-size:.9rem;
   color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all .2s;}
@@ -340,8 +307,7 @@ body.loading{overflow:hidden;}
 .gcash-box{background:var(--parch);border:1px solid var(--bd-l);border-radius:12px;
   padding:20px;text-align:center;margin-bottom:16px;}
 .gcash-qr{width:148px;height:148px;margin:0 auto 10px;background:white;border:1px solid var(--bd);
-  border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;
-  display:none;}
+  border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;}
 .gcash-qr img{width:100%;height:100%;object-fit:cover;}
 .gcash-num{font-family:var(--head-font);font-size:1.55rem;font-weight:700;color:var(--deep);}
 .gcash-nm{font-size:.8rem;color:var(--muted);margin-top:3px;}
@@ -351,17 +317,12 @@ body.loading{overflow:hidden;}
   cursor:pointer;position:relative;background:var(--parch);transition:all .2s;}
 .ss-zone:hover{border-color:var(--accent);background:var(--accent-p);}
 .ss-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.order-ref-box{background:var(--warm);border:1px solid var(--bd);border-radius:10px;
-  padding:12px;text-align:center;margin-bottom:16px;}
-.order-ref-label{font-size:.7rem;color:var(--muted);font-weight:700;letter-spacing:.1em;margin-bottom:3px;}
-.order-ref-val{font-family:var(--head-font);font-size:1.2rem;font-weight:700;color:var(--deep);letter-spacing:.1em;}
 
 /* ── SUCCESS ── */
-.suc{display:none;text-align:center;padding:88px 32px;background:#0d0a08;min-height:100vh;color:rgba(245,237,224,.85);}
-.suc.show{display:block;}
+.suc{display:none;text-align:center;padding:88px 32px;background:#0d0a08 !important;min-height:100vh;color:rgba(245,237,224,.85);}
+.suc.on{display:block;}
 
 /* ── FAQ ── */
-.faq-sec{background:#12100E;padding:56px 0;}
 .faq-list{display:flex;flex-direction:column;gap:8px;}
 .faq-item{background:rgba(255,255,255,.06);border:1px solid rgba(201,148,58,.2);border-radius:10px;overflow:hidden;}
 .faq-q{padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:.88rem;color:rgba(245,237,224,.9);font-weight:500;user-select:none;background:transparent;}
@@ -371,27 +332,38 @@ body.loading{overflow:hidden;}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;padding:0 20px;font-size:.83rem;color:rgba(245,237,224,.7);line-height:1.7;}
 .faq-item.open .faq-a{max-height:500px;padding:0 20px 16px;}
 
-/* ── FOOTER ── */
-.site-footer{background:#0d0a08;border-top:1px solid rgba(201,148,58,.15);padding:32px 20px;}
+/* ── SITE FOOTER ── */
+.site-footer{background:#0d0a08;border-top:1px solid rgba(201,148,58,.15);padding:32px 20px;margin-top:0;}
 .footer-inner{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:14px;}
-.footer-brand{font-family:var(--head-font);font-size:1.1rem;color:rgba(245,237,224,.7);}
-.footer-brand em{color:var(--accent-l);font-style:italic;}
+.footer-social{display:flex;gap:12px;}
+.footer-social-link{width:36px;height:36px;background:rgba(255,255,255,.08);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;text-decoration:none;
+  border:1px solid rgba(255,255,255,.12);transition:background .2s;color:rgba(245,237,224,.5);}
+.footer-social-link:hover{background:rgba(231,119,55,.2);color:var(--gold);}
 .footer-links{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;}
 .footer-link{font-size:.76rem;color:rgba(245,237,224,.4);text-decoration:none;letter-spacing:.05em;transition:color .2s;}
 .footer-link:hover{color:var(--gold);}
-.footer-tagline{font-size:.68rem;color:rgba(245,237,224,.25);letter-spacing:.1em;text-transform:uppercase;}
+.footer-copy{font-size:.68rem;color:rgba(245,237,224,.2);letter-spacing:.08em;}
 
 /* ── TOAST ── */
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
   background:#1a1a1a;color:#fefcfa;padding:12px 22px;border-radius:10px;
   font-size:.84rem;opacity:0;transition:all .3s;z-index:9000;pointer-events:none;max-width:360px;text-align:center;}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-#toast.err{background:var(--err);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── MESSENGER FLOAT ── */
+.msng-float{position:fixed;bottom:24px;right:24px;z-index:400;
+  width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(0,0,0,.3);transition:transform .2s;text-decoration:none;}
+.msng-float:hover{transform:scale(1.08);}
+.msng-tooltip{position:absolute;right:64px;background:#1a1a1a;color:white;
+  padding:6px 12px;border-radius:8px;font-size:.76rem;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:opacity .2s;}
+.msng-float:hover .msng-tooltip{opacity:1;}
 
 @media(max-width:600px){
   .fcard{padding:28px 20px;}
   .book-cards{flex-direction:column;}
-  .gender-pills{gap:10px;}
   .nav{padding:0 18px;}
   .hero{padding:60px 20px;}
 }
@@ -405,21 +377,21 @@ body.loading{overflow:hidden;}
   <div class="loader-dots"><span></span><span></span><span></span></div>
 </div>
 
-<!-- LOADING OVERLAY (book generation) -->
-<div class="loading-screen" id="loading-screen">
-  <div class="loading-spinner"></div>
-  <div class="loading-msg" id="loading-msg">Creating your story…</div>
+<!-- PDF PROGRESS OVERLAY -->
+<div class="pdf-progress" id="pdf-progress">
+  <div class="loader-logo" style="margin-bottom:0;">Generating PDF…</div>
+  <div class="pdf-progress-bar-wrap"><div class="pdf-progress-bar" id="pdf-bar"></div></div>
+  <div class="pdf-progress-lbl" id="pdf-bar-lbl">Preparing…</div>
 </div>
 
 <!-- NAV -->
 <nav class="nav">
   <a class="nav-brand" href="#">
-    <img class="nav-logo-img" id="nav-logo-img" alt="Little Light Storybooks">
-    <span class="nav-logo-fallback" id="nav-logo-fallback">📖</span>
+    <img class="nav-logo-img" id="nav-logo-img" alt="Logo">
     <span class="nav-brand-text" id="nav-brand-text">Little <em>Book of Psalms</em></span>
   </a>
   <div class="nav-right">
-    <a class="btn btn-gold btn-sm" href="#form-wrap" id="nav-cta-btn">Create Their Book</a>
+    <a class="btn btn-gold btn-sm" href="#steps" id="nav-cta-btn">Create Your Book</a>
   </div>
 </nav>
 
@@ -434,12 +406,12 @@ body.loading{overflow:hidden;}
       <div class="hero-badge" id="hero-badge">✦ Personalized Christian Storybook</div>
       <h1 class="hero-h1" id="hero-h1">
         <span class="hero-h1-main">Little Book of Psalms:</span>
-        <em class="hero-name-em" id="hero-name-display"><span id="hero-name-chip">Your Child</span></em>
+        <em class="hero-name-em" id="hero-name-display">Your Child</em>
       </h1>
       <div class="hero-divider"></div>
       <p class="hero-sub" id="hero-sub">Every letter of their name receives a Psalm-inspired blessing — woven into a beautiful personalized storybook they'll treasure for life.</p>
       <div class="hero-cta">
-        <a href="#form-wrap" class="btn btn-gold btn-lg" id="hero-btn1">Create Their Book</a>
+        <a href="#steps" class="btn btn-gold btn-lg" id="hero-btn1">Create Your Book</a>
         <a class="btn btn-out btn-lg" id="hero-btn2" href="samples.html">See Preview ↓</a>
       </div>
     </div>
@@ -452,394 +424,379 @@ body.loading{overflow:hidden;}
   </div>
 </section>
 
-<!-- TRUST STRIP -->
-<div class="trust" id="trust-strip">
-  <div class="trust-item">
-    <div class="trust-icon-wrap" id="trust-icon-1-wrap"><div id="trust-icon-1-fallback">✝️</div></div>
-    <div class="trust-label" id="trust-label-1">Faith-Inspired</div>
-  </div>
-  <div class="trust-item">
-    <div class="trust-icon-wrap" id="trust-icon-2-wrap"><div id="trust-icon-2-fallback">📖</div></div>
-    <div class="trust-label" id="trust-label-2">Psalm Verses</div>
-  </div>
-  <div class="trust-item">
-    <div class="trust-icon-wrap" id="trust-icon-3-wrap"><div id="trust-icon-3-fallback">🎁</div></div>
-    <div class="trust-label" id="trust-label-3">Perfect Gift</div>
+<!-- STEPS -->
+<div class="steps-wrap" id="steps">
+  <div class="container">
+
+    <!-- Step indicator -->
+    <div class="step-indicator">
+      <div class="si-item">
+        <div class="si-num act" id="si1">1</div>
+        <div class="si-lbl act" id="sl1">Your Child</div>
+      </div>
+      <div class="si-line" id="si-line-1"></div>
+      <div class="si-item">
+        <div class="si-num" id="si2">2</div>
+        <div class="si-lbl" id="sl2">Preview &amp; Order</div>
+      </div>
+    </div>
+
+    <!-- ══ STEP 1 ══ -->
+    <div class="step-panel act" id="step1">
+      <div class="fcard">
+        <div class="fcard-title" id="fs-title">✦ About Your Child</div>
+        <div class="fcard-sub" id="fs-sub">Fill in the details below to personalize your storybook.</div>
+
+        <!-- Name -->
+        <div class="fgrp">
+          <label class="flbl">What is your child's name? <span style="color:var(--err);font-size:.72rem;font-weight:600;">Required*</span></label>
+          <input class="name-big" id="child-name" type="text" maxlength="30"
+            placeholder="E.g. Zachary Jacob" oninput="onName(this.value)" autocomplete="off">
+          <div class="fcc" id="name-cc" style="margin-top:4px;">0 / 15 letters</div>
+          <div class="chips" id="chips"></div>
+          <div class="fhint" id="name-hint">Spaces allowed and not counted in pricing.</div>
+          <div class="ferr" id="e-cname">Please enter your child's name.</div>
+        </div>
+
+        <!-- Gender -->
+        <div class="fgrp">
+          <label class="flbl">Gender <span style="color:var(--err);font-size:.72rem;font-weight:600;">Required*</span></label>
+          <div class="gcards" id="gender-cards">
+            <div class="gcard sel" onclick="pickGender('girl',this)">
+              <div class="gcard-icon">👧🏻</div>
+              <div class="gcard-lbl">Girl</div>
+            </div>
+            <div class="gcard" onclick="pickGender('boy',this)">
+              <div class="gcard-icon">👦🏻</div>
+              <div class="gcard-lbl">Boy</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Photo -->
+        <div class="fgrp">
+          <label class="flbl">Child's Photo <span style="color:var(--err);font-size:.72rem;font-weight:600;">Required*</span></label>
+          <div class="upzone" id="up-zone">
+            <input type="file" id="photo-in" accept="image/*" onchange="onPhoto(this)">
+            <div id="up-ph">
+              <div class="up-icon">📷</div>
+              <div class="up-lbl">Tap to upload a photo</div>
+              <div class="up-hint">JPG or PNG · Max 10MB · Landscape works best</div>
+            </div>
+            <div id="up-done" style="display:none;text-align:center;">
+              <div class="up-prev"><img id="photo-prev-img" src="" alt=""></div>
+              <div id="up-progress-wrap" style="display:none;margin:8px 0;">
+                <div style="background:rgba(255,255,255,.1);border-radius:20px;height:6px;overflow:hidden;">
+                  <div id="up-progress-bar" style="height:100%;width:0%;background:var(--gold);border-radius:20px;transition:width .2s;"></div>
+                </div>
+                <div id="up-progress-pct" style="font-size:.72rem;color:var(--gold);margin-top:4px;">0%</div>
+              </div>
+              <button class="up-rm" onclick="rmPhoto(event)">✕ Remove Photo</button>
+              <div style="font-size:.74rem;color:var(--ok);margin-top:6px;" id="up-success-msg">✓ Photo uploaded successfully</div>
+            </div>
+          </div>
+          <div class="ferr" id="e-photo">Please upload your child's photo.</div>
+        </div>
+
+        <!-- Book Option -->
+        <div class="fgrp">
+          <label class="flbl">Book Option <span style="color:var(--err);font-size:.72rem;font-weight:600;">Required*</span></label>
+          <div class="book-cards" id="book-option-cards">
+            <div class="book-card sel" id="bc-standard" onclick="pickBookOption('standard',this)">
+              <div class="bc-icon">📖</div>
+              <div class="bc-title">Standard Option</div>
+              <div class="bc-price" id="bt-std-price">₱599</div>
+              <div class="bc-desc"><strong>A5 Landscape (5.8" × 8.3")</strong><br>
+                220 GSM Premium Glossy Photo Paper All Pages · Staple-bound · Vibrant high-quality print for everyday reading.</div>
+              <a href="samples.html" target="_blank" style="display:inline-block;margin-top:8px;font-size:.78rem;color:var(--gold);text-decoration:none;">📷 See photos &amp; video →</a>
+            </div>
+            <div class="book-card" id="bc-hardbound" onclick="pickBookOption('hardbound',this)">
+              <div class="bc-badge">Premium</div>
+              <div class="bc-icon">📚</div>
+              <div class="bc-title">Hardbound Option</div>
+              <div class="bc-price" id="bt-hb-price">₱2,199</div>
+              <div class="bc-desc"><strong>A5 Landscape (5.8" × 8.3")</strong><br>
+                Sturdy hard cover · Thick coated pages · Side-stitched — made to be treasured for years.</div>
+              <a href="samples.html" target="_blank" style="display:inline-block;margin-top:8px;font-size:.78rem;color:var(--gold);text-decoration:none;">📷 See photos &amp; video →</a>
+            </div>
+          </div>
+          <div class="ferr" id="e-book">Please select a book option.</div>
+        </div>
+
+        <!-- Dedication -->
+        <div class="fgrp">
+          <label class="flbl">Dedication Message <span style="color:var(--err);font-size:.72rem;font-weight:600;">Required*</span></label>
+          <textarea class="ftextarea" id="ded-msg" rows="5" maxlength="700"
+            placeholder="Write a heartfelt message for your child. This will appear on the dedication page.&#10;&#10;Example:&#10;To my little miracle — you are God's greatest gift to us. We love you beyond words."
+            oninput="onDed(this)"></textarea>
+          <div class="fcc" id="ded-cc">0 / 700 characters</div>
+          <div class="ferr" id="e-ded">Please write a dedication message.</div>
+        </div>
+
+        <!-- Giver -->
+        <div class="fgrp">
+          <label class="flbl">Who is this book from? <span style="color:var(--err);font-size:.72rem;font-weight:600;">Required*</span></label>
+          <input class="finput" id="giver-msg" type="text"
+            placeholder="e.g. Daddy &amp; Mommy, Lolo &amp; Lola"
+            maxlength="60" oninput="onGiver(this)">
+          <div class="fcc" id="giver-cc">0 / 60 characters</div>
+          <div class="ferr" id="e-giver">Please fill in who this book is from.</div>
+        </div>
+
+        <div class="step-footer">
+          <div class="step-footer-note">All fields marked * are required.</div>
+          <button class="btn btn-gold" onclick="goStep2()">Next — Preview Book →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STEP 2 ══ -->
+    <div class="step-panel" id="step2">
+      <div class="preview-layout">
+
+        <!-- LEFT: VERTICAL SCROLL VIEWER -->
+        <div class="preview-main">
+          <div class="book-scroll-wrap">
+            <div class="book-scroll-label" id="spread-label">Book Preview</div>
+            <div id="book-scroll-pages"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: SUMMARY + ORDER -->
+        <div class="preview-sidebar">
+          <div class="summary-card">
+            <div class="summary-title">Order Summary</div>
+            <div class="summary-row">
+              <span class="sr-lbl">Name</span>
+              <span class="sr-val sr-name" id="sum-name">—</span>
+            </div>
+            <div class="summary-row">
+              <span class="sr-lbl">Gender</span>
+              <span class="sr-val" id="sum-gender">—</span>
+            </div>
+            <div class="summary-row">
+              <span class="sr-lbl">Photo</span>
+              <img class="sr-photo" id="sum-photo" src="" alt="" style="display:none;">
+            </div>
+            <div class="summary-row" id="sum-ded-row" style="display:none;">
+              <span class="sr-lbl">Dedication</span>
+              <span class="sr-val" id="sum-ded" style="font-size:.78rem;font-style:italic;"></span>
+            </div>
+            <div class="summary-row">
+              <span class="sr-lbl">Pages</span>
+              <span class="sr-val" id="sum-pages">—</span>
+            </div>
+            <div class="summary-price">
+              <div class="sp-row" id="sp-base-row">
+                <span id="sp-base-lbl">—</span>
+                <span id="sp-base-val">—</span>
+              </div>
+              <div class="sp-row" id="sp-extra-row" style="display:none;">
+                <span id="sp-extra-lbl"></span>
+                <span id="sp-extra-val" style="color:var(--err)"></span>
+              </div>
+              <div class="sp-total">
+                <span class="sp-total-lbl">Total</span>
+                <span class="sp-total-val" id="sp-total">—</span>
+              </div>
+            </div>
+            <div class="confirm-btn-wrap">
+              <button class="btn btn-gold btn-full" id="order-now-btn" onclick="openPayment()">Order Now →</button>
+            </div>
+            <a class="edit-link" onclick="goStep1()">← Edit details</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </div>
 
-<!-- SOCIAL PROOF -->
-<section class="social-sec" id="social-section">
-  <div class="container">
-    <div class="sec-eyebrow" id="sp-eyebrow">✦ Loved by Families</div>
-    <h2 class="sec-title" id="sp-title">Families are Blessing<br>Their Little Ones</h2>
-    <p class="sec-sub" id="sp-sub">See how parents are gifting personalized Psalm-inspired books.</p>
-    <div class="proof-strip" id="proof-strip"></div>
+<!-- SUCCESS -->
+<div class="suc" id="suc">
+  <div style="font-size:3rem;margin-bottom:16px;">✦</div>
+  <div style="font-family:var(--head-font);font-size:2rem;margin-bottom:8px;">Order Received!</div>
+  <div style="color:var(--muted);margin-bottom:24px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7;" id="suc-msg">
+    We've received your order <strong id="suc-ref"></strong>. We'll send your book to <strong id="suc-phone"></strong> within the delivery window. God bless you! ✦
   </div>
-</section>
+  <a href="#" class="btn btn-gold" onclick="sessionStorage.removeItem('bop_order_placed');location.reload();return false;">Create Another Book</a>
 
-<!-- HOW IT WORKS -->
-<section class="hiw-sec" id="hiw-section">
-  <div class="container">
-    <div class="sec-eyebrow" id="hiw-eyebrow">✦ Simple Process</div>
-    <h2 class="sec-title" id="hiw-title">How It Works</h2>
-    <p class="sec-sub" id="hiw-sub">Four simple steps to create a book your child will treasure forever.</p>
-    <div class="hiw-steps" id="hiw-steps"></div>
+  <!-- FAQ -->
+  <div style="max-width:600px;margin:48px auto 0;text-align:left;">
+    <div style="font-family:var(--head-font);font-size:1.3rem;color:var(--gold);margin-bottom:20px;text-align:center;">Frequently Asked Questions</div>
+    <div class="faq-list" id="faq-list"></div>
   </div>
-</section>
 
-<!-- FORM -->
-<div class="form-wrap" id="form-wrap">
-  <div class="container">
-    <div class="fcard">
-      <div class="fcard-title" id="form-title">✦ Create Their Book</div>
-      <div class="fcard-sub" id="form-sub">Fill in the details below and preview your personalized Little Book of Psalms.</div>
-
-      <!-- Child's Name -->
-      <div class="fgrp">
-        <label class="flbl">Child's Name <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
-        <input class="finput" id="inp-name" type="text" maxlength="15"
-          placeholder="e.g. Jeremiah, Hannah..." oninput="onName(this)" autocomplete="off">
-        <div class="fcc" id="char-name-cc"><span id="char-name">0</span> / 15 letters</div>
-        <div class="fhint">Spaces are allowed and not counted in pricing.</div>
-        <div class="ferr" id="e-name">Please enter your child's name.</div>
+  <!-- Footer inside success screen -->
+  <footer class="site-footer" style="margin-top:48px;">
+    <div class="footer-inner">
+      <div class="footer-social">
+        <a href="https://www.facebook.com/littlelightstorybooks" target="_blank" rel="noopener" aria-label="Facebook" class="footer-social-link">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/littlelightstorybooks" target="_blank" rel="noopener" aria-label="Instagram" class="footer-social-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
       </div>
-
-      <!-- Gender -->
-      <div class="fgrp">
-        <label class="flbl">Gender <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
-        <div class="gender-pills">
-          <div class="gpill sel" id="pill-girl" onclick="pickGender('girl')">
-            <div class="gpill-icon">👧🏻</div>Girl
-          </div>
-          <div class="gpill" id="pill-boy" onclick="pickGender('boy')">
-            <div class="gpill-icon">👦🏻</div>Boy
-          </div>
-        </div>
-        <div class="ferr" id="e-gender">Please select a gender.</div>
+      <div class="footer-links">
+        <a href="privacy.html" class="footer-link">Privacy Policy</a>
+        <a href="samples.html" class="footer-link">Samples</a>
       </div>
-
-      <!-- Photo -->
-      <div class="fgrp">
-        <label class="flbl">Child's Photo <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
-        <div class="upzone" id="up-zone">
-          <input type="file" id="photo-input" accept="image/*" onchange="onPhotoSelect(this)">
-          <div id="up-placeholder">
-            <div class="up-icon" id="photo-icon">📷</div>
-            <div class="up-lbl" id="photo-label">Tap to upload a photo</div>
-            <div class="up-hint">JPG or PNG · Max 10MB · Landscape works best</div>
-          </div>
-          <div class="up-prev" id="up-preview" style="display:none;text-align:center;">
-            <img id="photo-preview" src="" alt="" style="display:none;">
-            <button class="up-rm" onclick="rmPhoto(event)">✕ Remove Photo</button>
-          </div>
-        </div>
-        <div class="ferr" id="e-photo">Please upload your child's photo.</div>
-      </div>
-
-      <!-- Book Option -->
-      <div class="fgrp">
-        <label class="flbl">Book Option <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
-        <div class="book-cards">
-          <div class="book-card sel" id="bc-standard" onclick="pickBookOption('standard',this)">
-            <div class="bc-icon">📖</div>
-            <div class="bc-title">Standard</div>
-            <div class="bc-price" id="bt-std-price">₱599</div>
-            <div class="bc-desc"><strong>A5 Landscape</strong><br>220 GSM Premium Glossy · Staple-bound · Vibrant print quality.</div>
-            <a href="samples.html" target="_blank" style="display:inline-block;margin-top:8px;font-size:.78rem;color:var(--gold);text-decoration:none;">📷 See samples →</a>
-          </div>
-          <div class="book-card" id="bc-hardbound" onclick="pickBookOption('hardbound',this)">
-            <div class="bc-badge">Premium</div>
-            <div class="bc-icon">📚</div>
-            <div class="bc-title">Hardbound</div>
-            <div class="bc-price" id="bt-hb-price">₱2,199</div>
-            <div class="bc-desc"><strong>A5 Landscape</strong><br>Sturdy hard cover · Thick coated pages · Side-stitched — built to last.</div>
-            <a href="samples.html" target="_blank" style="display:inline-block;margin-top:8px;font-size:.78rem;color:var(--gold);text-decoration:none;">📷 See samples →</a>
-          </div>
-        </div>
-        <div class="ferr" id="e-book">Please select a book option.</div>
-      </div>
-
-      <!-- Dedication -->
-      <div class="fgrp">
-        <label class="flbl">Dedication Message <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
-        <textarea class="ftextarea" id="inp-ded" rows="5" maxlength="700"
-          placeholder="Write a heartfelt message for your child. This will appear on the dedication page.&#10;&#10;Example:&#10;To our little miracle — you are God's greatest gift to us. We love you beyond words."
-          oninput="onDed(this)"></textarea>
-        <div class="fcc"><span id="char-ded">0</span> / 700 characters</div>
-        <div class="ferr" id="e-ded">Please write a dedication message.</div>
-      </div>
-
-      <!-- Giver -->
-      <div class="fgrp">
-        <label class="flbl">Who is this book from? <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
-        <input class="finput" id="inp-giver" type="text"
-          placeholder="e.g. Mama and Papa" maxlength="60" oninput="onGiver(this)">
-        <div class="fcc"><span id="char-giver">0</span> / 60 characters</div>
-        <div class="ferr" id="e-giver">Please fill in who this book is from.</div>
-      </div>
-
-      <!-- Buyer Name -->
-      <div class="fgrp">
-        <label class="flbl">Your Name (for delivery) <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
-        <input class="finput" id="inp-buyer" type="text" maxlength="80"
-          placeholder="Full name of the recipient">
-        <div class="ferr" id="e-buyer">Please enter your name.</div>
-      </div>
-
-      <!-- Phone -->
-      <div class="fgrp">
-        <label class="flbl">Contact Number <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
-        <input class="finput" id="inp-phone" type="tel" maxlength="15"
-          placeholder="e.g. 09XX XXX XXXX">
-        <div class="ferr" id="e-phone">Please enter your contact number.</div>
-      </div>
-
-      <!-- Address -->
-      <div class="fgrp">
-        <label class="flbl">Delivery Address <span style="color:var(--err);font-size:.72rem;">Required*</span></label>
-        <textarea class="ftextarea" id="inp-addr" rows="3" maxlength="300"
-          placeholder="House/Unit No., Street, Barangay, City, Province"></textarea>
-        <div class="ferr" id="e-addr">Please enter your delivery address.</div>
-      </div>
-
-      <div class="step-footer">
-        <div class="step-footer-note">All fields marked * are required.</div>
-        <button class="btn btn-gold" onclick="goStep2()">Preview Their Book →</button>
-      </div>
+      <div class="footer-copy">© 2026 Little Light Storybooks. All rights reserved.</div>
     </div>
-  </div>
+  </footer>
 </div>
 
-<!-- PREVIEW SECTION -->
-<div class="preview-section" id="preview-section">
-  <div class="preview-layout">
-    <!-- Scroll viewer -->
-    <div class="preview-main">
-      <div class="book-scroll-wrap">
-        <div class="book-scroll-label" id="spread-label">Book Preview</div>
-        <div id="book-scroll-pages"></div>
-      </div>
-    </div>
-    <!-- Sidebar -->
-    <div class="preview-sidebar">
-      <div class="summary-card">
-        <div class="summary-title">Order Summary</div>
-        <div class="summary-row"><span class="sr-lbl">Name</span><span class="sr-val sr-name" id="sum-name">—</span></div>
-        <div class="summary-row"><span class="sr-lbl">Gender</span><span class="sr-val" id="sum-gender">—</span></div>
-        <div class="summary-row"><span class="sr-lbl">Book</span><span class="sr-val" id="sum-book">—</span></div>
-        <div class="summary-price">
-          <div class="sp-total">
-            <span class="sp-total-lbl">Total</span>
-            <span class="sp-total-val" id="sum-total">₱599</span>
-          </div>
-        </div>
-        <div class="confirm-btn-wrap">
-          <button class="btn btn-gold btn-full" onclick="openPayment()">Order Now — Pay via GCash</button>
-        </div>
-        <a class="edit-link" onclick="goStep1()">← Edit Details</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- GCASH MODAL -->
-<div class="modal-ov" id="gcash-modal">
+<!-- GCASH PAYMENT MODAL -->
+<div class="modal-ov" id="pay-modal">
   <div class="modal">
-    <button class="modal-x" onclick="closeModal()">✕</button>
-    <div class="modal-tag">Payment</div>
-    <div class="modal-h">Pay via GCash</div>
-    <div class="modal-sub">Send payment to the GCash number below, then upload your screenshot to confirm.</div>
+    <button class="modal-x" onclick="cModal('pay-modal')">✕</button>
+    <div class="modal-tag">GCash Payment</div>
+    <div class="modal-h">Send Your Payment</div>
+    <div class="modal-sub">Send the exact amount to the GCash account below, then upload a screenshot of your payment for verification.<br><br>You may also transfer via banking app:<br><strong>Transfer → E-Wallet → GCash</strong></div>
     <div class="gcash-box">
-      <div id="gcash-qr-wrap" style="display:none;">
-        <div class="gcash-qr"><img id="gcash-qr-img" src="" alt="GCash QR"></div>
+      <div class="gcash-qr" id="gcash-qr-wrap">
+        <span style="font-size:.7rem;color:var(--muted)">QR Code</span>
       </div>
-      <div class="gcash-num" id="gcash-number">—</div>
-      <div class="gcash-nm">Little Light Storybooks</div>
-    </div>
-    <div class="order-ref-box">
-      <div class="order-ref-label">YOUR ORDER REFERENCE</div>
-      <div class="order-ref-val" id="modal-ref">—</div>
+      <div class="gcash-num" id="gcash-num-display">09XX-XXX-XXXX</div>
+      <div class="gcash-nm" id="gcash-acct-display">Account Name</div>
     </div>
     <div class="amt-box">
-      Send exactly <strong id="modal-amount">—</strong> and use your reference number as the payment note.
+      Amount to send: <strong id="modal-amount">—</strong><br>
+      <span style="font-size:.78rem;opacity:.7;">Reference: <strong id="modal-ref">—</strong></span>
     </div>
-    <div class="ss-zone">
-      <input type="file" id="ss-input" accept="image/*" onchange="onSSSelect(this)">
-      <div id="ss-icon" style="font-size:1.8rem;margin-bottom:8px;">📸</div>
-      <div id="ss-label" style="font-size:.9rem;font-weight:600;color:var(--body);">Upload Payment Screenshot</div>
-      <div style="font-size:.76rem;color:var(--muted);margin-top:4px;">Tap to attach your GCash screenshot</div>
+    <!-- Delivery details -->
+    <div style="margin-bottom:14px;">
+      <div style="font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Delivery Details</div>
+      <div class="fgrp">
+        <label class="flbl">Your Full Name <span style="color:var(--err)">*</span></label>
+        <input class="finput" id="b-name" type="text" placeholder="Your complete name">
+        <div class="ferr" id="e-bname">Required.</div>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Contact Number <span style="color:var(--err)">*</span></label>
+        <input class="finput" id="b-phone" type="tel" placeholder="09XXXXXXXXX" maxlength="11" oninput="onPhone(this)">
+        <div class="fhint">11 digits · must start with 09</div>
+        <div class="ferr" id="e-bphone">Valid 11-digit PH number required.</div>
+      </div>
+      <div class="fgrp" style="margin-bottom:0;">
+        <label class="flbl">Complete Delivery Address <span style="color:var(--err)">*</span></label>
+        <textarea class="ftextarea" id="b-addr" rows="3"
+          placeholder="House/Unit No., Street, Barangay, City, Province, ZIP Code"></textarea>
+        <div class="ferr" id="e-baddr">Required.</div>
+      </div>
     </div>
-    <div class="ferr" id="e-ss" style="margin-top:8px;">Please upload your payment screenshot.</div>
-    <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
-      <button class="btn btn-gold btn-full" onclick="confirmOrder()">Confirm My Order ✓</button>
-      <button class="btn btn-out btn-full" style="color:var(--muted);border-color:var(--bd);" onclick="closeModal()">Cancel</button>
+    <div class="fgrp">
+      <label class="flbl">GCash Screenshot <span style="color:var(--err)">*</span></label>
+      <div class="ss-zone">
+        <input type="file" id="ss-in" accept="image/*" onchange="onSS(this)">
+        <div id="ss-ph"><div style="font-size:1.6rem;margin-bottom:6px;">🖼️</div>
+          <div style="font-size:.82rem;color:var(--brown);font-weight:500;">Tap to upload payment screenshot</div></div>
+        <div id="ss-done" style="display:none;padding:8px;">
+          <div id="ss-progress-wrap" style="display:none;margin-bottom:6px;">
+            <div style="background:rgba(255,255,255,.1);border-radius:20px;height:6px;overflow:hidden;">
+              <div id="ss-progress-bar" style="height:100%;width:0%;background:var(--gold);border-radius:20px;transition:width .2s;"></div>
+            </div>
+            <div id="ss-progress-pct" style="font-size:.72rem;color:var(--gold);margin-top:4px;">0%</div>
+          </div>
+          <div id="ss-success-msg" style="color:var(--ok);font-size:.82rem;">✓ Screenshot uploaded</div>
+        </div>
+      </div>
+      <div class="ferr" id="e-ss">Please upload your payment screenshot.</div>
     </div>
+    <button class="btn btn-gold btn-full" onclick="confirmOrder()">Confirm Order ✓</button>
   </div>
 </div>
-
-<!-- SUCCESS SCREEN -->
-<div class="suc" id="suc-screen">
-  <div style="font-size:4rem;margin-bottom:20px;">🙏</div>
-  <div style="font-family:var(--head-font);font-size:2.2rem;color:var(--gold);margin-bottom:12px;">Order Received!</div>
-  <div style="font-size:1rem;color:rgba(245,237,224,.7);margin-bottom:8px;">Your reference number:</div>
-  <div style="font-family:var(--head-font);font-size:1.6rem;color:white;margin-bottom:24px;letter-spacing:.1em;" id="suc-ref">—</div>
-  <div style="max-width:480px;margin:0 auto 32px;font-size:.92rem;color:rgba(245,237,224,.65);line-height:1.8;" id="suc-msg">
-    We've received your order and will confirm via message shortly. Your Little Book of Psalms will be printed with care and delivered to you.
-  </div>
-  <button class="btn btn-gold" onclick="location.reload()">Create Another Book</button>
-</div>
-
-<!-- FAQ -->
-<section class="faq-sec" id="faq-section">
-  <div class="container" style="max-width:700px;">
-    <div class="sec-eyebrow" style="color:rgba(201,148,58,.7);">✦ Questions</div>
-    <h2 class="sec-title" style="color:rgba(245,237,224,.85);margin-bottom:32px;">Frequently Asked Questions</h2>
-    <div class="faq-list">
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">How long does delivery take? <span class="faq-icon">+</span></div>
-        <div class="faq-a">Standard processing is 3–5 business days after payment confirmation, plus shipping time depending on your location.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">What is the maximum name length? <span class="faq-icon">+</span></div>
-        <div class="faq-a">Up to 8 letters at the standard price. Each additional letter is charged separately. Spaces are free.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Can I give this as a gift? <span class="faq-icon">+</span></div>
-        <div class="faq-a">Absolutely! The Little Book of Psalms makes a beautiful gift for baptisms, birthdays, baby showers, and dedications.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">What photo should I upload? <span class="faq-icon">+</span></div>
-        <div class="faq-a">A clear, well-lit photo of your child's face works best. Landscape orientation is ideal. JPG or PNG up to 10MB.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-brand">Little <em>Book of Psalms</em></div>
-    <div class="footer-links">
-      <a class="footer-link" href="privacy.html">Privacy Policy</a>
-      <a class="footer-link" href="samples.html">Samples</a>
-    </div>
-    <div class="footer-tagline">© 2025 Little Light Storybooks</div>
-  </div>
-</footer>
 
 <!-- TOAST -->
-<div id="toast"></div>
+<div class="toast" id="toast"></div>
 
-<script src="engine.js"></script>
+<!-- MESSENGER FLOAT -->
+<a class="msng-float" href="https://m.me/littlelightstorybooks" target="_blank" rel="noopener" aria-label="Message us on Messenger">
+  <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="28" cy="28" r="28" fill="#0084FF"/>
+    <path d="M28 11C18.06 11 10 18.61 10 28c0 5.05 2.14 9.61 5.59 12.86V47l6.18-3.4A18.9 18.9 0 0028 45c9.94 0 18-7.61 18-17S37.94 11 28 11zm1.79 22.89l-4.55-4.86-8.88 4.86 9.78-10.38 4.67 4.86 8.76-4.86-9.78 10.38z" fill="white"/>
+  </svg>
+  <span class="msng-tooltip">Message us</span>
+</a>
+
 <script src="letters.js"></script>
+<script src="engine.js"></script>
 <script>
-// ── GLOBAL STATE ──────────────────────────────────────────────
-var _gender = 'girl';
-var _photoFile = null;
-var _photoDataUrl = null;
-var _ssFile = null;
-var _bookOption = 'standard';
-var _userData = {};
-var _state = null;
-var S = {}; // current order state
+// ═══════════════════════════════════════════════════════════════
+// LITTLE BOOK OF PSALMS — index.js (inline)
+// ═══════════════════════════════════════════════════════════════
 
-// Loading messages
-var _loadMsgs = ['Creating your story…','Weaving in God\'s blessings…','Almost ready…'];
-var _loadIdx = 0;
-var _loadTimer = null;
+// ── STATE ──────────────────────────────────────────────────────
+var S = {
+  raw: '', letters: '', gender: 'girl',
+  photo: null, ded: '', giver: '', book: 'standard',
+  bName: '', phone: '', addr: '', ss: null, ref: '',
+};
+var _allPages  = [];
+var _spreads   = [];
+var _currentSpread = 0;
+window._LL_currentSpread = 0;
 
-// ── INIT ──────────────────────────────────────────────────────
+// ── INIT ───────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
+  var _failsafe = setTimeout(function() { appReady(); }, 5000);
+  sessionStorage.removeItem('bop_order_placed');
   LL.loadRemoteState(function(state) {
-    _state = state;
+    clearTimeout(_failsafe);
     applySettings(state);
-    applyDynamicSections(state);
-    // Fade out loader
-    var loader = document.getElementById('app-loader');
-    if (loader) { loader.classList.add('fade-out'); setTimeout(function(){ loader.style.display='none'; }, 300); }
-    document.body.classList.remove('loading');
   });
 });
 
-// ── APPLY SETTINGS ────────────────────────────────────────────
+// ── APPLY ADMIN SETTINGS ───────────────────────────────────────
 function applySettings(state) {
   var ps  = (state && state.pageSettings) || {};
   var cfg = (state && state.config)       || {};
 
   function setText(id, v) { var el=document.getElementById(id); if(el&&v) el.innerHTML=v; }
-  function setPlaceholder(id, v) { var el=document.getElementById(id); if(el&&v) el.placeholder=v; }
-
-  // Hero
-  setText('hero-badge', ps.heroBadge);
-  setText('hero-h1',    ps.heroH1);
-  setText('hero-sub',   ps.heroSub);
-  setText('hero-btn1',  ps.heroBtn1);
+  setText('hero-badge',     ps.heroBadge);
+  setText('hero-h1',        ps.heroH1);
+  setText('hero-sub',       ps.heroSub);
+  setText('hero-btn1',      ps.heroBtn1);
   setText('nav-brand-text', ps.navBrand);
   setText('nav-cta-btn',    ps.navCta);
   setText('spread-label',   ps.spreadLabel);
+  setText('fs-title',       ps.formTitle);
+  setText('fs-sub',         ps.formSub);
 
-  // Trust strip text
-  if (ps.trustLabel1) setText('trust-label-1', ps.trustLabel1);
-  if (ps.trustLabel2) setText('trust-label-2', ps.trustLabel2);
-  if (ps.trustLabel3) setText('trust-label-3', ps.trustLabel3);
-
-  // Trust strip icons
-  applyIcon('trust-icon-1-wrap', 'trust-icon-1-fallback', ps.trustIcon1);
-  applyIcon('trust-icon-2-wrap', 'trust-icon-2-fallback', ps.trustIcon2);
-  applyIcon('trust-icon-3-wrap', 'trust-icon-3-fallback', ps.trustIcon3);
-
-  // Social proof section text
-  if (ps.spEyebrow) setText('sp-eyebrow', ps.spEyebrow);
-  if (ps.spTitle)   setText('sp-title',   ps.spTitle);
-  if (ps.spSub)     setText('sp-sub',     ps.spSub);
-
-  // How it works text
-  if (ps.hiwEyebrow) setText('hiw-eyebrow', ps.hiwEyebrow);
-  if (ps.hiwTitle)   setText('hiw-title',   ps.hiwTitle);
-  if (ps.hiwSub)     setText('hiw-sub',     ps.hiwSub);
-
-  // Form text
-  if (ps.formTitle) setText('form-title', ps.formTitle);
-  if (ps.formSub)   setText('form-sub',   ps.formSub);
-
-  // Form placeholders
-  setPlaceholder('inp-name',  ps.phName  || 'e.g. Jeremiah, Hannah...');
-  setPlaceholder('inp-ded',   ps.phDed   || 'e.g. A Special Day: Welcomed into God\'s Love');
-  setPlaceholder('inp-giver', ps.phGiver || 'e.g. Mama and Papa');
-
-  // See preview button
+  // See Preview button
   var btn2 = document.getElementById('hero-btn2');
   if (btn2) {
     if (ps.seePreview) btn2.textContent = ps.seePreview;
-    if (ps.seePreviewLink) { btn2.href=ps.seePreviewLink; btn2.target='_blank'; btn2.rel='noopener'; }
-    else { btn2.href='samples.html'; }
+    if (ps.seePreviewLink) { btn2.href=ps.seePreviewLink; btn2.target='_blank'; btn2.rel='noopener'; btn2.removeAttribute('onclick'); }
+    else { btn2.href='#steps'; btn2.removeAttribute('target'); }
   }
 
   // Logo
   if (ps.logoSrc) {
-    var li = document.getElementById('nav-logo-img');
-    var lf = document.getElementById('nav-logo-fallback');
-    if (li) { li.src=LL.resolveImg(ps.logoSrc,200); li.classList.add('show'); }
-    if (lf) lf.style.display='none';
-    if (ps.hideTextLogo) { var nt=document.getElementById('nav-brand-text'); if(nt) nt.style.display='none'; }
+    var li=document.getElementById('nav-logo-img');
+    if (li) { li.src=LL.resolveImg(ps.logoSrc,200); li.classList.add('show');
+      if (ps.hideTextLogo) { var nt=document.getElementById('nav-brand-text'); if(nt) nt.style.display='none'; }
+    }
   }
 
   // Hero background
   if (ps.heroBgSrc) {
-    var bi = document.getElementById('hero-bg-img');
+    var bi=document.getElementById('hero-bg-img');
     if (bi) { bi.src=LL.resolveImg(ps.heroBgSrc,1400); bi.setAttribute('fetchpriority','high'); bi.setAttribute('loading','eager'); bi.classList.add('show'); }
   }
 
   // Product image
   if (ps.productImgSrc) {
-    var pw = document.getElementById('hero-product-wrap');
-    var pe = document.getElementById('hero-product-empty');
-    var pi = document.createElement('img');
+    var pw=document.getElementById('hero-product-wrap');
+    var pe=document.getElementById('hero-product-empty');
+    var pi=document.createElement('img');
     pi.className='hero-product-img';
     pi.alt='Little Book of Psalms';
     pi.style.cssText='max-width:100%;max-height:480px;object-fit:contain;filter:drop-shadow(0 20px 48px rgba(0,0,0,.45));border-radius:4px;animation:float 4s ease-in-out infinite;';
     pi.setAttribute('loading','eager');
+    pi.setAttribute('fetchpriority','high');
     pi.src=LL.resolveImg(ps.productImgSrc,600);
     if (pw) pw.appendChild(pi);
     if (pe) pe.style.display='none';
@@ -853,330 +810,312 @@ function applySettings(state) {
   if (cfg.hbMaxL)  LL.PRICING.hardbound.maxL = cfg.hbMaxL;
   if (cfg.hbEx)    LL.PRICING.hardbound.ex   = cfg.hbEx;
 
-  // Update price display
-  var stdP = document.getElementById('bt-std-price');
-  var hbP  = document.getElementById('bt-hb-price');
-  if (stdP) stdP.textContent = '₱' + LL.PRICING.standard.base;
-  if (hbP)  hbP.textContent  = '₱' + LL.PRICING.hardbound.base;
+  var _bsp=document.getElementById('bt-std-price');
+  var _bhp=document.getElementById('bt-hb-price');
+  if (_bsp) _bsp.textContent = '₱' + LL.PRICING.standard.base.toLocaleString();
+  if (_bhp) _bhp.textContent = '₱' + LL.PRICING.hardbound.base.toLocaleString();
 
-  // GCash
-  if (cfg.gcash)    { var gn=document.getElementById('gcash-number'); if(gn) gn.textContent=cfg.gcash; }
-  if (cfg.gcashQR)  {
-    var qw=document.getElementById('gcash-qr-wrap');
-    var qi=document.getElementById('gcash-qr-img');
-    if (qw&&qi) { qi.src=LL.resolveImg(cfg.gcashQR,300); qw.style.display='block'; }
-  }
+  // GCash display
+  if (cfg.gcashNum)  { var gn=document.getElementById('gcash-num-display');  if(gn) gn.textContent=cfg.gcashNum; }
+  if (cfg.gcashName) { var ga=document.getElementById('gcash-acct-display'); if(ga) ga.textContent=cfg.gcashName; }
+  if (cfg.gcashQR)   { var qw=document.getElementById('gcash-qr-wrap'); if(qw) qw.innerHTML='<img src="'+LL.resolveImg(cfg.gcashQR,300)+'" alt="GCash QR" style="width:100%;height:100%;object-fit:cover;">'; }
 
-  // Confirm message
-  if (cfg.confirmMsg) { var sm=document.getElementById('suc-msg'); if(sm) sm.textContent=cfg.confirmMsg; }
+  // Messenger link
+  if (cfg.messengerLink) { var mf=document.querySelector('.msng-float'); if(mf) mf.href=cfg.messengerLink; }
 
-  // Pixel
   if (cfg.pixelId) LL.initPixel(cfg.pixelId);
+
+  appReady();
 }
 
-// ── APPLY ICON ────────────────────────────────────────────────
-function applyIcon(wrapId, fallbackId, src) {
-  if (!src) return;
-  var wrap = document.getElementById(wrapId);
-  var fallback = document.getElementById(fallbackId);
-  if (!wrap) return;
-  var img = document.createElement('img');
-  img.className = 'trust-icon';
-  img.src = LL.resolveImg(src, 60);
-  img.alt = '';
-  img.onerror = function(){ this.style.display='none'; if(fallback) fallback.style.display='block'; };
-  if (fallback) fallback.style.display='none';
-  wrap.innerHTML='';
-  wrap.appendChild(img);
+function appReady() {
+  var loader=document.getElementById('app-loader');
+  if (!loader) return;
+  loader.classList.add('fade-out');
+  document.body.classList.remove('loading');
+  setTimeout(function(){ loader.style.display='none'; }, 280);
 }
 
-// ── DYNAMIC SECTIONS ──────────────────────────────────────────
-function applyDynamicSections(state) {
-  var ps  = (state && state.pageSettings) || {};
-  var lp  = (state && state.landingPage)  || {};
-
-  if (ps.trustLabel1) { var el=document.getElementById('trust-label-1'); if(el) el.textContent=ps.trustLabel1; }
-  if (ps.trustLabel2) { var el=document.getElementById('trust-label-2'); if(el) el.textContent=ps.trustLabel2; }
-  if (ps.trustLabel3) { var el=document.getElementById('trust-label-3'); if(el) el.textContent=ps.trustLabel3; }
-
-  if (lp.spEyebrow) { var el=document.getElementById('sp-eyebrow'); if(el) el.textContent=lp.spEyebrow; }
-  if (lp.spTitle)   { var el=document.getElementById('sp-title');   if(el) el.innerHTML=lp.spTitle; }
-  if (lp.spSub)     { var el=document.getElementById('sp-sub');     if(el) el.textContent=lp.spSub; }
-
-  var strip = document.getElementById('proof-strip');
-  if (strip && lp.spCards && lp.spCards.length) {
-    strip.innerHTML = lp.spCards.map(function(card) {
-      if (!card) return '';
-      var photoHtml = card.photo
-        ? '<img class="proof-card-photo" src="'+LL.resolveImg(card.photo,300)+'" alt="'+LL.escHtml(card.name||'')+'" loading="lazy">'
-        : '<div class="proof-card-photo-empty">📸</div>';
-      return '<div class="proof-card">'+photoHtml+'<div class="proof-card-body"><div class="proof-stars">⭐⭐⭐⭐⭐</div><div class="proof-quote">'+LL.escHtml(card.quote||'')+'</div><div class="proof-name">— '+LL.escHtml(card.name||'')+'</div></div></div>';
-    }).join('');
-  } else if (strip) {
-    strip.innerHTML = [
-      {quote:'My son cried happy tears!', name:'Ate Maria, QC'},
-      {quote:'Perfect baptism gift!', name:'Kuya Rex, Manila'},
-      {quote:'Ordered 3 already!', name:'Ate Grace, Cebu'},
-    ].map(function(c){
-      return '<div class="proof-card"><div class="proof-card-photo-empty">📸</div><div class="proof-card-body"><div class="proof-stars">⭐⭐⭐⭐⭐</div><div class="proof-quote">'+LL.escHtml(c.quote)+'</div><div class="proof-name">— '+LL.escHtml(c.name)+'</div></div></div>';
-    }).join('');
-  }
-
-  if (lp.hiwEyebrow) { var el=document.getElementById('hiw-eyebrow'); if(el) el.textContent=lp.hiwEyebrow; }
-  if (lp.hiwTitle)   { var el=document.getElementById('hiw-title');   if(el) el.textContent=lp.hiwTitle; }
-  if (lp.hiwSub)     { var el=document.getElementById('hiw-sub');     if(el) el.textContent=lp.hiwSub; }
-
-  var stepsWrap = document.getElementById('hiw-steps');
-  var defaultSteps = [
-    {icon:'✏️', title:'Personalize Their Book', desc:'Enter your child\'s name, gender, photo, and dedication message.'},
-    {icon:'👀', title:'Instantly Preview',       desc:'See your personalized Psalm storybook come to life right before your eyes.'},
-    {icon:'💚', title:'Order via GCash',         desc:'Click "Order Now" and pay easily via GCash or bank transfer.'},
-    {icon:'🖨️', title:'We Print with Care',      desc:'We confirm your order and place it in our production queue.'},
-    {icon:'📦', title:'Delivered to Your Door',  desc:'Your book is printed, bound, and shipped with love and care.'},
-  ];
-  var steps = (lp.hiwSteps && lp.hiwSteps.length) ? lp.hiwSteps : defaultSteps;
-  if (stepsWrap) {
-    stepsWrap.innerHTML = steps.map(function(step, i) {
-      var iconHtml = step.iconSrc
-        ? '<img class="step-icon-img" src="'+LL.resolveImg(step.iconSrc,60)+'" alt="">'
-        : '<div class="step-icon-emoji">'+LL.escHtml(step.icon||'✦')+'</div>';
-      var connector = (i < steps.length-1) ? '<div class="step-connector"></div>' : '';
-      return '<div class="step"><div class="step-num">'+(i+1)+'</div><div class="step-icon-wrap">'+iconHtml+'</div><div class="step-body"><div class="step-title">'+LL.escHtml(step.title)+'</div><div class="step-desc">'+LL.escHtml(step.desc)+'</div></div></div>'+connector;
-    }).join('');
-  }
-}
-
-// ── FORM HANDLERS ─────────────────────────────────────────────
-function onName(el) {
-  el.value = el.value.slice(0,15);
-  document.getElementById('char-name').textContent = el.value.length;
-  var chip = document.getElementById('hero-name-chip');
-  if (chip) chip.textContent = el.value || 'Your Child\'s Name';
-  hideErr('e-name');
-}
-function onDed(el) {
-  el.value = el.value.slice(0,700);
-  document.getElementById('char-ded').textContent = el.value.length;
-  hideErr('e-ded');
-}
-function onGiver(el) {
-  el.value = el.value.slice(0,60);
-  document.getElementById('char-giver').textContent = el.value.length;
-  hideErr('e-giver');
-}
-function pickGender(g) {
-  _gender = g;
-  document.getElementById('pill-boy').classList.toggle('sel', g==='boy');
-  document.getElementById('pill-girl').classList.toggle('sel', g==='girl');
-  hideErr('e-gender');
-}
-function pickBookOption(type, el) {
-  _bookOption = type;
-  document.querySelectorAll('.book-card').forEach(function(c){ c.classList.remove('sel'); });
-  if (el) el.classList.add('sel');
-  hideErr('e-book');
-}
-function onPhotoSelect(input) {
-  var f = input.files[0]; if (!f) return;
-  _photoFile = f;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    _photoDataUrl = e.target.result;
-    var prev = document.getElementById('photo-preview');
-    var icon = document.getElementById('photo-icon');
-    var lbl  = document.getElementById('photo-label');
-    var upPrev = document.getElementById('up-preview');
-    if (prev) { prev.src=_photoDataUrl; prev.style.display='block'; }
-    if (upPrev) upPrev.style.display='block';
-    if (icon) icon.style.display='none';
-    if (lbl)  lbl.textContent='Photo selected ✓';
-    hideErr('e-photo');
-  };
-  reader.readAsDataURL(f);
-}
-function rmPhoto(e) {
-  e.preventDefault(); e.stopPropagation();
-  _photoFile=null; _photoDataUrl=null;
-  var prev=document.getElementById('photo-preview');
-  var upPrev=document.getElementById('up-preview');
-  var icon=document.getElementById('photo-icon');
-  var lbl=document.getElementById('photo-label');
-  if(prev){prev.src='';prev.style.display='none';}
-  if(upPrev) upPrev.style.display='none';
-  if(icon) icon.style.display='';
-  if(lbl) lbl.textContent='Tap to upload a photo';
-  document.getElementById('photo-input').value='';
-}
-function onSSSelect(input) {
-  var f = input.files[0]; if (!f) return;
-  _ssFile = f;
-  var icon = document.getElementById('ss-icon');
-  var lbl  = document.getElementById('ss-label');
-  if (icon) icon.textContent='✅';
-  if (lbl)  lbl.textContent='Screenshot selected ✓';
-  hideErr('e-ss');
-}
-
-// ── VALIDATION ────────────────────────────────────────────────
-function showErr(id){ var el=document.getElementById(id); if(el) el.classList.add('show'); }
-function hideErr(id){ var el=document.getElementById(id); if(el) el.classList.remove('show'); }
-function validateAll() {
-  var ok = true;
-  if (!document.getElementById('inp-name').value.trim()) { showErr('e-name'); ok=false; } else hideErr('e-name');
-  if (!_gender)         { showErr('e-gender'); ok=false; }
-  if (!_photoFile)      { showErr('e-photo');  ok=false; }
-  if (!document.getElementById('inp-ded').value.trim())   { showErr('e-ded');   ok=false; } else hideErr('e-ded');
-  if (!document.getElementById('inp-giver').value.trim()) { showErr('e-giver'); ok=false; } else hideErr('e-giver');
-  if (!_bookOption)     { showErr('e-book');   ok=false; }
-  if (!document.getElementById('inp-buyer').value.trim()) { showErr('e-buyer'); ok=false; } else hideErr('e-buyer');
-  if (!document.getElementById('inp-phone').value.trim()) { showErr('e-phone'); ok=false; } else hideErr('e-phone');
-  if (!document.getElementById('inp-addr').value.trim())  { showErr('e-addr');  ok=false; } else hideErr('e-addr');
-  return ok;
-}
-
-// ── STEP 2 — PREVIEW ──────────────────────────────────────────
-function goStep2() {
-  if (!validateAll()) {
-    var firstErr = document.querySelector('.ferr.show');
-    if (firstErr) firstErr.scrollIntoView({behavior:'smooth',block:'center'});
-    return;
-  }
-
-  _userData = {
-    name:    document.getElementById('inp-name').value.trim(),
-    gender:  _gender,
-    photo:   _photoDataUrl,
-    ded:     document.getElementById('inp-ded').value.trim(),
-    giver:   document.getElementById('inp-giver').value.trim(),
-    book:    _bookOption,
-    buyer:   document.getElementById('inp-buyer').value.trim(),
-    phone:   document.getElementById('inp-phone').value.trim(),
-    addr:    document.getElementById('inp-addr').value.trim(),
-  };
-
-  // Update sidebar summary
-  var sn=document.getElementById('sum-name'); if(sn) sn.textContent=_userData.name;
-  var sg=document.getElementById('sum-gender'); if(sg) sg.textContent=_gender==='boy'?'Boy':'Girl';
-  var sb=document.getElementById('sum-book'); if(sb) sb.textContent=_bookOption==='hardbound'?'Hardbound':'Standard';
-  var st=document.getElementById('sum-total');
-  if(st) st.textContent='₱'+(_bookOption==='hardbound'?LL.PRICING.hardbound.base:LL.PRICING.standard.base);
-
-  showLoading();
-  try { if(typeof fbq!=='undefined') fbq('track','ViewContent',{content_name:'Book Preview',content_category:'Personalized Storybook'}); } catch(e){}
-
-  LL.loadRemoteState(function(state) {
-    _state = state;
-    var pages = LL.buildPageModel(state || LL._readLocalState(), _userData);
-    var frontCoverPage = pages.shift();
-    var backCoverPage  = pages.pop();
-    var innerPages     = pages;
-
-    _spreads = [];
-    for (var i=0;i<innerPages.length;i+=2) {
-      _spreads.push({left:innerPages[i],right:innerPages[i+1]||null});
+// ── FORM HANDLERS ──────────────────────────────────────────────
+function onName(v) {
+  var cleaned = v.replace(/[^a-zA-Z ]/g,'').replace(/  +/g,' ');
+  cleaned = cleaned.replace(/\b\w/g, function(c){ return c.toUpperCase(); });
+  var lettersOnly = cleaned.replace(/ /g,'');
+  if (lettersOnly.length > 15) {
+    var count=0, trimmed='';
+    for (var ci=0;ci<cleaned.length;ci++) {
+      if (cleaned[ci]===' ') { trimmed+=' '; }
+      else if (count<15) { trimmed+=cleaned[ci]; count++; }
+      else break;
     }
+    cleaned = trimmed.trimEnd();
+  }
+  var inp=document.getElementById('child-name');
+  if (inp && inp.value!==cleaned) { var pos=inp.selectionStart||0; inp.value=cleaned; try{inp.setSelectionRange(pos,pos);}catch(e){} }
+  S.raw=cleaned; S.letters=cleaned.replace(/ /g,'').toUpperCase();
+  var nameCC=document.getElementById('name-cc');
+  if (nameCC) { var lCount=S.letters.length; nameCC.textContent=lCount+' / 15 letters'; nameCC.classList.toggle('warn',lCount>=13); }
+  renderChips(cleaned.trim());
+  var hn=document.getElementById('hero-name-display'); if(hn) hn.textContent=cleaned.trim()||'Your Child';
+}
 
-    renderBookScroll(frontCoverPage, innerPages, backCoverPage, _userData.name);
-    hideLoading();
+function renderChips(raw) {
+  var wrap=document.getElementById('chips');
+  var hint=document.getElementById('name-hint');
+  if (!raw.trim()) { wrap.innerHTML=''; hint.textContent='Spaces allowed and not counted in pricing.'; return; }
+  var bt=LL.PRICING[S.book]; var li=0;
+  wrap.innerHTML = raw.split('').map(function(ch) {
+    if (ch===' ') return '<div class="chip chip-sp" title="Space (not counted)">SPC</div>';
+    var ex=li++>=bt.maxL;
+    return '<div class="chip '+(ex?'chip-ex':'chip-ok')+'" title="'+(ex?'Extra +₱'+bt.ex:'Included')+'">'+ch+'</div>';
+  }).join('');
+  var len=S.letters.length; var over=Math.max(0,len-bt.maxL);
+  hint.innerHTML = over>0
+    ? '<span style="color:var(--err)">⚠ '+over+' extra letter'+(over>1?'s':'')+' beyond '+bt.maxL+' — +₱'+(over*bt.ex)+' added</span>'
+    : len+' letter'+(len!==1?'s':'')+' · '+(bt.maxL-len)+' more included in base price';
+}
 
-    document.getElementById('form-wrap').style.display='none';
-    document.getElementById('social-section').style.display='none';
-    document.getElementById('hiw-section').style.display='none';
-    var prev = document.getElementById('preview-section');
-    if (prev) { prev.classList.add('show'); prev.scrollIntoView({behavior:'smooth'}); }
+function pickGender(g,el) {
+  S.gender=g;
+  document.querySelectorAll('#gender-cards .gcard').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
+}
+
+function pickBookOption(type,el) {
+  S.book=type;
+  document.querySelectorAll('#book-option-cards .book-card').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
+  document.getElementById('e-book').classList.remove('show');
+  renderChips(S.raw);
+}
+
+function onPhoto(input) {
+  var f=input.files[0]; if(!f) return;
+  if (f.size>10*1024*1024) { LL.toast('Photo must be under 10MB','err'); return; }
+  var localURL=URL.createObjectURL(f);
+  document.getElementById('photo-prev-img').src=localURL;
+  document.getElementById('up-ph').style.display='none';
+  S.photo=null;
+  var doneEl=document.getElementById('up-done');
+  var progressWrap=document.getElementById('up-progress-wrap');
+  var progressBar=document.getElementById('up-progress-bar');
+  var progressPct=document.getElementById('up-progress-pct');
+  var successMsg=document.getElementById('up-success-msg');
+  if (doneEl) doneEl.style.display='block';
+  if (progressWrap) progressWrap.style.display='block';
+  if (successMsg) successMsg.style.display='none';
+  if (progressBar) progressBar.style.width='0%';
+  if (progressPct) progressPct.textContent='0%';
+  LL.uploadToCloudinary(f,'bookofpsalms_uploads/customers/photos',function(pct){
+    if (progressBar) progressBar.style.width=pct+'%';
+    if (progressPct) progressPct.textContent=pct+'%';
+  },'customer-photo').then(function(url){
+    S.photo=url;
+    document.getElementById('photo-prev-img').src=url;
+    if (progressWrap) progressWrap.style.display='none';
+    if (successMsg) successMsg.style.display='block';
+    LL.toast('Photo uploaded!','ok');
+  }).catch(function(e){
+    S.photo=null;
+    document.getElementById('up-ph').style.display='block';
+    if (doneEl) doneEl.style.display='none';
+    LL.toast('Photo upload failed: '+e.message,'err');
   });
 }
 
-function goStep1() {
-  document.getElementById('preview-section').classList.remove('show');
-  document.getElementById('form-wrap').style.display='';
-  document.getElementById('social-section').style.display='';
-  document.getElementById('hiw-section').style.display='';
-  document.getElementById('form-wrap').scrollIntoView({behavior:'smooth'});
+function rmPhoto(e) {
+  e.stopPropagation();
+  S.photo=null;
+  document.getElementById('photo-in').value='';
+  document.getElementById('up-ph').style.display='block';
+  document.getElementById('up-done').style.display='none';
 }
 
-// ── LOADING ───────────────────────────────────────────────────
-function showLoading() {
-  var ls = document.getElementById('loading-screen');
-  if (ls) ls.classList.add('show');
-  _loadIdx = 0;
-  var lm = document.getElementById('loading-msg');
-  if (lm) lm.textContent = _loadMsgs[0];
-  _loadTimer = setInterval(function(){
-    _loadIdx = (_loadIdx+1) % _loadMsgs.length;
-    var lm2 = document.getElementById('loading-msg');
-    if (lm2) lm2.textContent = _loadMsgs[_loadIdx];
+function onDed(el) {
+  if (el.value.length>700) el.value=el.value.slice(0,700);
+  var len=el.value.length;
+  var cc=document.getElementById('ded-cc');
+  cc.textContent=len+' / 700 characters';
+  cc.classList.toggle('warn',len>600);
+  S.ded=el.value;
+}
+
+function onGiver(el) {
+  if (el.value.length>60) el.value=el.value.slice(0,60);
+  var len=el.value.length;
+  var cc=document.getElementById('giver-cc');
+  cc.textContent=len+' / 60 characters';
+  cc.classList.toggle('warn',len>50);
+  S.giver=el.value;
+}
+
+function onPhone(input) {
+  var v=input.value.replace(/\D/g,'');
+  if (v.length>11) v=v.slice(0,11);
+  input.value=v;
+  var ok=/^09\d{9}$/.test(v);
+  input.classList.toggle('inv',v.length>0&&!ok);
+  document.getElementById('e-bphone').classList.toggle('show',v.length>0&&!ok);
+}
+
+function phoneOK() { return /^09\d{9}$/.test(document.getElementById('b-phone').value); }
+
+function onSS(input) {
+  var f=input.files[0]; if(!f) return;
+  S.ss=null;
+  var phEl=document.getElementById('ss-ph');
+  var doneEl=document.getElementById('ss-done');
+  var progWrap=document.getElementById('ss-progress-wrap');
+  var progBar=document.getElementById('ss-progress-bar');
+  var progPct=document.getElementById('ss-progress-pct');
+  var sucMsg=document.getElementById('ss-success-msg');
+  phEl.style.display='none'; doneEl.style.display='block';
+  if (progWrap) progWrap.style.display='block';
+  if (sucMsg) sucMsg.style.display='none';
+  if (progBar) progBar.style.width='0%';
+  if (progPct) progPct.textContent='0%';
+  LL.uploadToCloudinary(f,'bookofpsalms_uploads/customers/screenshots',function(pct){
+    if (progBar) progBar.style.width=pct+'%';
+    if (progPct) progPct.textContent=pct+'%';
+  },'customer-screenshot').then(function(url){
+    S.ss=url;
+    if (progWrap) progWrap.style.display='none';
+    if (sucMsg) sucMsg.style.display='block';
+    LL.toast('Screenshot uploaded!','ok');
+  }).catch(function(e){
+    S.ss=null; phEl.style.display='block'; doneEl.style.display='none';
+    LL.toast('Screenshot upload failed: '+e.message,'err');
+  });
+}
+
+// ── STEP NAVIGATION ────────────────────────────────────────────
+function goStep2() {
+  var ok=true;
+  function showE(id,on){ document.getElementById(id).classList.toggle('show',on); }
+  if (!S.letters)                { showE('e-cname',true); ok=false; } else showE('e-cname',false);
+  if (!S.photo) {
+    var donEl=document.getElementById('up-done');
+    var uploading=donEl&&donEl.style.display!=='none'&&!document.getElementById('up-success-msg').style.display;
+    if (uploading) { LL.toast('Please wait — photo is still uploading...','err'); ok=false; }
+    else { showE('e-photo',true); ok=false; }
+  } else showE('e-photo',false);
+  if (!S.book)                   { showE('e-book',true);  ok=false; } else showE('e-book',false);
+  if (!S.ded||!S.ded.trim())     { showE('e-ded',true);   ok=false; } else showE('e-ded',false);
+  if (!S.giver||!S.giver.trim()) { showE('e-giver',true); ok=false; } else showE('e-giver',false);
+  if (!ok) { LL.toast('Please fill in all required fields','err'); return; }
+
+  // Emotional loading phases
+  var phases = [
+    'Years from now, they may still smile remembering this story…',
+    'We\'re weaving their name into Psalm-inspired blessings…',
+    'Adding God\'s Word and love to every page…',
+    'Almost ready. Made especially for your little one…'
+  ];
+  var previewLoader=document.createElement('div');
+  previewLoader.id='preview-loader';
+  previewLoader.style.cssText='position:fixed;inset:0;background:rgba(13,10,8,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:32px;';
+  previewLoader.innerHTML='<div style="width:48px;height:48px;border:3px solid rgba(201,148,58,.2);border-top-color:#C9943A;border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:28px;flex-shrink:0;"></div>'
+    +'<div id="preview-loader-msg" style="font-family:Georgia,serif;font-size:1.05rem;color:rgba(245,237,224,.9);text-align:center;max-width:320px;line-height:1.7;font-style:italic;">'+phases[0]+'</div>';
+  document.body.appendChild(previewLoader);
+  var phaseIdx=0;
+  var phaseTimer=setInterval(function(){
+    phaseIdx++;
+    if (phaseIdx<phases.length) { var msgEl=document.getElementById('preview-loader-msg'); if(msgEl) msgEl.textContent=phases[phaseIdx]; }
   }, 1500);
-}
-function hideLoading() {
-  var ls = document.getElementById('loading-screen');
-  if (ls) ls.classList.remove('show');
-  if (_loadTimer) { clearInterval(_loadTimer); _loadTimer=null; }
+
+  document.getElementById('step1').classList.remove('act');
+  document.getElementById('step2').classList.add('act');
+  var si1=document.getElementById('si1'); si1.classList.remove('act'); si1.classList.add('done'); si1.textContent='✓';
+  document.getElementById('sl1').classList.remove('act');
+  document.getElementById('si-line-1').classList.add('done');
+  document.getElementById('si2').classList.add('act');
+  document.getElementById('sl2').classList.add('act');
+
+  var minDelay=9000; var startTime=Date.now();
+  LL.loadRemoteState(function(state){
+    buildSpreads(state);
+    updateSummary();
+    document.addEventListener('contextmenu',_blockRightClick);
+    var elapsed=Date.now()-startTime;
+    var remaining=Math.max(0,minDelay-elapsed);
+    setTimeout(function(){
+      clearInterval(phaseTimer);
+      var loader=document.getElementById('preview-loader');
+      if (loader) document.body.removeChild(loader);
+    }, remaining);
+  });
+  goTo('steps');
 }
 
-// ── BOOK RENDER ───────────────────────────────────────────────
-var _spreads = [];
+function goStep1() {
+  document.getElementById('step2').classList.remove('act');
+  document.getElementById('step1').classList.add('act');
+  var si1=document.getElementById('si1'); si1.classList.add('act'); si1.classList.remove('done'); si1.textContent='1';
+  document.getElementById('sl1').classList.add('act');
+  document.getElementById('si-line-1').classList.remove('done');
+  document.getElementById('si2').classList.remove('act');
+  document.getElementById('sl2').classList.remove('act');
+  document.removeEventListener('contextmenu',_blockRightClick);
+  goTo('steps');
+}
 
-function renderBookScroll(frontCoverPage, innerPages, backCoverPage, name) {
-  var container = document.getElementById('book-scroll-pages');
+function _blockRightClick(e){ e.preventDefault(); }
+
+// ── VERTICAL SCROLL BOOK VIEWER ────────────────────────────────
+function buildSpreads(state) {
+  var userData={raw:S.raw,letters:S.letters,gender:S.gender,photo:S.photo,ded:S.ded,giver:S.giver};
+  var pages=LL.buildPageModel(state||LL._readLocalState(),userData);
+  _allPages=pages;
+  var name=S.raw.trim().replace(/\b\w/g,function(c){return c.toUpperCase();});
+  var frontCoverPage=pages.find(function(p){return p.meta&&p.meta.isFrontCover;});
+  var backCoverPage=pages.find(function(p){return p.meta&&p.meta.isBackCover;});
+  var innerPages=pages.filter(function(p){
+    if (p.type==='filler') return false;
+    if (p.meta&&p.meta.isFrontCover) return false;
+    if (p.meta&&p.meta.isBackCover) return false;
+    return true;
+  });
+  _spreads=[];
+  for (var i=0;i<innerPages.length;i+=2) { _spreads.push({left:innerPages[i],right:innerPages[i+1]||null}); }
+  renderBookScroll(frontCoverPage,innerPages,backCoverPage,name);
+  try { if(typeof fbq!=='undefined') fbq('track','ViewContent',{content_name:'Book Preview',content_category:'Personalized Storybook'}); } catch(e){}
+}
+
+function renderBookScroll(frontCoverPage,innerPages,backCoverPage,name) {
+  var container=document.getElementById('book-scroll-pages');
   if (!container) return;
   container.innerHTML='';
-
-  var wrap = container.closest('.book-scroll-wrap') || container.parentElement;
-
-  function getScale(totalW) {
-    var w = wrap.offsetWidth || 420;
-    return Math.min(1, w/totalW);
-  }
-
-  function makeRow(label, pageModels, type) {
-    var totalW = 420;
-    var scale  = getScale(totalW);
-    var ratioH = Math.round(296*scale);
-
-    var row = document.createElement('div');
-    row.className='bsv-row';
-    row.setAttribute('data-totalw', totalW);
-
-    var lbl = document.createElement('div');
-    lbl.className='book-scroll-label';
-    lbl.textContent=label;
-    row.appendChild(lbl);
-
-    var rb = document.createElement('div');
-    rb.className='bsv-ratio-box';
-    rb.style.height=ratioH+'px';
-    row.appendChild(rb);
-
-    var inner = document.createElement('div');
-    inner.className='bsv-inner bsv-'+type;
-    inner.style.zoom=scale;
-    rb.appendChild(inner);
-
-    pageModels.forEach(function(pm) {
-      if (!pm) return;
-      var pageEl = document.createElement('div');
-      pageEl.className='bsv-page';
-      pageEl.innerHTML = LL.renderPage(pm, name, _userData.giver);
-      LL.mergePageImages(pageEl, pm);
+  var wrap=container.closest('.book-scroll-wrap')||container.parentElement;
+  function getScale(totalW){ var w=wrap.offsetWidth||560; return Math.min(1,w/totalW); }
+  function makeRow(label,pageModels,type) {
+    var totalW=type==='spread'?840:420;
+    var scale=getScale(totalW);
+    var ratioH=Math.round(296*scale);
+    var row=document.createElement('div'); row.className='bsv-row'; row.setAttribute('data-totalw',totalW);
+    if (label) { var lbl=document.createElement('div'); lbl.className='bsv-row-label'; lbl.textContent=label; row.appendChild(lbl); }
+    var ratioBox=document.createElement('div'); ratioBox.className='bsv-ratio-box'; ratioBox.style.height=ratioH+'px';
+    var inner=document.createElement('div'); inner.className='bsv-inner bsv-'+type; inner.style.zoom=scale;
+    pageModels.forEach(function(p){
+      var pageEl=document.createElement('div'); pageEl.className='bsv-page';
+      pageEl.innerHTML=p?LL.renderPage(p,name,S.giver||''):'';
+      if (p) LL.mergePageImages(pageEl,p);
       inner.appendChild(pageEl);
     });
-
-    container.appendChild(row);
+    ratioBox.appendChild(inner); row.appendChild(ratioBox); container.appendChild(row);
   }
-
-  makeRow('Front Cover', [frontCoverPage||{type:'filler',meta:{}}], 'solo');
-  for (var i=0;i<innerPages.length;i++) {
-    makeRow('Page '+(i+2), [innerPages[i]], 'solo');
+  makeRow('Front Cover',[frontCoverPage||{type:'filler',meta:{}}],'solo');
+  for (var i=0;i<innerPages.length;i+=2) {
+    var l=innerPages[i]; var r=innerPages[i+1]||null;
+    makeRow('Page '+(i+2),[l],'solo');
+    if (r) makeRow('Page '+(i+3),[r],'solo');
   }
-  makeRow('Back Cover', [backCoverPage||{type:'filler',meta:{}}], 'solo');
-
-  window.addEventListener('resize', function(){
+  makeRow('Back Cover',[backCoverPage||{type:'filler',meta:{}}],'solo');
+  window.addEventListener('resize',function(){
     container.querySelectorAll('.bsv-row').forEach(function(row){
-      var tw  = parseInt(row.getAttribute('data-totalw'))||420;
-      var sc  = getScale(tw);
-      var rb  = row.querySelector('.bsv-ratio-box');
-      var inn = row.querySelector('.bsv-inner');
+      var tw=parseInt(row.getAttribute('data-totalw'))||420;
+      var sc=getScale(tw);
+      var rb=row.querySelector('.bsv-ratio-box');
+      var inn=row.querySelector('.bsv-inner');
       if(!rb||!inn) return;
       rb.style.height=Math.round(296*sc)+'px';
       inn.style.zoom=sc;
@@ -1184,116 +1123,176 @@ function renderBookScroll(frontCoverPage, innerPages, backCoverPage, name) {
   },{passive:true});
 }
 
-// ── PAYMENT ───────────────────────────────────────────────────
+// ── SUMMARY ────────────────────────────────────────────────────
+function updateSummary() {
+  document.getElementById('sum-name').textContent=S.raw||'—';
+  document.getElementById('sum-gender').textContent=S.gender==='girl'?'👧🏻 Girl':'👦🏻 Boy';
+  if (S.photo) { var sp=document.getElementById('sum-photo'); sp.src=S.photo; sp.style.display='block'; }
+  if (S.ded) { document.getElementById('sum-ded-row').style.display='flex'; document.getElementById('sum-ded').textContent=S.ded.slice(0,80)+(S.ded.length>80?'…':''); }
+  var totalPg=_allPages.filter(function(p){return p&&p.type!=='filler';}).length;
+  document.getElementById('sum-pages').textContent=totalPg+' pages';
+  updateModalPrice();
+}
+
+function updateModalPrice() {
+  var bt=LL.PRICING[S.book];
+  var over=Math.max(0,S.letters.length-bt.maxL);
+  var total=bt.base+over*bt.ex;
+  document.getElementById('sp-base-lbl').textContent=bt.label+' · up to '+bt.maxL+' letters';
+  document.getElementById('sp-base-val').textContent='₱'+bt.base.toLocaleString();
+  document.getElementById('sp-total').textContent='₱'+total.toLocaleString();
+  var er=document.getElementById('sp-extra-row');
+  if (over>0) {
+    er.style.display='flex';
+    document.getElementById('sp-extra-lbl').textContent=over+' extra letter'+(over>1?'s':'');
+    document.getElementById('sp-extra-val').textContent='+₱'+(over*bt.ex).toLocaleString();
+  } else { er.style.display='none'; }
+  document.getElementById('modal-amount').textContent='₱'+total.toLocaleString();
+  return total;
+}
+
+// ── PAYMENT ────────────────────────────────────────────────────
 function openPayment() {
   if (sessionStorage.getItem('bop_order_placed')==='1') {
-    LL.toast('Order already placed. Click "Create Another Book" to start over.','err');
+    LL.toast('Order already placed. Click "Create Another Book" to start a new order.','err');
     return;
   }
-
   try { if(typeof fbq!=='undefined') fbq('track','InitiateCheckout'); } catch(e){}
-
   var now=new Date();
   var mm=String(now.getMonth()+1).padStart(2,'0');
   var dd=String(now.getDate()).padStart(2,'0');
   var yy=String(now.getFullYear()).slice(-2);
   var chars='ABCDEFGHJKLMNPQRSTUVWXYZ';
-  var uid='';for(var ci=0;ci<3;ci++) uid+=chars.charAt(Math.floor(Math.random()*chars.length));
-  S.ref = 'BOP-'+yy+mm+dd+'-'+uid;
-
-  var mr=document.getElementById('modal-ref'); if(mr) mr.textContent=S.ref;
-  var ma=document.getElementById('modal-amount');
-  if (ma) {
-    var price = _bookOption==='hardbound' ? LL.PRICING.hardbound.base : LL.PRICING.standard.base;
-    ma.textContent='₱'+price;
-    S.total=price;
-  }
-
-  document.getElementById('gcash-modal').classList.add('open');
-}
-
-function closeModal() {
-  document.getElementById('gcash-modal').classList.remove('open');
+  var uid=''; for(var ci=0;ci<3;ci++) uid+=chars.charAt(Math.floor(Math.random()*chars.length));
+  S.ref='BOP-'+mm+dd+yy+'-'+uid;
+  document.getElementById('modal-ref').textContent=S.ref;
+  updateModalPrice();
+  oModal('pay-modal');
 }
 
 function confirmOrder() {
-  if (!_ssFile) { showErr('e-ss'); return; }
+  var bn=document.getElementById('b-name').value.trim();
+  var ph=document.getElementById('b-phone').value.trim();
+  var ad=document.getElementById('b-addr').value.trim();
+  var ok=true;
+  function showE(id,on){ document.getElementById(id).classList.toggle('show',on); }
+  if (!bn)        { showE('e-bname',true);  ok=false; } else showE('e-bname',false);
+  if (!phoneOK()) { showE('e-bphone',true); ok=false; } else showE('e-bphone',false);
+  if (!ad)        { showE('e-baddr',true);  ok=false; } else showE('e-baddr',false);
+  if (!S.ss)      { showE('e-ss',true);     ok=false; } else showE('e-ss',false);
+  if (!ok) { LL.toast('Please fix the errors above','err'); return; }
 
-  var cfg = (_state&&_state.config)||{};
+  S.bName=bn; S.phone=ph; S.addr=ad;
+  var bt=LL.PRICING[S.book];
+  var over=Math.max(0,S.letters.length-bt.maxL);
+  var total=bt.base+over*bt.ex;
+  var cfg=LL._readLocalState().config||{};
+  var iCount=cfg.introCount||13;
+  var oCount=cfg.outroCount||5;
+  var totalPg=Math.ceil((iCount+S.letters.length*2+oCount)/4)*4;
 
-  LL.uploadToCloudinary(_ssFile, 'bookofpsalms_uploads/customers', null, 'customer-screenshot').then(function(ssUrl) {
-    var order = {
-      ref:    S.ref,
-      date:   new Date().toISOString(),
-      status: 'pending',
-      child:  _userData.name,
-      gender: _userData.gender,
-      book:   _userData.book,
-      total:  S.total,
-      ded:    _userData.ded,
-      giver:  _userData.giver,
-      buyer:  _userData.buyer,
-      phone:  _userData.phone,
-      addr:   _userData.addr,
-      ss:     ssUrl,
-    };
+  var order = {
+    ref:        S.ref,
+    timestamp:  new Date().toISOString(),
+    child:      { name:S.raw, lettersOnly:S.letters, gender:S.gender, photo:S.photo },
+    dedication: S.ded,
+    giver:      S.giver,
+    bookType:   S.book,
+    buyer:      { name:S.bName, phone:S.phone, address:S.addr },
+    payment:    { screenshot:S.ss, amount:total, status:'pending' },
+    pages:      totalPg,
+    created:    Date.now(),
+  };
 
-    if (_photoFile) {
-      LL.uploadToCloudinary(_photoFile,'bookofpsalms_uploads/customers',null,'customer-photo').then(function(photoUrl){
-        order.photo=photoUrl;
-        saveOrder(order, cfg);
-      }).catch(function(){ saveOrder(order, cfg); });
-    } else {
-      saveOrder(order, cfg);
-    }
-  }).catch(function(e){ LL.toast('Upload failed: '+e.message,'err'); });
-}
-
-// ── SAVE ORDER (fixed — fetch-then-save pattern) ──────────────
-function saveOrder(order, cfg) {
+  // Save order: fetch-then-save to preserve existing orders
   LL.loadRemoteState(function(state) {
-    // Merge into existing orders array — never overwrite
-    var existing = (state && Array.isArray(state.orders)) ? state.orders : [];
-    // Dedupe by ref in case of retry
+    state = state || {};
+    var existing = Array.isArray(state.orders) ? state.orders : [];
     existing = existing.filter(function(o){ return o.ref !== order.ref; });
     existing.unshift(order);
-    state = state || {};
     state.orders = existing;
-
-    LL.saveRemoteState(state, function(ok){
-      if (!ok) { LL.toast('Could not save order. Please try again.','err'); return; }
-
-      LL.firePixel(order.total, order.ref, window.location.href);
-      sessionStorage.setItem('bop_order_placed','1');
-      closeModal();
-      showSuccess(order, cfg);
-    });
+    LL.saveRemoteState(state, function(){});
   });
+
+  sessionStorage.setItem('bop_order_placed','1');
+  var orderBtn=document.getElementById('order-now-btn');
+  if (orderBtn) { orderBtn.disabled=true; orderBtn.textContent='Order Placed ✓'; }
+
+  LL.firePixel(total, S.ref, window.location.href, order);
+  cModal('pay-modal');
+
+  // Loading before success
+  var loadingEl=document.createElement('div');
+  loadingEl.id='order-loading';
+  loadingEl.style.cssText='position:fixed;inset:0;background:rgba(13,10,8,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;';
+  loadingEl.innerHTML='<div style="width:48px;height:48px;border:3px solid rgba(201,148,58,.2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:20px;"></div>'
+    +'<div id="order-loading-msg" style="font-family:var(--head-font);font-size:1.1rem;color:var(--gold);letter-spacing:.1em;">Processing your order…</div>';
+  document.body.appendChild(loadingEl);
+
+  setTimeout(function(){ var m=document.getElementById('order-loading-msg'); if(m) m.textContent='Sending book request…'; }, 1500);
+
+  setTimeout(function(){
+    document.body.removeChild(loadingEl);
+    document.querySelector('.steps-wrap').style.display='none';
+    var suc=document.getElementById('suc');
+    var cfg2=LL._readLocalState().config||{};
+    var msgTpl=cfg2.confirmMsg||
+      'We\'ve received your order {ref}. We\'ll send your book to {phone} within the delivery window. God bless you! ✦';
+    var msgEl=document.getElementById('suc-msg');
+    if (msgEl) {
+      var parts=msgTpl.replace('{ref}','|||REF|||').replace('{phone}','|||PHONE|||').replace('{babyname}',S.raw||'').split('|||');
+      msgEl.innerHTML=parts.map(function(p){
+        if(p==='REF')   return '<strong>Order #'+S.ref+'</strong>';
+        if(p==='PHONE') return '<strong>'+S.phone+'</strong>';
+        return LL.escHtml(p).replace(/\n/g,'<br>');
+      }).join('');
+    }
+    suc.classList.add('on');
+    suc.style.display='block';
+    document.querySelector('.steps-wrap').parentElement.appendChild(suc);
+    document.body.style.background='#0d0a08';
+    renderFAQ();
+    LL.toast('Order submitted!','ok');
+  }, 6000);
 }
 
-function showSuccess(order, cfg) {
-  document.getElementById('preview-section').classList.remove('show');
-  var sr=document.getElementById('suc-ref'); if(sr) sr.textContent=order.ref;
-  if (cfg.confirmMsg) { var sm=document.getElementById('suc-msg'); if(sm) sm.textContent=cfg.confirmMsg; }
-  var suc=document.getElementById('suc-screen'); if(suc){ suc.classList.add('show'); suc.scrollIntoView({behavior:'smooth'}); }
+// ── UTILS ──────────────────────────────────────────────────────
+function oModal(id){ document.getElementById(id).classList.add('open'); }
+function cModal(id){ document.getElementById(id).classList.remove('open'); }
+function goTo(id){ var el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth'}); }
+</script>
+
+<script>
+var FAQ_ITEMS = [
+  { q:"When will I receive my book?", a:"Standard Option: 3–5 business days production after payment confirmation.<br>Hardbound Option: 2–3 weeks lead time due to the premium binding process.<br><br>Shipping estimates after production:<br>• NCR: 1–2 days<br>• Luzon: 1–3 days<br>• Visayas: 3–5 days<br>• Mindanao: 5–7 days<br><br>Please note that we do not ship to island locations at this time." },
+  { q:"Where are you located?", a:"We are based in Quezon City. We do not have a physical store at this time. You may reach us through our Messenger for all inquiries." },
+  { q:"What is your return and refund policy?", a:"We take quality seriously. If your book arrives damaged or in poor condition, it is insured through our courier and we will send a replacement. A video of you opening the parcel is required as proof of condition upon arrival." },
+  { q:"Can I change the name or details after ordering?", a:"Please message us immediately through Messenger and provide your reference number. We will do our best to accommodate the correction before production begins." },
+  { q:"What if I made a mistake in the name spelling?", a:"Contact us immediately through Messenger before production begins. We will do our best to accommodate the correction." },
+  { q:"How will I know my order is being processed?", a:"Once we confirm your payment, we will reach out to you via the contact number you provided. You may also message us through our Facebook page or tap the Messenger icon." },
+  { q:"How is the book delivered?", a:"We ship nationwide through our trusted courier partners." },
+  { q:"Can I order for multiple children?", a:"Absolutely! Simply place a separate order for each child so each book is uniquely personalized." },
+  { q:"Is my child's photo kept private?", a:"Yes. Your child's photo is used solely for creating the personalized book and stored securely. We store photos and information for a maximum of 1 week after order placement. We do not share your data with any third parties." }
+];
+
+function renderFAQ() {
+  var list=document.getElementById('faq-list'); if(!list) return;
+  list.innerHTML=FAQ_ITEMS.map(function(item,i){
+    return '<div class="faq-item" id="faq-'+i+'">'
+      +'<div class="faq-q" onclick="toggleFAQ('+i+')">'
+      +LL.escHtml(item.q)
+      +'<span class="faq-icon">+</span></div>'
+      +'<div class="faq-a">'+item.a+'</div>'
+      +'</div>';
+  }).join('');
 }
 
-// ── FAQ ───────────────────────────────────────────────────────
-function toggleFaq(el) {
-  var item=el.parentElement;
-  var ans=item.querySelector('.faq-a');
+function toggleFAQ(i) {
+  var item=document.getElementById('faq-'+i); if(!item) return;
   var isOpen=item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(function(i){
-    i.classList.remove('open');
-    i.querySelector('.faq-a').classList.remove('open');
-  });
-  if (!isOpen) { item.classList.add('open'); ans.classList.add('open'); }
+  document.querySelectorAll('.faq-item').forEach(function(el){ el.classList.remove('open'); });
+  if (!isOpen) item.classList.add('open');
 }
-
-// ── RIGHT CLICK PROTECTION ────────────────────────────────────
-document.addEventListener('contextmenu',function(e){
-  if(e.target.closest('.bsv-page')||e.target.closest('.bsv-inner')) e.preventDefault();
-});
 </script>
 </body>
 </html>
