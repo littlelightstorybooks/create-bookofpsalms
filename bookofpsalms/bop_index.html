@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Little Book of Psalms — Personalized Christian Storybook</title>
+<meta name="description" content="A personalized Christian storybook with your child's name in every blessing, inspired by the Book of Psalms.">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=Poppins:wght@400;600;700&family=Luckiest+Guy&family=Kanit:wght@400;700&family=Margarine&family=Sniglet&family=Galindo&family=Darumadrop+One&family=Mochiy+Pop+P+One&family=Londrina+Solid&family=Belanosima:wght@400;700&family=Lilita+One&family=Braah+One&family=Gorditas:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & VARIABLES ───────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --orange:#F47B20;--orange-light:#FFB347;--orange-dark:#E06010;
+  --navy:#1A3A5C;--navy-light:#2D5A8C;--navy-dark:#0D2040;
+  --sky:#EAF6FF;--sky-mid:#C8E8F8;
+  --green:#7DB87A;--green-dark:#4A8C47;
+  --pink:#F4A7B9;--blue-rib:#A8D8EA;
+  --cream:#FFFDF8;--parch:#FFF8EE;--white:#FFFFFF;
+  --muted:#6B8FAB;--border:#D4E8F4;--text:#1A3A5C;
+  --gold:#D4A017;--err:#E53E3E;
+  --radius:14px;--radius-sm:10px;--radius-lg:20px;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);font-family:'Nunito',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;}
+
+/* ── NAV ─────────────────────────────────────────────────────── */
+.nav{background:rgba(255,255,255,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:200;}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-wrap{position:relative;width:42px;height:42px;}
+.nav-logo-img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--orange);display:none;}
+.nav-logo-img.show{display:block;}
+.nav-logo-fallback{width:42px;height:42px;border-radius:50%;border:2px solid var(--orange);background:linear-gradient(135deg,#FFF0E0,#FFE0C0);display:flex;align-items:center;justify-content:center;font-size:20px;}
+.nav-brand-text{}
+.nav-name{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--navy);font-weight:700;line-height:1.1;}
+.nav-sub{font-size:8px;color:var(--orange);letter-spacing:2px;font-weight:700;text-transform:uppercase;}
+.nav-cta-btn{background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-size:12px;font-weight:800;padding:8px 18px;border-radius:20px;text-decoration:none;white-space:nowrap;font-family:'Nunito',sans-serif;}
+
+/* ── HERO ────────────────────────────────────────────────────── */
+.hero{position:relative;min-height:520px;background:linear-gradient(160deg,#C8E8FF 0%,#D8F0E8 50%,#E8F4D8 100%);display:flex;flex-direction:column;overflow:hidden;}
+.hero-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;}
+.hero-bg-img.show{display:block;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(200,232,255,.25) 0%,rgba(232,244,216,.4) 100%);pointer-events:none;}
+.hero-top{position:relative;z-index:2;padding:40px 24px 24px;text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.hero-badge{display:inline-block;background:rgba(255,255,255,.88);color:var(--orange);font-size:10px;font-weight:800;letter-spacing:2px;padding:4px 16px;border-radius:20px;border:1px solid rgba(244,123,32,.2);margin-bottom:14px;}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:38px;color:var(--navy);font-weight:700;line-height:1.2;margin-bottom:10px;}
+.hero-h1 em{color:var(--orange);font-style:italic;}
+.hero-sub-text{font-size:13px;color:var(--muted);line-height:1.8;max-width:320px;margin:0 auto 24px;}
+.hero-btns{display:flex;flex-direction:column;gap:10px;align-items:center;}
+.hero-btn1{display:inline-block;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;padding:14px 36px;border-radius:28px;text-decoration:none;box-shadow:0 6px 24px rgba(244,123,32,.35);letter-spacing:.3px;}
+.hero-btn2{font-size:12px;color:var(--navy-light);text-decoration:none;font-weight:700;opacity:.8;}
+.hero-product-wrap{position:relative;z-index:2;text-align:center;padding:8px 24px 0;}
+.hero-product-img{max-width:100%;max-height:260px;object-fit:contain;filter:drop-shadow(0 12px 32px rgba(0,0,0,.18));border-radius:4px;animation:float 4s ease-in-out infinite;}
+.hero-product-empty{font-size:80px;filter:drop-shadow(0 8px 24px rgba(0,0,0,.12));animation:float 4s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+
+/* Live name chip */
+.name-chip{display:inline-block;background:rgba(255,255,255,.9);border:1px solid rgba(244,123,32,.3);border-radius:20px;padding:4px 14px;font-size:12px;color:var(--navy);font-weight:700;margin-bottom:16px;min-width:80px;}
+
+/* ── TRUST STRIP ─────────────────────────────────────────────── */
+.trust{display:flex;justify-content:center;align-items:center;gap:0;background:rgba(255,255,255,.95);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.trust-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 8px;border-right:1px solid var(--border);}
+.trust-item:last-child{border-right:none;}
+.trust-icon{width:28px;height:28px;object-fit:contain;}
+.trust-icon-fallback{font-size:22px;line-height:1;}
+.trust-label{font-size:10px;color:var(--navy);font-weight:700;text-align:center;line-height:1.3;}
+
+/* ── SHARED SECTION STYLES ───────────────────────────────────── */
+.sec-eyebrow{font-size:10px;font-weight:800;color:var(--orange);letter-spacing:2px;text-align:center;margin-bottom:8px;text-transform:uppercase;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--navy);font-weight:700;text-align:center;line-height:1.3;margin-bottom:4px;}
+.sec-sub{font-size:12px;color:var(--muted);text-align:center;line-height:1.7;max-width:340px;margin:0 auto;}
+
+/* ── SECTION 1.1 — SOCIAL PROOF ──────────────────────────────── */
+.social{background:var(--white);padding:32px 0;border-bottom:1px solid var(--border);}
+.social-hdr{padding:0 24px 20px;}
+.proof-strip{display:flex;gap:12px;overflow-x:auto;padding:4px 24px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.proof-strip::-webkit-scrollbar{display:none;}
+.proof-card{flex-shrink:0;width:152px;background:var(--sky);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;box-shadow:0 2px 12px rgba(26,58,92,.07);}
+.proof-card-photo{width:152px;height:152px;object-fit:cover;display:block;background:linear-gradient(135deg,#D4EEFF,#E8F8E8);}
+.proof-card-photo-empty{width:152px;height:152px;background:linear-gradient(135deg,#D4EEFF,#E8F8E8);display:flex;align-items:center;justify-content:center;font-size:48px;}
+.proof-card-body{padding:10px 12px;}
+.proof-stars{color:var(--orange);font-size:11px;margin-bottom:3px;letter-spacing:1px;}
+.proof-quote{font-size:10px;color:var(--navy);line-height:1.5;font-style:italic;margin-bottom:4px;}
+.proof-name{font-size:9px;color:var(--muted);font-weight:700;}
+.proof-hint{text-align:center;font-size:11px;color:var(--muted);padding:4px 24px 0;font-weight:600;}
+
+/* ── SECTION 1.2 — HOW IT WORKS ──────────────────────────────── */
+.hiw{background:linear-gradient(160deg,#EAF6FF,#F0F8E8);padding:36px 24px;border-bottom:1px solid var(--border);}
+.steps{display:flex;flex-direction:column;align-items:center;margin-top:20px;gap:0;}
+.step{display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.85);border-radius:var(--radius);padding:14px 16px;border:1px solid rgba(255,255,255,.9);box-shadow:0 2px 12px rgba(26,58,92,.06);width:100%;max-width:440px;}
+.step-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.step-icon-wrap{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.step-icon-img{width:32px;height:32px;object-fit:contain;}
+.step-icon-emoji{font-size:24px;line-height:1;}
+.step-body{flex:1;}
+.step-title{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:2px;}
+.step-desc{font-size:11px;color:var(--muted);line-height:1.6;}
+.step-connector{width:2px;height:12px;background:linear-gradient(180deg,var(--orange),var(--orange-light));border-radius:2px;opacity:.3;margin:0 auto;}
+
+/* ── STEP 2 — FORM ───────────────────────────────────────────── */
+.form-section{background:var(--white);padding:28px 20px;border-bottom:1px solid var(--border);}
+.form-badge{display:inline-block;background:var(--sky);color:var(--navy-light);font-size:9px;font-weight:800;letter-spacing:1.5px;padding:3px 12px;border-radius:10px;border:1px solid var(--border);margin-bottom:12px;}
+.form-h2{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--navy);font-weight:700;margin-bottom:4px;line-height:1.2;}
+.form-sub{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
+.fgrp{margin-bottom:14px;}
+.flbl{display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:800;color:var(--navy);letter-spacing:.5px;margin-bottom:5px;}
+.flbl-req{color:var(--err);margin-left:2px;}
+.fchar{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:0;}
+.finput{width:100%;background:#F8FCFF;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;font-size:14px;font-family:'Nunito',sans-serif;color:var(--navy);outline:none;transition:border .2s;}
+.finput:focus{border-color:var(--sky-mid);}
+.finput.err{border-color:var(--err);}
+.ftextarea{width:100%;background:#F8FCFF;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;font-family:'Nunito',sans-serif;color:var(--navy);outline:none;resize:none;transition:border .2s;line-height:1.6;}
+.ftextarea:focus{border-color:var(--sky-mid);}
+.ftextarea.err{border-color:var(--err);}
+.ferr{font-size:10px;color:var(--err);margin-top:4px;display:none;font-weight:600;}
+.ferr.show{display:block;}
+
+/* Gender pills */
+.gender-pills{display:flex;gap:10px;}
+.gpill{flex:1;padding:12px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:#F8FCFF;text-align:center;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+.gpill.boy.sel{border-color:var(--blue-rib);background:#EAF6FF;color:var(--navy-light);}
+.gpill.girl.sel{border-color:var(--pink);background:#FFF0F5;color:#C06080;}
+
+/* Photo upload */
+.photo-zone{background:#F8FCFF;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:20px;text-align:center;cursor:pointer;transition:border .2s;position:relative;}
+.photo-zone:active{border-color:var(--orange);}
+.photo-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.photo-preview{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--orange);margin:0 auto 8px;display:none;}
+.photo-preview.show{display:block;}
+.photo-icon{font-size:28px;margin-bottom:4px;}
+.photo-label{font-size:11px;color:var(--muted);font-weight:600;line-height:1.5;}
+
+/* Book option cards */
+.book-cards-wrap{display:flex;gap:12px;margin-top:14px;}
+.book-card{flex:1;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 12px;text-align:center;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+.book-card.sel{border-color:var(--orange);background:#FFF8F2;box-shadow:0 4px 20px rgba(244,123,32,.15);}
+.bc-badge{display:inline-block;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-size:8px;font-weight:800;padding:2px 8px;border-radius:8px;margin-bottom:6px;}
+.bc-icon{font-size:26px;margin-bottom:6px;}
+.bc-title{font-size:12px;font-weight:800;color:var(--navy);margin-bottom:3px;}
+.bc-price{font-size:18px;font-weight:800;color:var(--orange);margin-bottom:4px;}
+.bc-desc{font-size:9px;color:var(--muted);line-height:1.5;}
+.bc-samples-link{display:inline-block;margin-top:6px;font-size:9px;color:var(--orange);text-decoration:none;font-weight:700;}
+
+/* CTA Button */
+.btn-preview{width:100%;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;padding:16px;border-radius:var(--radius);border:none;cursor:pointer;box-shadow:0 6px 24px rgba(244,123,32,.35);margin-top:8px;letter-spacing:.3px;-webkit-tap-highlight-color:transparent;}
+.btn-preview:active{opacity:.9;}
+
+/* ── LOADING SCREEN ──────────────────────────────────────────── */
+.loading-screen{display:none;position:fixed;inset:0;background:rgba(26,58,92,.85);z-index:500;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+.loading-screen.show{display:flex;}
+.loading-spinner{width:48px;height:48px;border:4px solid rgba(255,255,255,.2);border-top-color:var(--orange);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-msg{color:#fff;font-size:14px;font-weight:700;letter-spacing:.3px;}
+
+/* ── STEP 3 — BOOK PREVIEW ───────────────────────────────────── */
+.preview-section{display:none;background:var(--navy-dark);padding:24px 16px;}
+.preview-section.show{display:block;}
+.preview-header{text-align:center;margin-bottom:16px;}
+.preview-eyebrow{font-size:10px;color:var(--orange);font-weight:800;letter-spacing:2px;margin-bottom:6px;}
+.preview-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:#fff;font-weight:600;}
+.book-scroll-wrap{border-radius:var(--radius);overflow:hidden;background:var(--navy-dark);}
+.book-scroll-label{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.35);text-align:center;padding:10px 0 8px;font-family:'Nunito',sans-serif;}
+.bsv-row{margin-bottom:12px;}
+.bsv-ratio-box{position:relative;overflow:hidden;border-radius:var(--radius-sm);}
+.bsv-inner{display:flex;align-items:stretch;}
+.bsv-page{width:420px;height:296px;flex-shrink:0;position:relative;overflow:hidden;container-type:inline-size;}
+.bsv-solo .bsv-page{box-shadow:0 8px 32px rgba(0,0,0,.6);}
+
+/* Preview action bar */
+.preview-actions{padding:16px 0 8px;display:flex;flex-direction:column;gap:10px;}
+.btn-order{width:100%;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;padding:16px;border-radius:var(--radius);border:none;cursor:pointer;box-shadow:0 6px 24px rgba(244,123,32,.35);}
+.btn-back{width:100%;background:transparent;color:rgba(255,255,255,.5);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;padding:10px;border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);cursor:pointer;}
+
+/* ── GCASH MODAL ─────────────────────────────────────────────── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(13,32,64,.85);z-index:600;align-items:flex-end;justify-content:center;}
+.modal-overlay.show{display:flex;}
+.modal-sheet{background:var(--white);border-radius:24px 24px 0 0;padding:28px 24px 40px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--navy);font-weight:700;margin-bottom:4px;}
+.modal-sub{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
+.gcash-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.gcash-step{display:flex;align-items:center;gap:12px;background:var(--sky);border-radius:var(--radius-sm);padding:12px 14px;}
+.gcash-step-num{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.gcash-step-text{font-size:12px;color:var(--navy);font-weight:600;line-height:1.5;}
+.gcash-num-display{background:var(--navy);color:#fff;border-radius:var(--radius-sm);padding:12px 16px;text-align:center;font-size:18px;font-weight:800;letter-spacing:2px;margin-bottom:16px;}
+.gcash-qr{text-align:center;margin-bottom:16px;}
+.gcash-qr img{max-width:160px;border-radius:var(--radius-sm);border:2px solid var(--border);}
+.order-ref{background:var(--parch);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;text-align:center;margin-bottom:16px;}
+.order-ref-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1px;margin-bottom:2px;}
+.order-ref-val{font-size:16px;font-weight:800;color:var(--navy);letter-spacing:2px;}
+.btn-confirm{width:100%;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;padding:14px;border-radius:var(--radius);border:none;cursor:pointer;margin-bottom:10px;}
+.btn-cancel{width:100%;background:transparent;color:var(--muted);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;padding:10px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;}
+
+/* ── SUCCESS SCREEN ──────────────────────────────────────────── */
+.suc{display:none;background:linear-gradient(160deg,#EAF6FF,var(--cream));padding:40px 24px;}
+.suc.show{display:block;}
+.suc-icon{font-size:60px;text-align:center;margin-bottom:16px;}
+.suc-title{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--navy);font-weight:700;text-align:center;margin-bottom:6px;}
+.suc-ref{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;margin:16px 0;}
+.suc-ref-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1px;margin-bottom:4px;}
+.suc-ref-val{font-size:18px;font-weight:800;color:var(--navy);letter-spacing:2px;}
+.suc-msg{font-size:13px;color:var(--muted);text-align:center;line-height:1.8;margin-bottom:20px;max-width:360px;margin-left:auto;margin-right:auto;}
+.btn-new{display:block;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;padding:14px;border-radius:var(--radius);text-align:center;text-decoration:none;margin-bottom:12px;box-shadow:0 4px 16px rgba(244,123,32,.3);}
+
+/* FAQ */
+.faq{margin-top:24px;}
+.faq-title{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--navy);font-weight:700;margin-bottom:14px;text-align:center;}
+.faq-item{border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;overflow:hidden;background:var(--white);}
+.faq-q{padding:13px 16px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;display:flex;justify-content:space-between;align-items:center;-webkit-tap-highlight-color:transparent;}
+.faq-arrow{color:var(--orange);font-size:12px;transition:transform .2s;flex-shrink:0;}
+.faq-a{font-size:12px;color:var(--muted);line-height:1.7;padding:0 16px;max-height:0;overflow:hidden;transition:all .3s;}
+.faq-a.open{max-height:200px;padding:0 16px 13px;}
+.faq-item.open .faq-arrow{transform:rotate(180deg);}
+
+/* FOOTER */
+.site-footer{background:linear-gradient(160deg,var(--navy-dark),var(--navy));padding:32px 24px;margin-top:0;}
+.footer-inner{text-align:center;}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:18px;color:#fff;margin-bottom:4px;}
+.footer-logo em{color:var(--orange-light);font-style:italic;}
+.footer-tagline{font-size:9px;color:rgba(255,255,255,.35);letter-spacing:2px;margin-bottom:16px;}
+.footer-social{display:flex;justify-content:center;gap:12px;margin-bottom:14px;}
+.footer-social-link{width:38px;height:38px;background:rgba(255,255,255,.08);border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid rgba(255,255,255,.12);transition:background .2s;}
+.footer-social-link:hover{background:rgba(255,255,255,.15);}
+.footer-links{display:flex;justify-content:center;gap:18px;margin-bottom:10px;flex-wrap:wrap;}
+.footer-link{font-size:11px;color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s;}
+.footer-link:hover{color:var(--orange-light);}
+.footer-copy{font-size:10px;color:rgba(255,255,255,.2);}
+
+/* ── UTILS ───────────────────────────────────────────────────── */
+@media(max-width:480px){
+  .hero-h1{font-size:30px;}
+  .sec-title{font-size:22px;}
+  .modal-sheet{border-radius:20px 20px 0 0;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-brand" href="#">
+    <div class="nav-logo-wrap">
+      <img class="nav-logo-img" id="nav-logo-img" alt="Little Light Storybooks">
+      <div class="nav-logo-fallback" id="nav-logo-fallback">📖</div>
+    </div>
+    <div class="nav-brand-text" id="nav-brand-text">
+      <div class="nav-name">Little <em style="color:var(--orange);font-style:italic;">Light</em></div>
+      <div class="nav-sub">Storybooks</div>
+    </div>
+  </a>
+  <a class="nav-cta-btn" href="#steps" id="nav-cta-btn">Create Their Book</a>
+</nav>
+
+<!-- SECTION 1 — HERO -->
+<div class="hero" id="hero">
+  <img class="hero-bg-img" id="hero-bg-img" alt="" fetchpriority="high" loading="eager">
+  <div class="hero-overlay"></div>
+  <div class="hero-top">
+    <div class="hero-badge" id="hero-badge">✦ PERSONALIZED CHRISTIAN STORYBOOK</div>
+    <div class="name-chip" id="hero-name-chip">Your Child's Name</div>
+    <h1 class="hero-h1" id="hero-h1">Little <em>Book</em><br>of Psalms</h1>
+    <p class="hero-sub-text" id="hero-sub">A beautiful book of God's blessings, written with your child's name on every page.</p>
+    <div class="hero-btns">
+      <a href="#steps" class="hero-btn1" id="hero-btn1">✦ Create Their Book →</a>
+      <a href="samples.html" class="hero-btn2" id="hero-btn2" target="_blank" rel="noopener">See Our Books →</a>
+    </div>
+  </div>
+  <div class="hero-product-wrap" id="hero-product-wrap">
+    <div class="hero-product-empty" id="hero-product-empty">📗</div>
+  </div>
+</div>
+
+<!-- TRUST STRIP -->
+<div class="trust" id="trust-strip">
+  <div class="trust-item">
+    <div id="trust-icon-1-wrap"><div class="trust-icon-fallback" id="trust-icon-1-fallback">🙏</div></div>
+    <div class="trust-label" id="trust-label-1">Christian Values</div>
+  </div>
+  <div class="trust-item">
+    <div id="trust-icon-2-wrap"><div class="trust-icon-fallback" id="trust-icon-2-fallback">⭐</div></div>
+    <div class="trust-label" id="trust-label-2">Personalized</div>
+  </div>
+  <div class="trust-item">
+    <div id="trust-icon-3-wrap"><div class="trust-icon-fallback" id="trust-icon-3-fallback">📦</div></div>
+    <div class="trust-label" id="trust-label-3">Fast Delivery</div>
+  </div>
+</div>
+
+<!-- SECTION 1.1 — SOCIAL PROOF -->
+<div class="social" id="social-section">
+  <div class="social-hdr">
+    <div class="sec-eyebrow" id="sp-eyebrow">✦ HAPPY FAMILIES</div>
+    <div class="sec-title" id="sp-title">Loved by Parents<br>Across the Philippines</div>
+    <div class="sec-sub" id="sp-sub" style="margin-top:4px;">Real families, real books, real joy.</div>
+  </div>
+  <div class="proof-strip" id="proof-strip">
+    <!-- Loaded dynamically from admin -->
+  </div>
+  <div class="proof-hint">← Swipe to see more →</div>
+</div>
+
+<!-- SECTION 1.2 — HOW IT WORKS -->
+<div class="hiw" id="hiw-section">
+  <div class="sec-eyebrow" id="hiw-eyebrow">✦ SIMPLE PROCESS</div>
+  <div class="sec-title" id="hiw-title">How It Works</div>
+  <div class="sec-sub" id="hiw-sub" style="margin-top:4px;">Creating your child's personalized book is easy and takes just minutes.</div>
+  <div class="steps" id="hiw-steps">
+    <!-- Steps loaded dynamically -->
+  </div>
+</div>
+
+<!-- SECTION 2 — FORM -->
+<div class="form-section" id="steps">
+  <div class="form-badge">✦ CREATE YOUR BOOK</div>
+  <div class="form-h2" id="form-title">Let's Make Their Special Book</div>
+  <div class="form-sub" id="form-sub">Fill in the details below and preview their personalized Book of Psalms.</div>
+
+  <!-- Child's Name -->
+  <div class="fgrp">
+    <label class="flbl" for="inp-name">
+      CHILD'S NAME <span class="flbl-req">*</span>
+      <span class="fchar"><span id="char-name">0</span>/15</span>
+    </label>
+    <input class="finput" id="inp-name" type="text" maxlength="15" autocomplete="off"
+      placeholder="e.g. Jeremiah, Hannah..."
+      oninput="onName(this)" onblur="validateName()">
+    <div class="ferr" id="e-name">Please enter your child's name.</div>
+  </div>
+
+  <!-- Gender -->
+  <div class="fgrp">
+    <label class="flbl">GENDER <span class="flbl-req">*</span></label>
+    <div class="gender-pills">
+      <div class="gpill boy" id="pill-boy" onclick="pickGender('boy')">💙 Boy</div>
+      <div class="gpill girl" id="pill-girl" onclick="pickGender('girl')">🌸 Girl</div>
+    </div>
+    <div class="ferr" id="e-gender">Please select a gender.</div>
+  </div>
+
+  <!-- Photo Upload -->
+  <div class="fgrp">
+    <label class="flbl">CHILD'S PHOTO <span class="flbl-req">*</span></label>
+    <div class="photo-zone" id="photo-zone" onclick="document.getElementById('photo-input').click()">
+      <img class="photo-preview" id="photo-preview" alt="Child photo">
+      <div class="photo-icon" id="photo-icon">📷</div>
+      <div class="photo-label" id="photo-label">Tap to upload your child's photo<br><span style="font-size:9px;opacity:.7;">JPG or PNG, max 5MB</span></div>
+      <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="onPhotoSelect(this)">
+    </div>
+    <div class="ferr" id="e-photo">Please upload your child's photo.</div>
+  </div>
+
+  <!-- Dedication -->
+  <div class="fgrp">
+    <label class="flbl" for="inp-ded">
+      DEDICATION MESSAGE <span class="flbl-req">*</span>
+      <span class="fchar"><span id="char-ded">0</span>/700</span>
+    </label>
+    <textarea class="ftextarea" id="inp-ded" rows="4" maxlength="700"
+      placeholder="e.g. A Special Day: Welcomed into God's Love"
+      oninput="onDed(this)" onblur="validateDed()"></textarea>
+    <div class="ferr" id="e-ded">Please enter a dedication message.</div>
+  </div>
+
+  <!-- Giver -->
+  <div class="fgrp">
+    <label class="flbl" for="inp-giver">
+      FROM <span class="flbl-req">*</span>
+      <span class="fchar"><span id="char-giver">0</span>/60</span>
+    </label>
+    <input class="finput" id="inp-giver" type="text" maxlength="60" autocomplete="off"
+      placeholder="e.g. Mama and Papa"
+      oninput="onGiver(this)" onblur="validateGiver()">
+    <div class="ferr" id="e-giver">Please enter who this book is from.</div>
+  </div>
+
+  <!-- Book Option -->
+  <div class="fgrp">
+    <label class="flbl">BOOK OPTION <span class="flbl-req">*</span></label>
+    <div class="book-cards-wrap">
+      <div class="book-card" id="bc-standard" onclick="pickBookOption('standard',this)">
+        <div class="bc-icon">📗</div>
+        <div class="bc-title">Standard</div>
+        <div class="bc-price" id="bt-std-price">₱799</div>
+        <div class="bc-desc">220 GSM Premium Glossy · A5 Landscape · Staple-bound · Vibrant full-color print</div>
+        <a href="samples.html" target="_blank" style="display:inline-block;margin-top:6px;font-size:9px;color:var(--orange);text-decoration:none;font-weight:700;">📷 See photos & video →</a>
+      </div>
+      <div class="book-card" id="bc-hardbound" onclick="pickBookOption('hardbound',this)">
+        <div class="bc-badge">Premium</div>
+        <div class="bc-icon">📘</div>
+        <div class="bc-title">Hardbound</div>
+        <div class="bc-price" id="bt-hb-price">₱1,299</div>
+        <div class="bc-desc">Rigid hardcover · Thick coated pages · Side-stitched — built to last forever</div>
+        <a href="samples.html" target="_blank" style="display:inline-block;margin-top:6px;font-size:9px;color:var(--orange);text-decoration:none;font-weight:700;">📷 See photos & video →</a>
+      </div>
+    </div>
+    <div class="ferr" id="e-book">Please select a book option.</div>
+  </div>
+
+  <!-- Buyer Info -->
+  <div class="fgrp">
+    <label class="flbl" for="inp-buyer">YOUR NAME <span class="flbl-req">*</span></label>
+    <input class="finput" id="inp-buyer" type="text" autocomplete="name"
+      placeholder="Your full name" onblur="validateBuyer()">
+    <div class="ferr" id="e-buyer">Please enter your name.</div>
+  </div>
+
+  <div class="fgrp">
+    <label class="flbl" for="inp-phone">CONTACT NUMBER <span class="flbl-req">*</span></label>
+    <input class="finput" id="inp-phone" type="tel" autocomplete="tel"
+      placeholder="e.g. 09XX XXX XXXX" onblur="validatePhone()">
+    <div class="ferr" id="e-phone">Please enter your contact number.</div>
+  </div>
+
+  <div class="fgrp">
+    <label class="flbl" for="inp-addr">DELIVERY ADDRESS <span class="flbl-req">*</span></label>
+    <textarea class="ftextarea" id="inp-addr" rows="3" autocomplete="street-address"
+      placeholder="Full delivery address including barangay, city, and province" onblur="validateAddr()"></textarea>
+    <div class="ferr" id="e-addr">Please enter your delivery address.</div>
+  </div>
+
+  <button class="btn-preview" onclick="goStep2()">✦ Preview Their Book →</button>
+</div>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loading-screen">
+  <div class="loading-spinner"></div>
+  <div class="loading-msg" id="loading-msg">Creating your story…</div>
+</div>
+
+<!-- SECTION 3 — BOOK PREVIEW -->
+<div class="preview-section" id="preview-section">
+  <div class="preview-header">
+    <div class="preview-eyebrow">✦ YOUR PERSONALIZED BOOK</div>
+    <div class="preview-title" id="preview-title">Here's Their Book!</div>
+  </div>
+  <div class="book-scroll-wrap">
+    <div class="book-scroll-label" id="spread-label">Book Preview</div>
+    <div id="book-scroll-pages"></div>
+  </div>
+  <div class="preview-actions">
+    <button class="btn-order" id="order-now-btn" onclick="openPayment()">✦ Order Now →</button>
+    <button class="btn-back" onclick="goStep1()">← Edit Details</button>
+  </div>
+</div>
+
+<!-- GCASH MODAL -->
+<div class="modal-overlay" id="gcash-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Complete Your Payment</div>
+    <div class="modal-sub">Send your payment via GCash and confirm your order below.</div>
+    <div class="order-ref">
+      <div class="order-ref-label">YOUR ORDER REFERENCE</div>
+      <div class="order-ref-val" id="modal-ref">—</div>
+    </div>
+    <div class="gcash-steps">
+      <div class="gcash-step">
+        <div class="gcash-step-num">1</div>
+        <div class="gcash-step-text">Open GCash and tap <strong>Send Money</strong></div>
+      </div>
+      <div class="gcash-step">
+        <div class="gcash-step-num">2</div>
+        <div class="gcash-step-text">Send to this number:</div>
+      </div>
+    </div>
+    <div class="gcash-num-display" id="gcash-number">0XXX XXX XXXX</div>
+    <div class="gcash-qr" id="gcash-qr-wrap" style="display:none;">
+      <img id="gcash-qr-img" src="" alt="GCash QR">
+    </div>
+    <div class="gcash-steps">
+      <div class="gcash-step">
+        <div class="gcash-step-num">3</div>
+        <div class="gcash-step-text">Amount: <strong id="modal-amount">₱799</strong> — Add your order reference in the message</div>
+      </div>
+      <div class="gcash-step">
+        <div class="gcash-step-num">4</div>
+        <div class="gcash-step-text">Take a screenshot of your payment and upload it below</div>
+      </div>
+    </div>
+    <div class="fgrp" style="margin-bottom:14px;">
+      <label class="flbl">PAYMENT SCREENSHOT <span class="flbl-req">*</span></label>
+      <div class="photo-zone" style="padding:14px;" onclick="document.getElementById('ss-input').click()">
+        <div class="photo-icon" id="ss-icon">📸</div>
+        <div class="photo-label" id="ss-label">Tap to upload your payment screenshot</div>
+        <input type="file" id="ss-input" accept="image/*" style="display:none" onchange="onSSSelect(this)">
+      </div>
+      <div class="ferr" id="e-ss">Please upload your payment screenshot.</div>
+    </div>
+    <button class="btn-confirm" onclick="confirmOrder()">✦ Confirm My Order</button>
+    <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- SUCCESS SCREEN -->
+<div class="suc" id="suc-screen">
+  <div class="suc-icon">🙏</div>
+  <div class="suc-title">Order Confirmed!</div>
+  <div class="suc-ref">
+    <div class="suc-ref-label">YOUR ORDER REFERENCE</div>
+    <div class="suc-ref-val" id="suc-ref">—</div>
+  </div>
+  <div class="suc-msg" id="suc-msg">Thank you! We have received your order and payment. We will review and confirm your order shortly. God bless you and your little one! 🙏</div>
+  <a href="#" class="btn-new" onclick="location.reload()">✦ Create Another Book</a>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <div class="faq-title">Frequently Asked Questions</div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How long does delivery take? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">Standard delivery takes 5–10 business days after order confirmation. We will notify you once your book is shipped.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I change my child's photo after ordering? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">Once your order is confirmed and in production, we are unable to change the photo. Please double-check your photo before confirming.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What payment methods do you accept? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">We accept GCash and bank transfer. Payment instructions are provided after you click Order Now.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Is the photo of my child safe? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">Yes. Your child's photo is used only to create your personalized book and is never shared with third parties. Please read our Privacy Policy for full details.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I order as a gift? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">Absolutely! Many of our books are ordered as baptism gifts, birthday gifts, and Christmas gifts. You can customize the dedication message for any occasion.</div>
+    </div>
+  </div>
+
+  <!-- Footer inside success -->
+  <footer class="site-footer" style="margin:28px -24px -40px;border-radius:0;">
+    <div class="footer-inner">
+      <div class="footer-logo">Little <em>Light</em> Storybooks</div>
+      <div class="footer-tagline">LITTLE BOOK OF PSALMS</div>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/littlelightstorybooks" target="_blank" rel="noopener" class="footer-social-link" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/littlelightstorybooks" target="_blank" rel="noopener" class="footer-social-link" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="privacy.html" class="footer-link">Privacy Policy</a>
+        <a href="samples.html" class="footer-link">See Our Books</a>
+      </div>
+      <div class="footer-copy">© 2026 Little Light Storybooks. All rights reserved.</div>
+    </div>
+  </footer>
+</div>
+
+<script src="letters.js?v=1"></script>
+<script src="engine.js?v=1"></script>
+<script>
+// ── GLOBAL STATE ──────────────────────────────────────────────
+var _gender = null;
+var _photoFile = null;
+var _photoDataUrl = null;
+var _ssFile = null;
+var _bookOption = null;
+var _userData = {};
+var _state = null;
+var S = {}; // current order state
+
+// Loading messages
+var _loadMsgs = ['Creating your story…','Weaving in God\'s blessings…','Almost ready…'];
+var _loadIdx = 0;
+var _loadTimer = null;
+
+// ── INIT ──────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  LL.loadRemoteState(function(state) {
+    _state = state;
+    applySettings(state);
+    applyDynamicSections(state);
+  });
+});
+
+// ── APPLY SETTINGS ────────────────────────────────────────────
+function applySettings(state) {
+  var ps  = (state && state.pageSettings) || {};
+  var cfg = (state && state.config)       || {};
+
+  function setText(id, v) { var el=document.getElementById(id); if(el&&v) el.innerHTML=v; }
+  function setPlaceholder(id, v) { var el=document.getElementById(id); if(el&&v) el.placeholder=v; }
+
+  // Hero
+  setText('hero-badge', ps.heroBadge);
+  setText('hero-h1',    ps.heroH1);
+  setText('hero-sub',   ps.heroSub);
+  setText('hero-btn1',  ps.heroBtn1);
+  setText('nav-brand-text', ps.navBrand);
+  setText('nav-cta-btn',    ps.navCta);
+  setText('spread-label',   ps.spreadLabel);
+
+  // Trust strip text
+  if (ps.trustLabel1) setText('trust-label-1', ps.trustLabel1);
+  if (ps.trustLabel2) setText('trust-label-2', ps.trustLabel2);
+  if (ps.trustLabel3) setText('trust-label-3', ps.trustLabel3);
+
+  // Trust strip icons
+  applyIcon('trust-icon-1-wrap', 'trust-icon-1-fallback', ps.trustIcon1);
+  applyIcon('trust-icon-2-wrap', 'trust-icon-2-fallback', ps.trustIcon2);
+  applyIcon('trust-icon-3-wrap', 'trust-icon-3-fallback', ps.trustIcon3);
+
+  // Social proof section text
+  if (ps.spEyebrow) setText('sp-eyebrow', ps.spEyebrow);
+  if (ps.spTitle)   setText('sp-title',   ps.spTitle);
+  if (ps.spSub)     setText('sp-sub',     ps.spSub);
+
+  // How it works text
+  if (ps.hiwEyebrow) setText('hiw-eyebrow', ps.hiwEyebrow);
+  if (ps.hiwTitle)   setText('hiw-title',   ps.hiwTitle);
+  if (ps.hiwSub)     setText('hiw-sub',     ps.hiwSub);
+
+  // Form text
+  if (ps.formTitle) setText('form-title', ps.formTitle);
+  if (ps.formSub)   setText('form-sub',   ps.formSub);
+
+  // Form placeholders
+  setPlaceholder('inp-name',  ps.phName  || 'e.g. Jeremiah, Hannah...');
+  setPlaceholder('inp-ded',   ps.phDed   || 'e.g. A Special Day: Welcomed into God\'s Love');
+  setPlaceholder('inp-giver', ps.phGiver || 'e.g. Mama and Papa');
+
+  // See preview button
+  var btn2 = document.getElementById('hero-btn2');
+  if (btn2) {
+    if (ps.seePreview) btn2.textContent = ps.seePreview;
+    if (ps.seePreviewLink) { btn2.href=ps.seePreviewLink; btn2.target='_blank'; btn2.rel='noopener'; }
+    else { btn2.href='samples.html'; }
+  }
+
+  // Logo
+  if (ps.logoSrc) {
+    var li = document.getElementById('nav-logo-img');
+    var lf = document.getElementById('nav-logo-fallback');
+    if (li) { li.src=LL.resolveImg(ps.logoSrc,200); li.classList.add('show'); }
+    if (lf) lf.style.display='none';
+    if (ps.hideTextLogo) { var nt=document.getElementById('nav-brand-text'); if(nt) nt.style.display='none'; }
+  }
+
+  // Hero background
+  if (ps.heroBgSrc) {
+    var bi = document.getElementById('hero-bg-img');
+    if (bi) { bi.src=LL.resolveImg(ps.heroBgSrc,1400); bi.setAttribute('fetchpriority','high'); bi.setAttribute('loading','eager'); bi.classList.add('show'); }
+  }
+
+  // Product image
+  if (ps.productImgSrc) {
+    var pw = document.getElementById('hero-product-wrap');
+    var pe = document.getElementById('hero-product-empty');
+    var pi = document.createElement('img');
+    pi.className='hero-product-img';
+    pi.alt='Little Book of Psalms';
+    pi.style.cssText='max-width:100%;max-height:260px;object-fit:contain;filter:drop-shadow(0 12px 32px rgba(0,0,0,.18));border-radius:4px;animation:float 4s ease-in-out infinite;';
+    pi.setAttribute('loading','eager');
+    pi.src=LL.resolveImg(ps.productImgSrc,600);
+    if (pw) pw.appendChild(pi);
+    if (pe) pe.style.display='none';
+  }
+
+  // Pricing
+  if (cfg.stdBase) LL.PRICING.standard.base  = cfg.stdBase;
+  if (cfg.stdMaxL) LL.PRICING.standard.maxL  = cfg.stdMaxL;
+  if (cfg.stdEx)   LL.PRICING.standard.ex    = cfg.stdEx;
+  if (cfg.hbBase)  LL.PRICING.hardbound.base = cfg.hbBase;
+  if (cfg.hbMaxL)  LL.PRICING.hardbound.maxL = cfg.hbMaxL;
+  if (cfg.hbEx)    LL.PRICING.hardbound.ex   = cfg.hbEx;
+
+  // Update price display
+  var stdP = document.getElementById('bt-std-price');
+  var hbP  = document.getElementById('bt-hb-price');
+  if (stdP) stdP.textContent = '₱' + LL.PRICING.standard.base;
+  if (hbP)  hbP.textContent  = '₱' + LL.PRICING.hardbound.base;
+
+  // GCash
+  if (cfg.gcash)    { var gn=document.getElementById('gcash-number'); if(gn) gn.textContent=cfg.gcash; }
+  if (cfg.gcashQR)  {
+    var qw=document.getElementById('gcash-qr-wrap');
+    var qi=document.getElementById('gcash-qr-img');
+    if (qw&&qi) { qi.src=LL.resolveImg(cfg.gcashQR,300); qw.style.display='block'; }
+  }
+
+  // Confirm message
+  if (cfg.confirmMsg) { var sm=document.getElementById('suc-msg'); if(sm) sm.textContent=cfg.confirmMsg; }
+
+  // Pixel
+  if (cfg.pixelId) LL.initPixel(cfg.pixelId);
+}
+
+// ── APPLY ICON (trust strip + steps) ─────────────────────────
+function applyIcon(wrapId, fallbackId, src) {
+  if (!src) return;
+  var wrap = document.getElementById(wrapId);
+  var fallback = document.getElementById(fallbackId);
+  if (!wrap) return;
+  var img = document.createElement('img');
+  img.className = 'trust-icon';
+  img.src = LL.resolveImg(src, 60);
+  img.alt = '';
+  img.onerror = function(){ this.style.display='none'; if(fallback) fallback.style.display='block'; };
+  if (fallback) fallback.style.display='none';
+  wrap.innerHTML='';
+  wrap.appendChild(img);
+}
+
+// ── DYNAMIC SECTIONS ──────────────────────────────────────────
+function applyDynamicSections(state) {
+  var ps = (state && state.pageSettings) || {};
+  var sp = (state && state.socialProof)  || {};
+  var hiw = (state && state.howItWorks)  || {};
+
+  // Social proof cards
+  var strip = document.getElementById('proof-strip');
+  if (strip && sp.cards && sp.cards.length) {
+    strip.innerHTML = sp.cards.map(function(card) {
+      if (!card) return '';
+      var photoHtml = card.photo
+        ? '<img class="proof-card-photo" src="'+LL.resolveImg(card.photo,300)+'" alt="'+LL.escHtml(card.name||'')+'" loading="lazy">'
+        : '<div class="proof-card-photo-empty">📸</div>';
+      return '<div class="proof-card">'+photoHtml+'<div class="proof-card-body"><div class="proof-stars">⭐⭐⭐⭐⭐</div><div class="proof-quote">'+LL.escHtml(card.quote||'')+'</div><div class="proof-name">— '+LL.escHtml(card.name||'')+'</div></div></div>';
+    }).join('');
+  } else if (strip) {
+    // Default placeholder cards
+    strip.innerHTML = [
+      {quote:'My son cried happy tears!', name:'Ate Maria, QC'},
+      {quote:'Perfect baptism gift!', name:'Kuya Rex, Manila'},
+      {quote:'Ordered 3 already!', name:'Ate Grace, Cebu'},
+    ].map(function(c){
+      return '<div class="proof-card"><div class="proof-card-photo-empty">📸</div><div class="proof-card-body"><div class="proof-stars">⭐⭐⭐⭐⭐</div><div class="proof-quote">'+LL.escHtml(c.quote)+'</div><div class="proof-name">— '+LL.escHtml(c.name)+'</div></div></div>';
+    }).join('');
+  }
+
+  // How it works steps
+  var stepsWrap = document.getElementById('hiw-steps');
+  var defaultSteps = [
+    {icon:'✏️', title:'Personalize Their Book', desc:'Enter your child\'s name, gender, photo, and dedication message.'},
+    {icon:'👀', title:'Instantly Preview',       desc:'See your personalized Christian storybook come to life right before your eyes.'},
+    {icon:'💚', title:'Order via GCash',         desc:'Click "Order Now" and pay easily via GCash or bank transfer.'},
+    {icon:'🖨️', title:'We Print with Care',      desc:'We confirm your order and place it in our production queue.'},
+    {icon:'📦', title:'Delivered to Your Door',  desc:'Your book is printed, bound, and shipped with love and care.'},
+  ];
+  var steps = (hiw.steps && hiw.steps.length) ? hiw.steps : defaultSteps;
+  if (stepsWrap) {
+    stepsWrap.innerHTML = steps.map(function(step, i) {
+      var iconHtml = step.iconSrc
+        ? '<img class="step-icon-img" src="'+LL.resolveImg(step.iconSrc,60)+'" alt="">'
+        : '<div class="step-icon-emoji">'+LL.escHtml(step.icon||'✦')+'</div>';
+      var connector = (i < steps.length-1) ? '<div class="step-connector"></div>' : '';
+      return '<div class="step"><div class="step-num">'+(i+1)+'</div><div class="step-icon-wrap">'+iconHtml+'</div><div class="step-body"><div class="step-title">'+LL.escHtml(step.title)+'</div><div class="step-desc">'+LL.escHtml(step.desc)+'</div></div></div>'+connector;
+    }).join('');
+  }
+}
+
+// ── FORM HANDLERS ─────────────────────────────────────────────
+function onName(el) {
+  el.value = el.value.slice(0,15);
+  document.getElementById('char-name').textContent = el.value.length;
+  var chip = document.getElementById('hero-name-chip');
+  if (chip) chip.textContent = el.value || 'Your Child\'s Name';
+  hideErr('e-name');
+}
+function onDed(el) {
+  el.value = el.value.slice(0,700);
+  document.getElementById('char-ded').textContent = el.value.length;
+  hideErr('e-ded');
+}
+function onGiver(el) {
+  el.value = el.value.slice(0,60);
+  document.getElementById('char-giver').textContent = el.value.length;
+  hideErr('e-giver');
+}
+function pickGender(g) {
+  _gender = g;
+  document.getElementById('pill-boy').classList.toggle('sel', g==='boy');
+  document.getElementById('pill-girl').classList.toggle('sel', g==='girl');
+  hideErr('e-gender');
+}
+function pickBookOption(type, el) {
+  _bookOption = type;
+  document.querySelectorAll('.book-card').forEach(function(c){ c.classList.remove('sel'); });
+  if (el) el.classList.add('sel');
+  hideErr('e-book');
+}
+function onPhotoSelect(input) {
+  var f = input.files[0]; if (!f) return;
+  _photoFile = f;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    _photoDataUrl = e.target.result;
+    var prev = document.getElementById('photo-preview');
+    var icon = document.getElementById('photo-icon');
+    var lbl  = document.getElementById('photo-label');
+    if (prev) { prev.src=_photoDataUrl; prev.classList.add('show'); }
+    if (icon) icon.style.display='none';
+    if (lbl)  lbl.textContent='Photo selected ✓';
+    hideErr('e-photo');
+  };
+  reader.readAsDataURL(f);
+}
+function onSSSelect(input) {
+  var f = input.files[0]; if (!f) return;
+  _ssFile = f;
+  var icon = document.getElementById('ss-icon');
+  var lbl  = document.getElementById('ss-label');
+  if (icon) icon.textContent='✅';
+  if (lbl)  lbl.textContent='Screenshot selected ✓';
+  hideErr('e-ss');
+}
+
+// ── VALIDATION ────────────────────────────────────────────────
+function showErr(id){ var el=document.getElementById(id); if(el) el.classList.add('show'); }
+function hideErr(id){ var el=document.getElementById(id); if(el) el.classList.remove('show'); }
+function validateName(){ var v=document.getElementById('inp-name').value.trim(); if(!v){showErr('e-name');return false;} hideErr('e-name');return true; }
+function validateDed(){ var v=document.getElementById('inp-ded').value.trim(); if(!v){showErr('e-ded');return false;} hideErr('e-ded');return true; }
+function validateGiver(){ if(!document.getElementById('inp-giver').value.trim()){showErr('e-giver');return false;} hideErr('e-giver');return true; }
+function validateBuyer(){ if(!document.getElementById('inp-buyer').value.trim()){showErr('e-buyer');return false;} hideErr('e-buyer');return true; }
+function validatePhone(){ if(!document.getElementById('inp-phone').value.trim()){showErr('e-phone');return false;} hideErr('e-phone');return true; }
+function validateAddr(){ if(!document.getElementById('inp-addr').value.trim()){showErr('e-addr');return false;} hideErr('e-addr');return true; }
+
+function validateAll() {
+  var ok = true;
+  if (!validateName())  ok = false;
+  if (!_gender)         { showErr('e-gender'); ok=false; }
+  if (!_photoFile)      { showErr('e-photo');  ok=false; }
+  if (!validateDed())   ok = false;
+  if (!validateGiver()) ok = false;
+  if (!_bookOption)     { showErr('e-book');   ok=false; }
+  if (!validateBuyer()) ok = false;
+  if (!validatePhone()) ok = false;
+  if (!validateAddr())  ok = false;
+  return ok;
+}
+
+// ── STEP 2 — PREVIEW ──────────────────────────────────────────
+function goStep2() {
+  if (!validateAll()) {
+    document.querySelector('.ferr.show') && document.querySelector('.ferr.show').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+
+  // Collect user data
+  _userData = {
+    name:    document.getElementById('inp-name').value.trim(),
+    gender:  _gender,
+    photo:   _photoDataUrl,
+    ded:     document.getElementById('inp-ded').value.trim(),
+    giver:   document.getElementById('inp-giver').value.trim(),
+    book:    _bookOption,
+    buyer:   document.getElementById('inp-buyer').value.trim(),
+    phone:   document.getElementById('inp-phone').value.trim(),
+    addr:    document.getElementById('inp-addr').value.trim(),
+  };
+
+  // Show loading
+  showLoading();
+
+  // Fire ViewContent pixel
+  try { if(typeof fbq!=='undefined') fbq('track','ViewContent',{content_name:'Book Preview',content_category:'Personalized Storybook'}); } catch(e){}
+
+  // Load state and build book
+  LL.loadRemoteState(function(state) {
+    _state = state;
+    var pages = LL.buildPageModel(state || LL._readLocalState(), _userData);
+    var frontCoverPage = pages.shift();
+    var backCoverPage  = pages.pop();
+    var innerPages     = pages;
+
+    // Build pairs for _spreads compat
+    _spreads = [];
+    for (var i=0;i<innerPages.length;i+=2) {
+      _spreads.push({left:innerPages[i],right:innerPages[i+1]||null});
+    }
+
+    renderBookScroll(frontCoverPage, innerPages, backCoverPage, _userData.name);
+    hideLoading();
+
+    document.getElementById('form-section') && (document.getElementById('form-section').style.display='none');
+    document.getElementById('social-section') && (document.getElementById('social-section').style.display='none');
+    document.getElementById('hiw-section') && (document.getElementById('hiw-section').style.display='none');
+    var prev = document.getElementById('preview-section');
+    if (prev) { prev.classList.add('show'); prev.scrollIntoView({behavior:'smooth'}); }
+  });
+}
+
+function goStep1() {
+  document.getElementById('preview-section').classList.remove('show');
+  document.getElementById('form-section').style.display='';
+  document.getElementById('social-section').style.display='';
+  document.getElementById('hiw-section').style.display='';
+  document.getElementById('steps').scrollIntoView({behavior:'smooth'});
+}
+
+// ── LOADING ───────────────────────────────────────────────────
+function showLoading() {
+  var ls = document.getElementById('loading-screen');
+  if (ls) ls.classList.add('show');
+  _loadIdx = 0;
+  var lm = document.getElementById('loading-msg');
+  if (lm) lm.textContent = _loadMsgs[0];
+  _loadTimer = setInterval(function(){
+    _loadIdx = (_loadIdx+1) % _loadMsgs.length;
+    var lm2 = document.getElementById('loading-msg');
+    if (lm2) lm2.textContent = _loadMsgs[_loadIdx];
+  }, 1500);
+}
+function hideLoading() {
+  var ls = document.getElementById('loading-screen');
+  if (ls) ls.classList.remove('show');
+  if (_loadTimer) { clearInterval(_loadTimer); _loadTimer=null; }
+}
+
+// ── BOOK RENDER ───────────────────────────────────────────────
+var _spreads = [];
+
+function renderBookScroll(frontCoverPage, innerPages, backCoverPage, name) {
+  var container = document.getElementById('book-scroll-pages');
+  if (!container) return;
+  container.innerHTML='';
+
+  var wrap = container.closest('.book-scroll-wrap') || container.parentElement;
+
+  function getScale(totalW) {
+    var w = wrap.offsetWidth || 420;
+    return Math.min(1, w/totalW);
+  }
+
+  function makeRow(label, pageModels, type) {
+    var totalW = 420;
+    var scale  = getScale(totalW);
+    var ratioH = Math.round(296*scale);
+
+    var row = document.createElement('div');
+    row.className='bsv-row';
+    row.setAttribute('data-totalw', totalW);
+
+    var lbl = document.createElement('div');
+    lbl.className='book-scroll-label';
+    lbl.textContent=label;
+    row.appendChild(lbl);
+
+    var rb = document.createElement('div');
+    rb.className='bsv-ratio-box';
+    rb.style.height=ratioH+'px';
+    row.appendChild(rb);
+
+    var inner = document.createElement('div');
+    inner.className='bsv-inner bsv-'+type;
+    inner.style.zoom=scale;
+    rb.appendChild(inner);
+
+    pageModels.forEach(function(pm) {
+      if (!pm) return;
+      var pageEl = document.createElement('div');
+      pageEl.className='bsv-page';
+      pageEl.innerHTML = LL.renderPage(pm, name, _userData.giver);
+      LL.mergePageImages(pageEl, pm);
+      inner.appendChild(pageEl);
+    });
+
+    container.appendChild(row);
+  }
+
+  makeRow('Front Cover', [frontCoverPage||{type:'filler',meta:{}}], 'solo');
+  for (var i=0;i<innerPages.length;i++) {
+    makeRow('Page '+(i+2), [innerPages[i]], 'solo');
+  }
+  makeRow('Back Cover', [backCoverPage||{type:'filler',meta:{}}], 'solo');
+
+  window.addEventListener('resize', function(){
+    container.querySelectorAll('.bsv-row').forEach(function(row){
+      var tw  = parseInt(row.getAttribute('data-totalw'))||420;
+      var sc  = getScale(tw);
+      var rb  = row.querySelector('.bsv-ratio-box');
+      var inn = row.querySelector('.bsv-inner');
+      if(!rb||!inn) return;
+      rb.style.height=Math.round(296*sc)+'px';
+      inn.style.zoom=sc;
+    });
+  },{passive:true});
+}
+
+// ── PAYMENT ───────────────────────────────────────────────────
+function openPayment() {
+  if (sessionStorage.getItem('bop_order_placed')==='1') {
+    LL.toast('Order already placed. Click "Create Another Book" to start over.','err');
+    return;
+  }
+
+  // Fire InitiateCheckout
+  try { if(typeof fbq!=='undefined') fbq('track','InitiateCheckout'); } catch(e){}
+
+  // Generate ref
+  var now=new Date();
+  var mm=String(now.getMonth()+1).padStart(2,'0');
+  var dd=String(now.getDate()).padStart(2,'0');
+  var yy=String(now.getFullYear()).slice(-2);
+  var chars='ABCDEFGHJKLMNPQRSTUVWXYZ';
+  var uid='';for(var ci=0;ci<3;ci++) uid+=chars.charAt(Math.floor(Math.random()*chars.length));
+  S.ref = 'BOP-'+yy+mm+dd+'-'+uid;
+
+  // Update modal
+  var mr=document.getElementById('modal-ref'); if(mr) mr.textContent=S.ref;
+  var ma=document.getElementById('modal-amount');
+  if (ma) {
+    var price = _bookOption==='hardbound' ? LL.PRICING.hardbound.base : LL.PRICING.standard.base;
+    ma.textContent='₱'+price;
+    S.total=price;
+  }
+
+  document.getElementById('gcash-modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('gcash-modal').classList.remove('show');
+}
+
+function confirmOrder() {
+  if (!_ssFile) { showErr('e-ss'); return; }
+
+  var cfg = (_state&&_state.config)||{};
+
+  // Upload screenshot then save order
+  LL.uploadToCloudinary(_ssFile, 'bookofpsalms_uploads/customers', null, 'customer-screenshot').then(function(ssUrl) {
+    var order = {
+      ref:    S.ref,
+      date:   new Date().toISOString(),
+      status: 'pending',
+      child:  _userData.name,
+      gender: _userData.gender,
+      book:   _userData.book,
+      total:  S.total,
+      ded:    _userData.ded,
+      giver:  _userData.giver,
+      buyer:  _userData.buyer,
+      phone:  _userData.phone,
+      addr:   _userData.addr,
+      ss:     ssUrl,
+    };
+
+    // Upload child photo
+    if (_photoFile) {
+      LL.uploadToCloudinary(_photoFile,'bookofpsalms_uploads/customers',null,'customer-photo').then(function(photoUrl){
+        order.photo=photoUrl;
+        saveOrder(order, cfg);
+      }).catch(function(){ saveOrder(order, cfg); });
+    } else {
+      saveOrder(order, cfg);
+    }
+  }).catch(function(e){ LL.toast('Upload failed: '+e.message,'err'); });
+}
+
+function saveOrder(order, cfg) {
+  LL.loadRemoteState(function(state) {
+    var orders = (state&&state.orders)||[];
+    orders.unshift(order);
+    state.orders=orders;
+    LL.saveRemoteState(state, function(ok){
+      if (!ok) { LL.toast('Could not save order. Please try again.','err'); return; }
+
+      // CAPI
+      LL.firePixel(order.total, order.ref, window.location.href);
+
+      sessionStorage.setItem('bop_order_placed','1');
+      closeModal();
+      showSuccess(order, cfg);
+    });
+  });
+}
+
+function showSuccess(order, cfg) {
+  document.getElementById('preview-section').classList.remove('show');
+  var sr=document.getElementById('suc-ref'); if(sr) sr.textContent=order.ref;
+  if (cfg.confirmMsg) { var sm=document.getElementById('suc-msg'); if(sm) sm.textContent=cfg.confirmMsg; }
+  var suc=document.getElementById('suc-screen'); if(suc){ suc.classList.add('show'); suc.scrollIntoView({behavior:'smooth'}); }
+}
+
+// ── FAQ ───────────────────────────────────────────────────────
+function toggleFaq(el) {
+  var item=el.parentElement;
+  var ans=item.querySelector('.faq-a');
+  var isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(function(i){
+    i.classList.remove('open');
+    i.querySelector('.faq-a').classList.remove('open');
+  });
+  if (!isOpen) { item.classList.add('open'); ans.classList.add('open'); }
+}
+
+// ── RIGHT CLICK PROTECTION ────────────────────────────────────
+document.addEventListener('contextmenu',function(e){
+  if(e.target.closest('.bsv-page')||e.target.closest('.bsv-inner')) e.preventDefault();
+});
+</script>
+</body>
+</html>

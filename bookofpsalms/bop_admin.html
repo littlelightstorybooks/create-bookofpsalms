@@ -1,0 +1,2227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Little Light -- Admin V2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600;700&family=Lora:wght@400;600&family=Montserrat:wght@400;600&family=Poppins:wght@400;600;700&family=Luckiest+Guy&family=Kanit:wght@400;700&family=Margarine&family=Sniglet&family=Galindo&family=Darumadrop+One&family=Mochiy+Pop+P+One&family=Londrina+Solid&family=Belanosima:wght@400;700&family=Lilita+One&family=Braah+One&family=Gorditas:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
+<link rel="dns-prefetch" href="https://res.cloudinary.com">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+/* ================================================
+   LITTLE LIGHT V2 -- ADMIN UI
+   ================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#C9943A;--gold-l:#E8C06A;--gold-p:#FDF3DC;
+  --deep:#12100E;--brown:#3A2410;--cream:#FEFAF3;
+  --parch:#F5EDD8;--bd:#E2D5B8;--muted:#8A7A62;
+  --ok:#3A7A4A;--err:#9E3030;
+  --boy:#2E6B9E;--boy-p:#EBF4FB;
+  --girl:#9E3A7A;--girl-p:#FBEDF6;
+}
+body{font-family:'Jost',sans-serif;background:var(--parch);color:var(--deep);-webkit-font-smoothing:antialiased;}
+
+/* SAVE BAR */
+#save-bar{position:fixed;top:0;left:224px;right:0;height:3px;z-index:200;background:transparent;transition:background .3s;}
+#save-bar.saving{background:var(--gold);animation:pulse-bar 1s infinite;}
+#save-bar.saved{background:var(--ok);}
+#save-bar.error{background:var(--err);}
+@keyframes pulse-bar{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+/* LAYOUT */
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:224px;flex-shrink:0;background:var(--deep);padding:24px 0;
+  position:sticky;top:0;height:100vh;overflow-y:auto;}
+.sb-logo{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--gold);
+  padding:0 18px;margin-bottom:20px;display:block;line-height:1.4;}
+.sb-logo em{font-style:italic;color:var(--gold-l);}
+.sb-sec{font-size:.57rem;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(254,250,243,.25);padding:0 18px;margin:18px 0 5px;}
+.sbtn{display:flex;align-items:center;gap:9px;padding:10px 18px;
+  color:rgba(254,250,243,.55);font-size:.78rem;cursor:pointer;border:none;
+  background:none;width:100%;text-align:left;transition:all .2s;text-decoration:none;}
+.sbtn:hover,.sbtn.act{background:rgba(201,148,58,.1);color:var(--gold);}
+.sbtn .si{font-size:.9rem;width:17px;text-align:center;}
+.sbadge{margin-left:auto;background:var(--gold);color:var(--deep);font-size:.6rem;
+  font-weight:700;padding:2px 6px;border-radius:8px;display:none;}
+.sbadge.show{display:inline;}
+.sb-status{padding:10px 18px;font-size:.65rem;color:rgba(254,250,243,.25);
+  border-top:1px solid rgba(255,255,255,.05);margin-top:20px;}
+.sb-status span{color:var(--gold);}
+
+/* INLINE GENDER SWITCHER — lives inside content tabs only */
+.tab-gender{display:flex;align-items:center;gap:0;border-radius:4px;overflow:hidden;
+  border:1.5px solid var(--bd);background:white;}
+.tab-gender-btn{flex:1;padding:7px 18px;font-size:.72rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;border:none;cursor:pointer;font-family:'Jost',sans-serif;
+  transition:all .18s;background:transparent;color:var(--muted);}
+.tab-gender-btn:first-child{border-right:1px solid var(--bd);}
+.tab-gender-btn:hover{color:var(--deep);}
+.tab-gender-btn.act-boy{background:var(--boy);color:white;border-color:var(--boy);}
+.tab-gender-btn.act-girl{background:var(--girl);color:white;border-color:var(--girl);}
+/* Tab header bar that holds the switcher */
+.tab-header{display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;border-bottom:1px solid var(--bd);background:white;}
+.tab-header-title{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);font-weight:600;}
+.tab-header-actions{display:flex;align-items:center;gap:8px;}
+
+.main{flex:1;overflow-y:auto;min-width:0;}
+.topbar{background:white;border-bottom:1px solid var(--bd);padding:13px 26px;
+  display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.tb-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;display:flex;align-items:center;gap:10px;}
+/* gender badge removed from topbar — gender now lives in content tabs only */
+.tb-actions{display:flex;gap:8px;align-items:center;}
+.tb-save-lbl{font-size:.7rem;color:var(--muted);}
+.content{padding:26px;}
+
+/* VIEWS */
+.view{display:none;}
+.view.act{display:block;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:9px 20px;
+  font-family:'Jost',sans-serif;font-size:.76rem;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;border:none;border-radius:2px;cursor:pointer;transition:all .2s;
+  text-decoration:none;white-space:nowrap;gap:6px;}
+.btn-gold{background:var(--gold);color:var(--deep);}
+.btn-gold:hover{background:var(--gold-l);}
+.btn-dark{background:var(--deep);color:#FEFAF3;}
+.btn-dark:hover{background:var(--brown);}
+.btn-sm{padding:6px 13px;font-size:.7rem;}
+.btn-xs{padding:4px 9px;font-size:.66rem;}
+.btn-err{background:transparent;color:var(--err);border:1px solid var(--err);}
+.btn-err:hover{background:var(--err);color:white;}
+.btn-sec{background:transparent;color:var(--muted);border:1px solid var(--bd);}
+.btn-sec:hover{border-color:var(--gold);color:var(--gold);}
+.btn-ghost{background:transparent;color:var(--muted);border:none;padding:4px 8px;font-size:.72rem;}
+.btn-ghost:hover{color:var(--gold);}
+
+/* CARDS */
+.card{background:white;border:1px solid var(--bd);border-radius:4px;padding:22px;
+  box-shadow:0 1px 6px rgba(18,16,14,.06);margin-bottom:18px;}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;margin-bottom:14px;
+  padding-bottom:10px;border-bottom:1px solid var(--bd);}
+
+/* FORM */
+.fgrp{margin-bottom:14px;}
+.fgrp:last-child{margin-bottom:0;}
+.flbl{display:block;font-size:.63rem;font-weight:600;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--brown);margin-bottom:5px;}
+.fhint{font-size:.68rem;color:var(--muted);margin-top:3px;line-height:1.5;}
+.finput,.ftextarea,.fsel{width:100%;padding:9px 11px;border:1.5px solid var(--bd);
+  border-radius:3px;font-size:.86rem;font-family:'Jost',sans-serif;color:var(--deep);
+  background:white;outline:none;transition:border-color .2s;}
+.finput:focus,.ftextarea:focus,.fsel:focus{border-color:var(--gold);}
+.ftextarea{resize:vertical;min-height:72px;line-height:1.6;}
+.fsel{appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238A7A62' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 11px center;padding-right:32px;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.f3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.color-row{display:flex;align-items:center;gap:8px;}
+.color-pick{width:38px;height:32px;border:1.5px solid var(--bd);border-radius:3px;cursor:pointer;padding:2px;}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+.stat{background:white;border:1px solid var(--bd);border-radius:4px;padding:18px;
+  box-shadow:0 1px 6px rgba(18,16,14,.06);}
+.stat-lbl{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:700;line-height:1;}
+.stat-sub{font-size:.7rem;color:var(--muted);margin-top:3px;}
+.stat.gold{border-top:3px solid var(--gold);}
+.stat.green{border-top:3px solid var(--ok);}
+.stat.blue{border-top:3px solid #2E6B9E;}
+
+/* TABLE */
+.tpanel{background:white;border:1px solid var(--bd);border-radius:4px;overflow:hidden;
+  box-shadow:0 1px 6px rgba(18,16,14,.06);}
+.tpanel-head{padding:14px 18px;border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.tpanel-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;}
+.search-bar{display:flex;align-items:center;gap:7px;background:var(--parch);
+  border:1px solid var(--bd);border-radius:3px;padding:6px 11px;}
+.search-bar input{border:none;background:none;outline:none;font-family:'Jost',sans-serif;font-size:.8rem;width:160px;}
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;padding:9px 13px;font-size:.6rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--muted);background:var(--parch);border-bottom:1px solid var(--bd);}
+td{padding:10px 13px;border-bottom:1px solid var(--bd);font-size:.8rem;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--gold-p);}
+.status-sel{padding:5px 8px;border:1px solid var(--bd);border-radius:3px;
+  font-family:'Jost',sans-serif;font-size:.74rem;cursor:pointer;background:white;outline:none;}
+.act-btns{display:flex;gap:4px;}
+.act-btn{padding:4px 9px;border-radius:2px;border:1px solid var(--bd);background:white;
+  font-size:.66rem;cursor:pointer;font-family:'Jost',sans-serif;transition:all .18s;font-weight:600;}
+.act-btn:hover{border-color:var(--gold);color:var(--gold);}
+.act-btn.p{background:var(--deep);color:white;border-color:var(--deep);}
+.act-btn.danger{color:var(--err);border-color:var(--err);}
+.act-btn.danger:hover{background:var(--err);color:white;}
+.empty{text-align:center;padding:48px 20px;color:var(--muted);font-size:.86rem;}
+
+/* IMAGE UPLOAD */
+.img-zone{border:2px dashed var(--bd);border-radius:3px;background:var(--parch);
+  cursor:pointer;position:relative;transition:all .2s;overflow:hidden;}
+.img-zone:hover{border-color:var(--gold);background:var(--gold-p);}
+.img-zone-a5{aspect-ratio:210/148;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}
+.iz-file{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2;}
+.iz-icon{font-size:1.4rem;}
+.iz-lbl{font-size:.72rem;color:var(--muted);text-align:center;}
+.iz-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.iz-rm{position:absolute;top:6px;right:6px;z-index:3;background:rgba(0,0,0,.55);
+  border:none;color:white;border-radius:2px;padding:3px 7px;font-size:.66rem;cursor:pointer;}
+
+/* TOAST */
+.toast-admin{position:fixed;bottom:22px;right:22px;z-index:9999;padding:13px 17px;
+  background:var(--deep);color:var(--cream);border-left:3px solid var(--gold);
+  border-radius:3px;font-size:.78rem;box-shadow:0 4px 18px rgba(0,0,0,.25);
+  transform:translateY(50px);opacity:0;transition:all .3s;max-width:300px;}
+.toast-admin.show{transform:translateY(0);opacity:1;}
+.toast-admin.ok{border-color:var(--ok);}
+.toast-admin.err{border-color:var(--err);}
+
+/* MESSENGER FLOAT */
+.msng-float{position:fixed;bottom:24px;right:24px;z-index:9000;width:48px;height:48px;
+  border-radius:50%;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.18);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  text-decoration:none;transition:transform .22s;}
+.msng-float:hover{transform:scale(1.08);}
+.msng-float svg{width:28px;height:28px;}
+
+/* ================================================
+   SHARED PAGE EDITOR SYSTEM
+   ================================================ */
+.ped-layout{display:grid;grid-template-columns:200px 1fr 300px;gap:0;
+  background:white;border:1px solid var(--bd);border-radius:4px;
+  box-shadow:0 1px 6px rgba(18,16,14,.06);overflow:hidden;min-height:600px;}
+
+/* Left nav panel */
+.ped-nav{border-right:1px solid var(--bd);background:var(--parch);display:flex;flex-direction:column;}
+.ped-nav-head{padding:12px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;
+  justify-content:space-between;background:white;}
+.ped-nav-title{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);font-weight:600;}
+.ped-nav-actions{display:flex;gap:4px;}
+.ped-nav-list{flex:1;overflow-y:auto;padding:6px;}
+
+/* Page thumbnail */
+.ped-thumb{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:3px;
+  cursor:pointer;transition:all .18s;margin-bottom:3px;border:1px solid transparent;}
+.ped-thumb:hover{background:white;border-color:var(--bd);}
+.ped-thumb.act{background:var(--gold-p);border-color:var(--gold);}
+.ped-thumb-img{width:48px;height:34px;border-radius:2px;overflow:hidden;flex-shrink:0;
+  background:var(--deep);position:relative;}
+.ped-thumb-img img{width:100%;height:100%;object-fit:cover;}
+.ped-thumb-img .ped-no-img{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  font-size:.55rem;color:rgba(255,255,255,.3);font-style:italic;}
+.ped-thumb-info{flex:1;min-width:0;}
+.ped-thumb-name{font-size:.72rem;font-weight:600;color:var(--deep);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;line-height:1.2;}
+.ped-thumb.act .ped-thumb-name{color:var(--brown);}
+.ped-thumb-num{font-size:.6rem;color:var(--muted);}
+.ped-thumb-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;display:none;}
+.ped-thumb.has-img .ped-thumb-dot{display:block;}
+
+/* Letter nav thumbnail */
+.ped-letter-thumb{display:flex;align-items:center;gap:8px;padding:8px 10px;
+  border-radius:3px;cursor:pointer;transition:all .18s;margin-bottom:3px;border:1px solid transparent;}
+.ped-letter-thumb:hover{background:white;border-color:var(--bd);}
+.ped-letter-thumb.act{background:var(--gold-p);border-color:var(--gold);}
+.ped-letter-icon{width:34px;height:34px;border-radius:3px;background:var(--deep);
+  display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;font-weight:700;color:var(--gold);flex-shrink:0;position:relative;overflow:hidden;}
+.ped-letter-icon img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.ped-letter-label{font-size:.78rem;font-weight:600;color:var(--deep);}
+.ped-letter-thumb.act .ped-letter-label{color:var(--brown);}
+.ped-letter-sub{font-size:.6rem;color:var(--muted);}
+
+/* Center form panel */
+.ped-form{border-right:1px solid var(--bd);padding:20px;overflow-y:auto;}
+.ped-form-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;margin-bottom:16px;
+  padding-bottom:10px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.ped-form-badge{font-size:.6rem;background:var(--gold-p);color:var(--brown);
+  padding:2px 8px;border-radius:10px;font-family:'Jost',sans-serif;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;}
+
+/* Right preview panel */
+.ped-preview{padding:16px;background:#1a1714;display:flex;flex-direction:column;gap:12px;}
+.ped-preview-label{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;
+  color:rgba(201,148,58,.7);font-family:'Jost',sans-serif;}
+
+/* Live preview box */
+.lp-wrap{background:#12100E;border-radius:3px;overflow:hidden;position:relative;
+  border:1px solid rgba(201,148,58,.2);box-shadow:0 2px 12px rgba(0,0,0,.4);}
+.lp-page{width:420px;height:296px;position:relative;overflow:hidden;container-type:inline-size;transform-origin:top left;flex-shrink:0;}
+.lp-spread{display:flex;}
+.lp-spread .lp-page:first-child{border-right:1px solid rgba(0,0,0,.5);}
+
+/* Image upload zone in form */
+.form-img-zone{border:2px dashed var(--bd);border-radius:3px;background:var(--parch);
+  cursor:pointer;position:relative;transition:all .2s;overflow:hidden;aspect-ratio:210/148;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}
+.form-img-zone:hover{border-color:var(--gold);background:var(--gold-p);}
+.form-img-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2;}
+.form-img-zone img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.form-img-zone .rm{position:absolute;top:6px;right:6px;z-index:3;background:rgba(0,0,0,.6);
+  border:none;color:white;border-radius:2px;padding:3px 7px;font-size:.66rem;cursor:pointer;}
+
+/* Upload status */
+.upload-status{display:flex;align-items:center;gap:6px;font-size:.7rem;margin-top:4px;
+  padding:5px 8px;border-radius:3px;background:var(--parch);}
+.upload-status.ok{color:var(--ok);}
+.upload-status.err{color:var(--err);}
+.upload-status.loading{color:var(--muted);}
+
+/* Section divider */
+.form-section{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);padding:10px 0 6px;border-top:1px solid var(--bd);margin-top:14px;margin-bottom:10px;}
+.form-section:first-child{border-top:none;margin-top:0;padding-top:0;}
+
+/* Variation tabs */
+.var-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;align-items:center;}
+.var-tab{padding:5px 12px;border-radius:3px;border:1px solid var(--bd);background:white;
+  font-size:.74rem;cursor:pointer;font-family:'Jost',sans-serif;transition:all .18s;}
+.var-tab:hover{border-color:var(--gold);}
+.var-tab.act{background:var(--gold);color:var(--deep);border-color:var(--gold);font-weight:700;}
+.var-add{padding:5px 10px;border-radius:3px;border:1px dashed var(--gold);background:transparent;
+  color:var(--gold);font-size:.74rem;cursor:pointer;font-family:'Jost',sans-serif;transition:all .18s;}
+.var-add:hover{background:var(--gold-p);}
+
+/* Letter image pair */
+.letter-img-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.letter-img-box{background:var(--parch);border:1px solid var(--bd);border-radius:3px;overflow:hidden;}
+.letter-img-head{padding:6px 10px;font-size:.6rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--bd);background:white;}
+.letter-img-body{padding:10px;}
+
+/* MODALS */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:800;
+  display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.2s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-box{background:white;border-radius:4px;padding:28px 26px;max-width:400px;width:90%;
+  box-shadow:0 16px 48px rgba(0,0,0,.35);transform:translateY(12px);transition:.2s;}
+.modal-overlay.open .modal-box{transform:translateY(0);}
+.modal-box h3{font-family:'Cormorant Garamond',serif;font-size:1.25rem;margin-bottom:10px;}
+.modal-box p{font-size:.84rem;color:var(--muted);margin-bottom:22px;line-height:1.6;}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;}
+</style>
+</head>
+<body>
+
+<div id="save-bar"></div>
+<div class="toast-admin" id="toast"></div>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <span class="sb-logo">Little <em>Light</em><br><small style="font-size:.75rem;opacity:.6;">Admin V2</small></span>
+
+  <div class="sb-sec">Content</div>
+  <button class="sbtn act" onclick="showView('dash',this)"><span class="si">📊</span>Dashboard</button>
+  <button class="sbtn" onclick="showView('page-settings',this)"><span class="si">🖼️</span>Page Settings</button>
+  <button class="sbtn" onclick="showView('intro',this)"><span class="si">📄</span>Intro Pages</button>
+  <button class="sbtn" onclick="showView('letters',this)"><span class="si">🔤</span>Letters A-Z</button>
+  <button class="sbtn" onclick="showView('outro',this)"><span class="si">📄</span>Outro Pages</button>
+
+  <div class="sb-sec">Store</div>
+  <button class="sbtn" onclick="showView('orders',this)"><span class="si">📦</span>Orders<span class="sbadge" id="sb-orders-badge">0</span></button>
+  <button class="sbtn" onclick="showView('samples',this)"><span class="si">🎬</span>Samples Page</button>
+  <button class="sbtn" onclick="showView('config',this)"><span class="si">⚙️</span>Settings</button>
+
+  <div class="sb-sec">Tools</div>
+  <button class="sbtn" onclick="saveAll()"><span class="si">💾</span>Save All</button>
+  <button class="sbtn" onclick="showView('recovery',this)"><span class="si">🔧</span>Recovery Tool</button>
+
+  <div class="sb-status" id="sb-save-status">Status: <span>Ready</span></div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+<div class="topbar">
+  <div class="tb-title" id="tb-title-text">Dashboard</div>
+  <div class="tb-actions">
+    <span class="tb-save-lbl" id="save-lbl">All changes saved</span>
+    <button class="btn btn-gold btn-sm" onclick="saveAll()">💾 Save</button>
+    <a class="btn btn-dark btn-sm" href="index.html" target="_blank">↗ Store</a>
+  </div>
+</div>
+<div class="content">
+
+<!-- DASHBOARD -->
+<div class="view act" id="view-dash">
+  <div class="stats">
+    <div class="stat gold"><div class="stat-lbl">Total Orders</div><div class="stat-val" id="ds-total">0</div><div class="stat-sub">all time</div></div>
+    <div class="stat green"><div class="stat-lbl">Pending</div><div class="stat-val" id="ds-pending">0</div><div class="stat-sub">awaiting fulfillment</div></div>
+    <div class="stat blue"><div class="stat-lbl">Revenue (est.)</div><div class="stat-val" id="ds-rev">&#x20B1;0</div><div class="stat-sub">confirmed orders</div></div>
+    <div class="stat"><div class="stat-lbl">Letters Configured</div><div class="stat-val" id="ds-letters">0/0</div><div class="stat-sub">boy / girl</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Recent Orders</div>
+    <div id="dash-orders-list"></div>
+  </div>
+</div>
+
+<!-- PAGE SETTINGS (shared, gender-independent) -->
+<div class="view" id="view-page-settings">
+  <div class="card">
+    <div class="card-title">Hero Section <span style="font-size:.7rem;color:var(--muted);font-family:'Jost',sans-serif;font-weight:400;">(shared — same for Boy and Girl)</span></div>
+    <div class="frow">
+      <div class="fgrp"><label class="flbl">Badge Text</label><input class="finput" id="ps-heroBadge" placeholder="Personalized Christian Storybooks"></div>
+      <div class="fgrp"><label class="flbl">Nav Brand (HTML ok)</label><input class="finput" id="ps-navBrand"></div>
+    </div>
+    <div class="fgrp"><label class="flbl">Hero H1 (HTML ok)</label><input class="finput" id="ps-heroH1"></div>
+    <div class="fgrp"><label class="flbl">Hero Subheading</label><textarea class="ftextarea" id="ps-heroSub" rows="3"></textarea></div>
+    <div class="frow">
+      <div class="fgrp"><label class="flbl">CTA Button Text</label><input class="finput" id="ps-heroBtn1" placeholder="Create Your Book"></div>
+      <div class="fgrp"><label class="flbl">Nav CTA Text</label><input class="finput" id="ps-navCta" placeholder="Create Your Book"></div>
+    </div>
+    <div class="frow">
+      <div class="fgrp"><label class="flbl">See Preview Button Text</label><input class="finput" id="ps-seePreview" placeholder="See Preview ↓"><div class="fhint">Text shown on the secondary hero button</div></div>
+      <div class="fgrp"><label class="flbl">See Preview Link</label><input class="finput" id="ps-seePreviewLink" placeholder="Leave blank to scroll to preview"><div class="fhint">Optional URL to redirect to another site. Leave blank to scroll down as default.</div></div>
+    </div>
+    <div class="fgrp"><label class="flbl">Spread Label</label><input class="finput" id="ps-spreadLabel" placeholder="Inner Pages"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Images <span style="font-size:.7rem;color:var(--muted);font-family:'Jost',sans-serif;font-weight:400;">(shared)</span></div>
+    <div class="frow">
+      <div class="fgrp">
+        <label class="flbl">Logo</label>
+        <div class="img-zone" style="height:64px;display:flex;align-items:center;justify-content:center;">
+          <input type="file" class="iz-file" accept="image/*" onchange="uploadImg(this,'ps-logoSrc')">
+          <img class="iz-img" id="iz-ps-logoSrc" style="object-fit:contain;display:none;" src="" alt="">
+          <span id="iz-lbl-ps-logoSrc" style="font-size:.72rem;color:var(--muted);">Upload Logo</span>
+        </div>
+        <label class="flbl" style="margin-top:8px;display:flex;align-items:center;gap:6px;">
+          <input type="checkbox" id="ps-hideTextLogo"> Hide text logo when image set
+        </label>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Hero Background <span style="font-weight:400;color:var(--muted);font-size:.7rem;">— recommended 1920×1080px (16:9, JPG/WebP)</span></label>
+        <div class="img-zone img-zone-a5">
+          <input type="file" class="iz-file" accept="image/*" onchange="uploadImg(this,'ps-heroBgSrc')">
+          <img class="iz-img" id="iz-ps-heroBgSrc" src="" alt="" style="display:none;">
+          <span class="iz-icon">🌄</span><span class="iz-lbl">Hero BG Image</span>
+        </div>
+        <div class="fhint">Full-width background. Min 1280px wide. Keep file under 500KB for fast loading.</div>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Product Image <span style="font-weight:400;color:var(--muted);font-size:.7rem;">— recommended 800×800px (1:1, PNG with transparency)</span></label>
+        <div class="img-zone img-zone-a5">
+          <input type="file" class="iz-file" accept="image/*" onchange="uploadImg(this,'ps-productImgSrc')">
+          <img class="iz-img" id="iz-ps-productImgSrc" src="" alt="" style="display:none;">
+          <span class="iz-icon">📖</span><span class="iz-lbl">Product Photo</span>
+        </div>
+        <div class="fhint">Book mockup shown in hero section. Square ratio works best. PNG recommended for clean edges.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INTRO PAGES -->
+<div class="view" id="view-intro">
+  <!-- Inline gender switcher — only visible here -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+    <div style="font-size:.78rem;color:var(--muted);">Editing intro pages for:</div>
+    <div class="tab-gender" id="intro-gender-switch">
+      <button class="tab-gender-btn act-boy" onclick="setGender('boy','intro')">Boy</button>
+      <button class="tab-gender-btn" onclick="setGender('girl','intro')">Girl</button>
+    </div>
+  </div>
+  <div class="ped-layout" style="grid-template-columns:200px 1fr;">   <div class="ped-nav">
+      <div class="tab-header">
+        <span class="tab-header-title">Pages</span>
+        <div class="tab-header-actions"><button class="btn-ghost btn" title="Add page" onclick="introAddPage()">+</button></div>
+      </div>
+      <div class="ped-nav-list" id="intro-nav-list"></div>
+      <div style="padding:8px 6px;border-top:1px solid var(--bd);">
+        <div style="font-size:.6rem;color:var(--muted);text-align:center;">
+          Count: <input type="number" id="intro-count" min="2" max="30" value="13"
+            style="width:42px;border:1px solid var(--bd);border-radius:2px;padding:2px 4px;font-size:.7rem;text-align:center;"
+            oninput="introCountChange()">
+        </div>
+      </div>
+    </div>
+    <div class="ped-form" id="intro-form">
+      <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:.84rem;">Select a page to edit it.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- LETTERS A-Z -->
+<div class="view" id="view-letters">
+  <!-- Inline gender switcher -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+    <div style="font-size:.78rem;color:var(--muted);">Editing letter blessings for:</div>
+    <div class="tab-gender" id="letters-gender-switch">
+      <button class="tab-gender-btn act-boy" onclick="setGender('boy','letters')">Boy</button>
+      <button class="tab-gender-btn" onclick="setGender('girl','letters')">Girl</button>
+    </div>
+  </div>
+  <div class="ped-layout" style="grid-template-columns:200px 1fr;">
+    <div class="ped-nav">
+      <div class="tab-header"><span class="tab-header-title">Letters</span></div>
+      <div class="ped-nav-list" id="letter-nav-list"></div>
+    </div>
+    <div class="ped-form" id="letter-form">
+      <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:.84rem;">Select a letter.</div>
+    </div>
+  </div>
+</div>
+
+<!-- OUTRO PAGES -->
+<div class="view" id="view-outro">
+  <!-- Inline gender switcher -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+    <div style="font-size:.78rem;color:var(--muted);">Editing outro pages for:</div>
+    <div class="tab-gender" id="outro-gender-switch">
+      <button class="tab-gender-btn act-boy" onclick="setGender('boy','outro')">Boy</button>
+      <button class="tab-gender-btn" onclick="setGender('girl','outro')">Girl</button>
+    </div>
+  </div>
+  <div class="ped-layout" style="grid-template-columns:200px 1fr;">
+    <div class="ped-nav">
+      <div class="tab-header">
+        <span class="tab-header-title">Pages</span>
+        <div class="tab-header-actions"><button class="btn-ghost btn" title="Add page" onclick="outroAddPage()">+</button></div>
+      </div>
+      <div class="ped-nav-list" id="outro-nav-list"></div>
+      <div style="padding:8px 6px;border-top:1px solid var(--bd);">
+        <div style="font-size:.6rem;color:var(--muted);text-align:center;">
+          Count: <input type="number" id="outro-count" min="2" max="20" value="5"
+            style="width:42px;border:1px solid var(--bd);border-radius:2px;padding:2px 4px;font-size:.7rem;text-align:center;"
+            oninput="outroCountChange()">
+        </div>
+      </div>
+    </div>
+    <div class="ped-form" id="outro-form">
+      <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:.84rem;">Select a page to edit it.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDERS -->
+<div class="view" id="view-orders">
+  <div class="tpanel">
+    <div class="tpanel-head">
+      <div class="tpanel-title">All Orders</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div class="search-bar"><span>🔍</span><input type="text" placeholder="Search name, ref, status..." oninput="filterOrders(this.value)"></div>
+        <button class="btn btn-sm btn-err" onclick="clearOrders()">Clear All</button>
+      </div>
+    </div>
+    <div id="orders-wrap"><div class="empty">No orders yet.</div></div>
+  </div>
+</div>
+
+
+<!-- SAMPLES PAGE -->
+<div class="view" id="view-samples">
+  <div class="card">
+    <div class="card-title">Samples Page — Hero</div>
+    <div class="fgrp"><label class="flbl">Eyebrow Text</label><input class="finput" id="sp-eyebrow" placeholder="CRAFTED WITH LOVE" oninput="markUnsaved()"></div>
+    <div class="fgrp"><label class="flbl">Main Title</label><input class="finput" id="sp-title" placeholder="See the Quality for Yourself" oninput="markUnsaved()"></div>
+    <div class="fgrp"><label class="flbl">Subtitle</label><textarea class="ftextarea" id="sp-subtitle" rows="2" placeholder="Every book is a memory your child will carry forever..." oninput="markUnsaved()"></textarea></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Standard Option</div>
+    <div class="fgrp"><label class="flbl">Badge Label</label><input class="finput" id="sp-std-badge" placeholder="✦ STANDARD OPTION" oninput="markUnsaved()"></div>
+    <div class="fgrp"><label class="flbl">Title</label><input class="finput" id="sp-std-title" placeholder="220 GSM Premium Glossy" oninput="markUnsaved()"></div>
+    <div class="fgrp"><label class="flbl">Description</label><input class="finput" id="sp-std-desc" placeholder="A5 Landscape · Staple-bound · Vibrant full-color print" oninput="markUnsaved()"></div>
+    <div class="fgrp"><label class="flbl">YouTube Video URL</label><input class="finput" id="sp-std-video" placeholder="https://www.youtube.com/watch?v=..." oninput="markUnsaved()"></div>
+    <div class="fgrp"><label class="flbl">CTA Button Text</label><input class="finput" id="sp-std-cta" placeholder="✦ Create Your Book" oninput="markUnsaved()"></div>
+    <div class="card-title" style="margin-top:16px;">Standard Photos (up to 3)</div>
+    <div id="sp-std-photos" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px;"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Hardbound Option</div>
+    <div class="fgrp"><label class="flbl">Badge Label</label><input class="finput" id="sp-hb-badge" placeholder="✦ HARDBOUND OPTION" oninput="markUnsaved()"></div>
+    <div class="fgrp"><label class="flbl">Title</label><input class="finput" id="sp-hb-title" placeholder="Rigid Hardcover · Built to Last" oninput="markUnsaved()"></div>
+    <div class="fgrp"><label class="flbl">Description</label><input class="finput" id="sp-hb-desc" placeholder="A5 · 48 pages · Glossy laminated cover" oninput="markUnsaved()"></div>
+    <div class="fgrp"><label class="flbl">YouTube Video URL</label><input class="finput" id="sp-hb-video" placeholder="https://www.youtube.com/watch?v=..." oninput="markUnsaved()"></div>
+    <div class="fgrp"><label class="flbl">CTA Button Text</label><input class="finput" id="sp-hb-cta" placeholder="✦ Create Your Book" oninput="markUnsaved()"></div>
+    <div class="card-title" style="margin-top:16px;">Specs (5 bullet points)</div>
+    <div class="fgrp"><input class="finput" id="sp-hb-spec1" placeholder="Spec 1" oninput="markUnsaved()"></div>
+    <div class="fgrp"><input class="finput" id="sp-hb-spec2" placeholder="Spec 2" oninput="markUnsaved()"></div>
+    <div class="fgrp"><input class="finput" id="sp-hb-spec3" placeholder="Spec 3" oninput="markUnsaved()"></div>
+    <div class="fgrp"><input class="finput" id="sp-hb-spec4" placeholder="Spec 4" oninput="markUnsaved()"></div>
+    <div class="fgrp"><input class="finput" id="sp-hb-spec5" placeholder="Spec 5" oninput="markUnsaved()"></div>
+    <div class="card-title" style="margin-top:16px;">Hardbound Photos (up to 4)</div>
+    <div id="sp-hb-photos" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:8px;"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Footer</div>
+    <div class="fgrp"><label class="flbl">Quote Text</label><input class="finput" id="sp-footer-quote" placeholder="A story written with love is a gift that lasts forever." oninput="markUnsaved()"></div>
+  </div>
+
+  <div style="padding:0 0 24px;">
+    <button class="btn btn-gold btn-lg" onclick="saveSamples()">Save Samples Page</button>
+  </div>
+</div>
+
+<!-- SETTINGS (shared) -->
+<div class="view" id="view-config">
+  <div class="card">
+    <div class="card-title">Payment — GCash <span style="font-size:.7rem;color:var(--muted);font-family:'Jost',sans-serif;font-weight:400;">(shared)</span></div>
+    <div class="frow">
+      <div class="fgrp"><label class="flbl">GCash Number</label><input class="finput" id="cfg-gcashNum" placeholder="09XXXXXXXXX"></div>
+      <div class="fgrp"><label class="flbl">Account Name</label><input class="finput" id="cfg-gcashName" placeholder="Account Name"></div>
+    </div>
+    <div class="fgrp">
+      <label class="flbl">GCash QR Code</label>
+      <div class="img-zone" style="height:120px;display:flex;align-items:center;justify-content:center;">
+        <input type="file" class="iz-file" accept="image/*" onchange="uploadImg(this,'cfg-gcashQR')">
+        <img class="iz-img" id="iz-cfg-gcashQR" src="" alt="" style="display:none;object-fit:contain;">
+        <span id="iz-lbl-cfg-gcashQR" style="font-size:.72rem;color:var(--muted);">Upload QR Code</span>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Pricing</div>
+    <div class="frow">
+      <div class="fgrp"><label class="flbl">Standard Base (&#x20B1;)</label><input class="finput" type="number" id="cfg-stdBase" value="599"></div>
+      <div class="fgrp"><label class="flbl">Standard Max Letters</label><input class="finput" type="number" id="cfg-stdMaxL" value="8"></div>
+    </div>
+    <div class="frow">
+      <div class="fgrp"><label class="flbl">Standard Extra/Letter (&#x20B1;)</label><input class="finput" type="number" id="cfg-stdEx" value="50"></div>
+      <div class="fgrp"></div>
+    </div>
+    <div class="frow">
+      <div class="fgrp"><label class="flbl">Hardbound Base (&#x20B1;)</label><input class="finput" type="number" id="cfg-hbBase" value="2199"></div>
+      <div class="fgrp"><label class="flbl">Hardbound Max Letters</label><input class="finput" type="number" id="cfg-hbMaxL" value="11"></div>
+    </div>
+    <div class="frow">
+      <div class="fgrp"><label class="flbl">Hardbound Extra/Letter (&#x20B1;)</label><input class="finput" type="number" id="cfg-hbEx" value="100"></div>
+      <div class="fgrp"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Book Structure</div>
+    <div class="frow">
+      <div class="fgrp"><label class="flbl">Intro Pages Count</label><input class="finput" type="number" id="cfg-introCount" value="13" min="2" max="30"></div>
+      <div class="fgrp"><label class="flbl">Outro Pages Count</label><input class="finput" type="number" id="cfg-outroCount" value="5" min="2" max="20"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Admin Password</div>
+    <div class="fgrp">
+      <label class="flbl">Current Password</label>
+      <input class="finput" type="password" id="cfg-pw-current" placeholder="Enter current password">
+    </div>
+    <div class="fgrp">
+      <label class="flbl">New Password</label>
+      <input class="finput" type="password" id="cfg-pw-new" placeholder="Enter new password">
+    </div>
+    <div class="fgrp">
+      <label class="flbl">Confirm New Password</label>
+      <input class="finput" type="password" id="cfg-pw-confirm" placeholder="Confirm new password">
+    </div>
+    <button class="btn btn-sm" onclick="changeAdminPassword()" style="margin-top:4px;">Update Password</button>
+  </div>
+  <div class="card">
+    <div class="card-title">Order Confirmation Message</div>
+    <div class="fgrp">
+      <label class="flbl">Message Text</label>
+      <textarea class="ftextarea" id="cfg-confirmMsg" rows="4" placeholder="We've received your order {ref}. We'll send your book to {phone} within the delivery window. God bless you! ✦"></textarea>
+      <div class="fhint">Use <strong>{ref}</strong> for the order number, <strong>{phone}</strong> for the customer's phone, and <strong>{babyname}</strong> for the child's name. {ref} and {phone} appear bold automatically.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Integrations</div>
+    <div class="frow">
+      <div class="fgrp"><label class="flbl">Facebook Pixel ID</label><input class="finput" id="cfg-pixelId" placeholder="XXXXXXXXXXXXXXXXX"></div>
+      <div class="fgrp"><label class="flbl">Messenger Link</label><input class="finput" id="cfg-messengerLink" placeholder="https://m.me/..."></div>
+    </div>
+  </div>
+</div>
+
+<!-- RECOVERY TOOL -->
+<div class="view" id="view-recovery">
+  <div class="card">
+    <div class="card-title">State Recovery Tool</div>
+    <div class="fhint" style="margin-bottom:16px;">Diagnose and repair state sync between localStorage and JSONBin.</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-gold btn-sm" onclick="runDiagnose()">1. Diagnose</button>
+      <button class="btn btn-sm btn-sec" id="sync-btn" onclick="runSync()" disabled>2. Force Sync</button>
+      <button class="btn btn-sm btn-sec" id="verify-btn" onclick="runVerify()" disabled>3. Verify JSONBin</button>
+    </div>
+    <div id="recovery-log" style="background:#0a0a0a;border:1px solid #222;border-radius:3px;
+      padding:14px;font-family:monospace;font-size:.74rem;line-height:1.8;
+      color:#e0e0e0;margin-top:14px;max-height:360px;overflow-y:auto;">
+      Ready. Click Diagnose to start.
+    </div>
+  </div>
+</div>
+
+</div></main>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-box">
+    <h3>Confirm Action</h3>
+    <p id="confirm-modal-msg">Are you sure?</p>
+    <div class="modal-actions">
+      <button class="btn btn-sm btn-sec" onclick="closeConfirmModal()">Cancel</button>
+      <button class="btn btn-sm btn-err" id="confirm-modal-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- PDF PROGRESS MODAL -->
+<div class="modal-overlay" id="admin-pdf-modal">
+  <div class="modal-box" style="text-align:center;">
+    <h3>Generating PDF...</h3>
+    <p id="admin-pdf-msg" style="font-family:monospace;color:var(--muted);font-size:.8rem;">Preparing...</p>
+    <div style="background:var(--parch);border-radius:3px;height:6px;margin:12px 0;overflow:hidden;">
+      <div id="admin-pdf-bar" style="height:100%;background:var(--gold);width:0%;transition:width .3s;border-radius:3px;"></div>
+    </div>
+    <button class="btn btn-sm btn-sec" onclick="closeAdminPDFModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- MESSENGER FLOAT -->
+<a class="msng-float" id="msng-float-link" href="https://m.me/728867286986943" target="_blank" rel="noopener">
+  <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="16" cy="16" r="16" fill="url(#mg2)"/>
+    <defs><linearGradient id="mg2" x1="16" y1="0" x2="16" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00C6FF"/><stop offset="100%" stop-color="#0068FF"/></linearGradient></defs>
+    <path d="M16 5.5C10.201 5.5 5.5 9.96 5.5 15.5c0 2.94 1.254 5.582 3.27 7.468V26l2.95-1.618A11.1 11.1 0 0016 24.5c5.799 0 10.5-4.46 10.5-10S21.799 5.5 16 5.5z" fill="white"/>
+    <path d="M13.5 18.5l4.25-4.5 2.25 2.25 3.75-3.75-4.25 4.5-2.25-2.25-3.75 3.75z" fill="url(#mg2a)"/>
+    <defs><linearGradient id="mg2a" x1="13.5" y1="18.5" x2="23.75" y2="12.5" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00C6FF"/><stop offset="100%" stop-color="#0068FF"/></linearGradient></defs>
+  </svg>
+</a>
+
+<!-- HIDDEN PDF RENDER STAGE -->
+<div id="admin-pdf-stage" style="position:fixed;left:-9999px;top:0;pointer-events:none;z-index:-1;">
+  <div id="admin-pdf-cover-front" style="width:420px;height:296px;position:relative;overflow:hidden;container-type:inline-size;"></div>
+  <div id="admin-pdf-page-l" style="width:210px;height:296px;position:relative;overflow:hidden;container-type:inline-size;"></div>
+  <div id="admin-pdf-page-r" style="width:210px;height:296px;position:relative;overflow:hidden;container-type:inline-size;"></div>
+  <div id="admin-pdf-cover-back" style="width:420px;height:296px;position:relative;overflow:hidden;container-type:inline-size;"></div>
+</div>
+
+<script src="letters.js?v=2"></script>
+<script src="engine.js?v=2"></script>
+<script>
+// ================================================================
+// LITTLE LIGHT V2 -- admin.js
+// Gender-aware page editor. A single source of truth: ST.active.
+// ================================================================
+'use strict';
+
+// ----------------------------------------------------------------
+// STATE STRUCTURE
+//
+// ST = {
+//   boy:          { introImages, introMessages, introLayouts,
+//                   outroImages, outroMessages, outroLayouts,
+//                   letters }
+//   girl:         { ...same shape... }
+//   activeGender: 'boy' | 'girl'
+//   config:       { introCount, outroCount, pricing, gcash, ... }
+//   pageSettings: { hero, nav, images, ... }
+// }
+//
+// A = ST.active = ST[ST.activeGender]
+// ALL tab editors read/write only through A.
+// ----------------------------------------------------------------
+
+var ST = {
+  boy:  { introImages:[], introMessages:[], introLayouts:[], outroImages:[], outroMessages:[], outroLayouts:[], letters:{} },
+  girl: { introImages:[], introMessages:[], introLayouts:[], outroImages:[], outroMessages:[], outroLayouts:[], letters:{} },
+  activeGender: 'boy',
+  config:       {},
+  pageSettings: {},
+};
+
+// A is the live pointer to the active gender dataset.
+// Always access content data through A, never through ST.boy/ST.girl directly.
+// D() -- Live getter for the active gender dataset.
+// ALWAYS use D() instead of a cached variable reference.
+// This ensures uploads, reads, and previews always hit the correct
+// ST[activeGender] object, even after mergeState replaces it.
+function D() { return ST[ST.activeGender]; }
+function _ensureD() {
+  // Guarantee all array fields exist on the active dataset
+  var d = D();
+  if(!d.introImages)   d.introImages   = [];
+  if(!d.introMessages) d.introMessages = [];
+  if(!d.introLayouts)  d.introLayouts  = [];
+  if(!d.outroImages)   d.outroImages   = [];
+  if(!d.outroMessages) d.outroMessages = [];
+  if(!d.outroLayouts)  d.outroLayouts  = [];
+  if(!d.letters)       d.letters       = {};
+  return d;
+}
+
+var unsaved       = false;
+var _saveDebounce = null;
+var _introIdx     = -1;
+var _outroIdx     = -1;
+var _currentLetter     = 'A';
+var _currentVariation  = 0;
+var _localST  = null;
+var _remoteST = null;
+var _confirmCallback = null;
+
+// ----------------------------------------------------------------
+// GENDER SYSTEM
+// ----------------------------------------------------------------
+
+// emptyDataset returns a fresh zeroed content dataset
+function emptyDataset() {
+  return { introImages:[], introMessages:[], introLayouts:[], outroImages:[], outroMessages:[], outroLayouts:[], letters:{} };
+}
+
+// setGender(g, tab)
+// Switches the active gender dataset. Called by inline tab switchers.
+// tab = 'intro' | 'letters' | 'outro' — identifies which switcher triggered.
+// Only updates the relevant tab's content and all three inline switchers.
+// Dashboard and Page Settings are completely unaffected.
+function setGender(g, tab) {
+  if (g !== 'boy' && g !== 'girl') return;
+  if (!ST[g]) ST[g] = emptyDataset();
+
+  var prev = ST.activeGender;
+  ST.activeGender = g;
+  _ensureD(); // guarantee all array fields exist on the new dataset
+
+  // Update all three inline tab switchers to stay in sync
+  ['intro', 'letters', 'outro'].forEach(function(t) {
+    var sw = document.getElementById(t === 'letters' ? 'letters-gender-switch' : t + '-gender-switch');
+    if (!sw) return;
+    var btns = sw.querySelectorAll('.tab-gender-btn');
+    if (btns[0]) btns[0].className = 'tab-gender-btn' + (g === 'boy'  ? ' act-boy'  : '');
+    if (btns[1]) btns[1].className = 'tab-gender-btn' + (g === 'girl' ? ' act-girl' : '');
+  });
+
+  // Reset editor state so stale indices don't bleed into the new dataset
+  _introIdx = -1;
+  _outroIdx = -1;
+  _currentLetter = 'A';
+  _currentVariation = 0;
+
+  // Refresh count fields from config (shared)
+  sv('intro-count', (ST.config || {}).introCount || 13);
+  sv('outro-count', (ST.config || {}).outroCount || 5);
+
+  // Refresh content for ALL three content tabs so they stay consistent
+  // (switching gender in Letters should also update Intro/Outro nav thumbnails)
+  renderIntroNav();
+  renderOutroNav();
+  renderLetterNav();
+  resetIntroForm();
+  resetOutroForm();
+  updateIntroPreview();
+  updateOutroPreview();
+  renderLetterEditor();
+
+  if (prev !== g) {
+    toast((g === 'boy' ? 'Boy' : 'Girl') + ' template active.', 'ok');
+  }
+}
+
+// ----------------------------------------------------------------
+// INIT
+// ----------------------------------------------------------------
+// ── ADMIN PASSWORD GATE ──────────────────────────────────────────
+(function() {
+  var DEFAULT_PW = 'llstrybk0902';
+  var session = sessionStorage.getItem('ht_admin_unlocked');
+  if (session === '1') return;
+  var stored = localStorage.getItem('bop_admin_pw') || DEFAULT_PW;
+  var attempts = 0;
+  while (attempts < 3) {
+    var input = prompt('Little Light Admin\n\nEnter password:');
+    if (input === null) { document.body.innerHTML = ''; return; }
+    if (input === stored) { sessionStorage.setItem('ht_admin_unlocked', '1'); return; }
+    attempts++;
+    if (attempts < 3) alert('Incorrect password. ' + (3 - attempts) + ' attempt(s) remaining.');
+  }
+  document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#888;">Access denied.</div>';
+})();
+
+document.addEventListener('DOMContentLoaded', function() {
+  LL.loadRemoteState(function(remoteState) {
+    if (remoteState && typeof remoteState === 'object') {
+      mergeState(remoteState);
+    }
+    applyStateToUI();
+    // Sync the inline gender switchers to the loaded activeGender
+    // without triggering a full setGender() (which would toast on load)
+    var g = ST.activeGender || 'boy';
+    ST.activeGender = g;
+    _ensureD();
+    ['intro','letters','outro'].forEach(function(t) {
+      var sw = document.getElementById(t === 'letters' ? 'letters-gender-switch' : t + '-gender-switch');
+      if (!sw) return;
+      var btns = sw.querySelectorAll('.tab-gender-btn');
+      if (btns[0]) btns[0].className = 'tab-gender-btn' + (g === 'boy'  ? ' act-boy'  : '');
+      if (btns[1]) btns[1].className = 'tab-gender-btn' + (g === 'girl' ? ' act-girl' : '');
+    });
+    renderIntroNav();
+    renderOutroNav();
+    renderLetterNav();
+    renderDashboard();
+    renderOrders();
+    setSaveStatus('saved');
+  });
+  setInterval(function() { if (unsaved) saveAll(); }, 90000);
+});
+
+// mergeState -- safely merge remote/local state into ST.
+// Handles both new format (ST.boy/ST.girl) and legacy flat format.
+function mergeState(src) {
+  if (!src || typeof src !== 'object') return;
+
+  // Config and pageSettings are always at root
+  if (src.config)       ST.config       = src.config;
+  if (src.pageSettings) ST.pageSettings = src.pageSettings;
+  if (src.activeGender) ST.activeGender = src.activeGender;
+  if (src.samplesPage)  ST.samplesPage  = src.samplesPage;
+
+  // New format: has boy/girl keys
+  if (src.boy || src.girl) {
+    // CRITICAL: merge IN-PLACE to preserve D() reference stability.
+    // Object.assign(emptyDataset(), src.boy) creates a NEW object — WRONG.
+    // Object.assign(ST.boy, src.boy) mutates the EXISTING object — CORRECT.
+    if (src.boy)  { Object.assign(ST.boy,  src.boy);  }
+    if (src.girl) { Object.assign(ST.girl, src.girl); }
+    // Ensure both datasets have all required array fields after merge
+    ['boy','girl'].forEach(function(g) {
+      var d = ST[g] = ST[g] || {};
+      if(!d.introImages)   d.introImages   = [];
+      if(!d.introMessages) d.introMessages = [];
+      if(!d.introLayouts)  d.introLayouts  = [];
+      if(!d.outroImages)   d.outroImages   = [];
+      if(!d.outroMessages) d.outroMessages = [];
+      if(!d.outroLayouts)  d.outroLayouts  = [];
+      if(!d.letters)       d.letters       = {};
+    });
+    return;
+  }
+
+  // Legacy flat format: migrate content into active gender dataset
+  var legacyKeys = ['introImages','introMessages','introLayouts','outroImages','outroMessages','outroLayouts','letters'];
+  var target = ST[ST.activeGender || 'boy'];
+  legacyKeys.forEach(function(k) { if (src[k] !== undefined) target[k] = src[k]; });
+}
+
+function markUnsaved() {
+  unsaved = true;
+  setSaveStatus('unsaved');
+  clearTimeout(_saveDebounce);
+  _saveDebounce = setTimeout(function() { if (unsaved) saveAll(); }, 8000);
+}
+
+function setSaveStatus(s) {
+  var bar = document.getElementById('save-bar');
+  var lbl = document.getElementById('save-lbl');
+  var sb  = document.getElementById('sb-save-status');
+  if (bar) bar.className = s === 'saving' ? 'saving' : s === 'saved' ? 'saved' : s === 'error' ? 'error' : '';
+  var msgs = {
+    saving:  'Saving...',
+    saved:   'All changes saved',
+    error:   'Remote auth error (local copy safe)',
+    unsaved: 'Unsaved changes'
+  };
+  var sbSpans = {
+    saving:  'Saving...',
+    saved:   'Saved',
+    error:   '<span style="color:#f87171;">Auth Error</span>',
+    unsaved: '<span style="color:#fbbf24;">Unsaved</span>'
+  };
+  if (lbl) lbl.textContent = msgs[s] || msgs.unsaved;
+  if (sb)  sb.innerHTML = 'Status: ' + (sbSpans[s] || sbSpans.unsaved);
+  if (s === 'saved') { setTimeout(function(){ if(bar) bar.className=''; }, 2000); unsaved = false; }
+}
+
+// ----------------------------------------------------------------
+// SAVE
+// ----------------------------------------------------------------
+function saveAll() {
+  clearTimeout(_saveDebounce);
+  collectPageSettings();
+  collectConfig();
+  var boyImgs  = (ST.boy.introImages  || []).filter(Boolean).length;
+  var girlImgs = (ST.girl.introImages || []).filter(Boolean).length;
+  var boyL     = Object.keys(ST.boy.letters  || {}).length;
+  var girlL    = Object.keys(ST.girl.letters || {}).length;
+
+  // Always save full ST (both genders) so switching never loses data
+  setSaveStatus('saving');
+  LL.saveRemoteState(ST, function(ok) {
+    if (ok) {
+      setSaveStatus('saved');
+      toast('Saved! Both templates live on store.', 'ok');
+    } else {
+      // This now only fires on auth failure (401/403)
+      setSaveStatus('error');
+      toast('Remote auth error -- check API key. Local copy is safe.', 'err');
+    }
+  });
+}
+
+// ----------------------------------------------------------------
+// VIEW ROUTING
+// ----------------------------------------------------------------
+function showView(id, btn) {
+  document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('act'); });
+  document.querySelectorAll('.sbtn').forEach(function(b){ b.classList.remove('act'); });
+  var el = document.getElementById('view-' + id);
+  if (el) el.classList.add('act');
+  if (btn) btn.classList.add('act');
+  var titles = { dash:'Dashboard','page-settings':'Page Settings',intro:'Intro Pages',
+    letters:'Letters A-Z',outro:'Outro Pages',orders:'Orders',config:'Settings',
+    samples:'Samples Page',recovery:'Recovery Tool' };
+  setText('tb-title-text', titles[id] || id);
+  if (id === 'letters') { renderLetterNav(); renderLetterEditor(); }
+  if (id === 'intro')   { renderIntroNav();  if (_introIdx >= 0) selectIntroPage(_introIdx); }
+  if (id === 'outro')   { renderOutroNav();  if (_outroIdx >= 0) selectOutroPage(_outroIdx); }
+  if (id === 'orders')  renderOrders();
+  if (id === 'dash')    renderDashboard();
+  if (id === 'samples') renderSamplesEditor();
+}
+
+// ----------------------------------------------------------------
+// STATE -> UI  (shared config/pageSettings only)
+// ----------------------------------------------------------------
+function applyStateToUI() {
+  var ps  = ST.pageSettings || {};
+  var cfg = ST.config       || {};
+  function sv2(id, v) { var e = document.getElementById(id); if (e && v != null) e.value = v; }
+  sv2('ps-heroBadge', ps.heroBadge); sv2('ps-navBrand', ps.navBrand);
+  sv2('ps-heroH1', ps.heroH1); sv2('ps-heroSub', ps.heroSub);
+  sv2('ps-heroBtn1', ps.heroBtn1); sv2('ps-navCta', ps.navCta);
+  sv2('ps-seePreview', ps.seePreview); sv2('ps-seePreviewLink', ps.seePreviewLink);
+  sv2('ps-spreadLabel', ps.spreadLabel);
+  var htl = document.getElementById('ps-hideTextLogo');
+  if (htl) htl.checked = !!ps.hideTextLogo;
+  showAdminImg('ps-logoSrc', ps.logoSrc);
+  showAdminImg('ps-heroBgSrc', ps.heroBgSrc);
+  showAdminImg('ps-productImgSrc', ps.productImgSrc);
+  sv2('cfg-gcashNum', cfg.gcashNum); sv2('cfg-gcashName', cfg.gcashName);
+  sv2('cfg-stdBase', cfg.stdBase||599); sv2('cfg-stdMaxL', cfg.stdMaxL||8); sv2('cfg-stdEx', cfg.stdEx||50);
+  sv2('cfg-hbBase', cfg.hbBase||2199); sv2('cfg-hbMaxL', cfg.hbMaxL||11); sv2('cfg-hbEx', cfg.hbEx||100);
+  sv2('cfg-introCount', cfg.introCount||13); sv2('cfg-outroCount', cfg.outroCount||5);
+  sv2('cfg-pixelId', cfg.pixelId); sv2('cfg-messengerLink', cfg.messengerLink);
+  sv2('cfg-confirmMsg', cfg.confirmMsg||'');
+  sv2('intro-count', cfg.introCount||13); sv2('outro-count', cfg.outroCount||5);
+  showAdminImg('cfg-gcashQR', cfg.gcashQR);
+  if (cfg.messengerLink) { var mf = document.getElementById('msng-float-link'); if (mf) mf.href = cfg.messengerLink; }
+}
+
+function showAdminImg(key, src) {
+  var imgEl = document.getElementById('iz-' + key);
+  var lblEl = document.getElementById('iz-lbl-' + key);
+  if (!imgEl) return;
+  if (src) { imgEl.src = src; imgEl.style.display = 'block'; if (lblEl) lblEl.style.display = 'none'; }
+  else      { imgEl.src = ''; imgEl.style.display = 'none';  if (lblEl) lblEl.style.display = ''; }
+}
+
+function collectPageSettings() {
+  var ps = ST.pageSettings || {};
+  function gv2(id){ var e=document.getElementById(id); return e?e.value.trim():''; }
+  ps.heroBadge=gv2('ps-heroBadge'); ps.navBrand=gv2('ps-navBrand'); ps.heroH1=gv2('ps-heroH1');
+  ps.heroSub=gv2('ps-heroSub'); ps.heroBtn1=gv2('ps-heroBtn1'); ps.navCta=gv2('ps-navCta');
+  ps.seePreview=gv2('ps-seePreview'); ps.seePreviewLink=gv2('ps-seePreviewLink');
+  ps.spreadLabel=gv2('ps-spreadLabel');
+  var htl=document.getElementById('ps-hideTextLogo'); if (htl) ps.hideTextLogo=htl.checked;
+  ST.pageSettings=ps;
+}
+
+function collectConfig() {
+  var cfg=ST.config||{};
+  function gv2(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+  function gn2(id){var v=parseFloat(gv2(id));return isNaN(v)?null:v;}
+  cfg.gcashNum=gv2('cfg-gcashNum'); cfg.gcashName=gv2('cfg-gcashName');
+  cfg.stdBase=gn2('cfg-stdBase'); cfg.stdMaxL=gn2('cfg-stdMaxL'); cfg.stdEx=gn2('cfg-stdEx');
+  cfg.hbBase=gn2('cfg-hbBase'); cfg.hbMaxL=gn2('cfg-hbMaxL'); cfg.hbEx=gn2('cfg-hbEx');
+  cfg.introCount=parseInt(gv2('cfg-introCount'))||13;
+  cfg.outroCount=parseInt(gv2('cfg-outroCount'))||5;
+  cfg.pixelId=gv2('cfg-pixelId'); cfg.messengerLink=gv2('cfg-messengerLink');
+  cfg.confirmMsg=gv2('cfg-confirmMsg');
+  ST.config=cfg;
+}
+
+// ----------------------------------------------------------------
+// SHARED UTILITIES
+// ----------------------------------------------------------------
+var FONTS=['Lora','Montserrat','Poppins','Playfair Display','Open Sans','Jost','Merriweather','Georgia','serif','sans-serif','Luckiest Guy','Kanit','Margarine','Sniglet','Galindo','Darumadrop One','Mochiy Pop P One','Londrina Solid','Belanosima','Lilita One','Braah One','Gorditas'];
+
+function fontOptions(sel) {
+  return FONTS.map(function(f){ return '<option value="'+f+'"'+(f===sel?' selected':'')+'>'+f+'</option>'; }).join('');
+}
+function colorRow(label, id, val, onchange) {
+  return '<div class="fgrp"><label class="flbl">'+label+'</label><div class="color-row">'
+    +'<input type="color" class="color-pick" id="'+id+'-pick" value="'+LL.escHtml(val)+'" oninput="syncColor(\''+id+'\',true);'+onchange+'">'
+    +'<input class="finput" id="'+id+'-txt" value="'+LL.escHtml(val)+'" style="font-size:.82rem;" oninput="syncColor(\''+id+'\',false);'+onchange+'">'
+    +'</div></div>';
+}
+function syncColor(id, fromPick) {
+  var pick=document.getElementById(id+'-pick'), txt=document.getElementById(id+'-txt');
+  if (!pick||!txt) return;
+  if (fromPick) txt.value=pick.value; else pick.value=txt.value;
+}
+function gv(id){var e=document.getElementById(id);return e?e.value:'';}
+function gn(id,def){var v=parseFloat(gv(id));return isNaN(v)?(def||0):v;}
+
+// Scale every .lp-page inside a .lp-wrap to fit — matches PDF proportions exactly.
+// Call after any preview render in admin.
+function applyLpZoom(wrapOrId){
+  var wrap=typeof wrapOrId==='string'?document.getElementById(wrapOrId):wrapOrId;
+  if(!wrap) return;
+  // Find the lp-wrap ancestor if an lp-page id was passed
+  if(!wrap.classList.contains('lp-wrap')) wrap=wrap.closest('.lp-wrap')||wrap.parentElement;
+  if(!wrap) return;
+  var pages=wrap.querySelectorAll('.lp-page');
+  var totalW=pages.length>=2?840:420;
+  var scale=wrap.offsetWidth/totalW;
+  if(!scale||isNaN(scale)||scale<=0) return;
+  pages.forEach(function(p){ p.style.zoom=scale; });
+  wrap.style.height=Math.round(296*scale)+'px';
+}
+function sv(id,val){var e=document.getElementById(id);if(e&&val!=null)e.value=val;}
+function setText(id,val){var e=document.getElementById(id);if(e)e.textContent=val;}
+
+function uploadImg(input, key) {
+  var f = input.files[0]; if (!f) return;
+  var folder = key.startsWith('ps-') ? 'bookofpsalms_uploads/page-settings' : 'bookofpsalms_uploads/config';
+  var lbl = document.getElementById('iz-lbl-' + key);
+  if (lbl) lbl.textContent = 'Uploading...';
+  LL.uploadToCloudinary(f, folder).then(function(url) {
+    if (key.startsWith('ps-'))  { if (!ST.pageSettings) ST.pageSettings={}; ST.pageSettings[key.replace('ps-','')] = url; }
+    else if (key.startsWith('cfg-')) { if (!ST.config) ST.config={}; ST.config[key.replace('cfg-','')] = url; }
+    showAdminImg(key, url);
+    markUnsaved();
+    toast('Image uploaded to Cloudinary!', 'ok');
+  }).catch(function(e) {
+    if (lbl) lbl.textContent = 'Upload failed';
+    toast('Upload failed: ' + e.message, 'err');
+    console.error('[CL] uploadImg error:', e);
+  });
+}
+
+// loadImgFile -- resolves with Cloudinary secure_url.
+// All three editors (intro, outro, letter) call this.
+function loadImgFile(file, folder) {
+  return LL.uploadToCloudinary(file, folder || 'bookofpsalms_uploads/admin');
+}
+
+// ----------------------------------------------------------------
+// INTRO PAGE EDITOR  (all reads/writes go through A)
+// ----------------------------------------------------------------
+function introCount(){return parseInt((document.getElementById('intro-count')||{}).value)||13;}
+
+function introCountChange(){
+  var n=introCount();
+  if(!ST.config)ST.config={};
+  ST.config.introCount=n;
+  markUnsaved();
+  renderIntroNav();
+  if(_introIdx>=n){_introIdx=-1;resetIntroForm();}
+}
+
+function introAddPage(){sv('intro-count',introCount()+1);introCountChange();}
+
+function renderIntroNav(){
+  var list=document.getElementById('intro-nav-list'); if(!list)return;
+  var n=introCount();
+  list.innerHTML='';
+  for(var i=0;i<n;i++){
+    var d=D();var img=(d.introImages||[])[i];
+    var label=i===0?'Front Cover':'Page '+(i+1);
+    var isAct=_introIdx===i;
+    var thumb=img?'<img src="'+LL.escHtml(img)+'" alt="">':'<div class="ped-no-img">P'+(i+1)+'</div>';
+    var el=document.createElement('div');
+    el.className='ped-thumb'+(isAct?' act':'')+(img?' has-img':'');
+    el.setAttribute('data-i', i);
+    el.innerHTML='<div class="ped-thumb-img">'+thumb+'</div>'
+      +'<div class="ped-thumb-info"><div class="ped-thumb-name">'+label+'</div>'
+      +'<div class="ped-thumb-num">Intro '+(i+1)+' of '+n+'</div></div>'
+      +'<div class="ped-thumb-dot" title="Has image"></div>';
+    el.onclick=(function(idx){return function(){selectIntroPage(idx);};})(i);
+    list.appendChild(el);
+  }
+}
+
+function selectIntroPage(idx){
+  _introIdx=idx;
+  var d=D();var img=(d.introImages||[])[idx];
+  var msg=(d.introMessages||[])[idx]||'';
+  var ly=(d.introLayouts||[])[idx]||{};
+  var n=introCount();
+  var label=idx===0?'Front Cover':'Page '+(idx+1);
+  renderIntroNav();
+  var formEl=document.getElementById('intro-form'); if(!formEl)return;
+  var imgHtml=img
+    ?'<img src="'+LL.escHtml(img)+'" alt=""><button class="rm" onclick="introRmImg()">Remove</button>'
+    :'<span class="iz-icon">🌄</span><span class="iz-lbl">Click to upload image</span>';
+  formEl.innerHTML='<div class="ped-form-title">'+label+' <span class="ped-form-badge">'+ST.activeGender.toUpperCase()+'</span></div>'
+    +'<div class="form-section">Page Image &amp; Preview</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px;">'
+    +'<div><div class="flbl" style="margin-bottom:5px;">Upload Image</div>'
+    +'<div class="form-img-zone" style="aspect-ratio:210/148;height:auto;"><input type="file" accept="image/*" onchange="introUploadImg(this)">'+imgHtml+'</div>'
+    +'<div id="intro-upload-status" class="upload-status" style="display:none;"></div></div>'
+    +'<div><div class="flbl" style="margin-bottom:5px;">Live Preview <span style="font-weight:400;color:var(--muted);font-size:.6rem;">(name: Ryne)</span></div>'
+    +'<div class="lp-wrap"><div class="lp-page" id="intro-live-preview"></div></div></div>'
+    +'</div>'    +'<div class="form-section">Customer Photo</div>'    +'<div class="fgrp"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;">'    +'<input type="checkbox" id="intro-use-photo" '+(ly.useCustomerPhoto?'checked':'')+' onchange="introLayoutChange();introTogglePhotoControls()">'    +'<span style="font-size:.82rem;">Show customer photo on this page</span></label>'    +'<div class="fhint">Customer\'s uploaded photo appears as an overlay. Admin preview shows a placeholder.</div></div>'    +'<div id="intro-photo-controls" style="display:'+(ly.useCustomerPhoto?'block':'none')+';">'    +'<div class="fhint" style="margin-bottom:8px;">Set exact pixel position on the 420×296px page. Photo fills the box with object-fit:cover.</div>'    +'<div class="f3col">'    +'<div class="fgrp"><label class="flbl">Top (px)</label><input class="finput" type="number" id="intro-pt" min="0" max="295" value="'+(ly.photoTop!=null?ly.photoTop:10)+'" oninput="introLayoutChange()"></div>'    +'<div class="fgrp"><label class="flbl">Bottom (px)</label><input class="finput" type="number" id="intro-pb" min="1" max="296" value="'+(ly.photoBottom!=null?ly.photoBottom:160)+'" oninput="introLayoutChange()"></div>'    +'</div>'    +'<div class="f3col">'    +'<div class="fgrp"><label class="flbl">Left (px)</label><input class="finput" type="number" id="intro-pl" min="0" max="419" value="'+(ly.photoLeft!=null?ly.photoLeft:0)+'" oninput="introLayoutChange()"></div>'    +'<div class="fgrp"><label class="flbl">Right (px)</label><input class="finput" type="number" id="intro-pr" min="1" max="420" value="'+(ly.photoRight!=null?ly.photoRight:420)+'" oninput="introLayoutChange()"></div>'    +'</div></div>'
+    +'<div class="form-section">Dedication Message</div>'
+    +'<div class="fgrp"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;">'
+    +'<input type="checkbox" id="intro-use-ded" '+(ly.useDedication?'checked':'')+' onchange="introLayoutChange();introToggleDedControls()">'
+    +'<span style="font-size:.82rem;">Show customer\'s dedication message on this page</span></label>'
+    +'<div class="fhint">The dedication text the customer typed at checkout appears as an overlay. Admin preview shows sample text.</div></div>'
+    +'<div id="intro-ded-controls" style="display:'+(ly.useDedication?'block':'none')+';margin-top:8px;">'
+    // Position
+    +'<div style="font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Position &amp; Size</div>'
+    +'<div class="f3col">'
+    +'<div class="fgrp"><label class="flbl">Width %</label><input class="finput" type="number" id="intro-dw" min="10" max="90" value="'+(ly.dedWidth!=null?ly.dedWidth:70)+'" oninput="introLayoutChange()"><div class="fhint">How wide the text block is</div></div>'
+    +'<div class="fgrp"><label class="flbl">Left % (X)</label><input class="finput" type="number" id="intro-dx" min="0" max="100" value="'+(ly.dedX!=null?ly.dedX:50)+'" oninput="introLayoutChange()"><div class="fhint">0 = left edge, 50 = center</div></div>'
+    +'<div class="fgrp"><label class="flbl">Top % (Y)</label><input class="finput" type="number" id="intro-dy" min="0" max="100" value="'+(ly.dedY!=null?ly.dedY:60)+'" oninput="introLayoutChange()"><div class="fhint">0 = top, 100 = bottom</div></div>'
+    +'</div>'
+    // Text Style
+    +'<div style="font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin:12px 0 8px;">Text Style</div>'
+    +'<div class="frow"><div class="fgrp"><label class="flbl">Font</label><select class="fsel" id="intro-ded-font" onchange="introLayoutChange()">'+fontOptions(ly.dedFont||'Lora')+'</select></div>'
+    +'<div class="fgrp"><label class="flbl">Size (px)</label><input class="finput" type="number" id="intro-ded-sz" min="6" max="60" value="'+(ly.dedFontSize||12)+'" oninput="introLayoutChange()"></div></div>'
+    +'<div class="frow">'
+    +colorRow('Color','intro-ded-col',ly.dedColor||'#FFFFFF','introLayoutChange()')
+    +'<div class="fgrp"><label class="flbl">Weight</label><select class="fsel" id="intro-ded-bold" onchange="introLayoutChange()"><option value="0"'+(!ly.dedBold?' selected':'')+'>Normal</option><option value="1"'+(ly.dedBold?' selected':'')+'>Bold</option></select></div></div>'
+    // Outline
+    +'<div style="font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin:12px 0 8px;">Text Outline</div>'
+    +'<div class="fgrp"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;">'
+    +'<input type="checkbox" id="intro-ded-outline-on" '+(ly.dedOutlineEnabled?'checked':'')+' onchange="introLayoutChange();introToggleDedOutlineControls()">'
+    +'<span style="font-size:.82rem;font-weight:600;">Enable Outline</span></label></div>'
+    +'<div id="intro-ded-outline-controls" style="display:'+(ly.dedOutlineEnabled?'block':'none')+';margin-top:6px;">'
+    +'<div class="frow">'
+    +colorRow('Outline Color','intro-ded-outline-col',ly.dedOutlineColor||'#000000','introLayoutChange()')
+    +'<div class="fgrp"><label class="flbl">Width (px)</label>'
+    +'<input class="finput" type="number" id="intro-ded-outline-w" min="0.5" max="8" step="0.5" value="'+(ly.dedOutlineWidth||1)+'" oninput="introLayoutChange()">'
+    +'<div class="fhint">0.5–8px</div></div>'
+    +'</div></div>'
+    // Sample text tester
+    +'<div style="font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px;">Sample Text Tester</div>'
+    +'<div class="fgrp">'
+    +'<div style="font-size:.76rem;color:var(--body);margin-bottom:6px;line-height:1.5;">Type a sample dedication below to see exactly how it fits at the current font size, width, and position. This text is for preview only — the real dedication comes from the customer.</div>'
+    +'<textarea class="ftextarea" id="intro-ded-sample" rows="4" placeholder="Type a sample dedication here…&#10;&#10;e.g. To my little miracle — you are God\'s greatest gift to us. We love you more than words can say." oninput="onDedSample(this)" style="font-family:Lora,serif;font-style:italic;">'+(ly._dedSample||'')+'</textarea>'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px;">'
+    +'<div id="intro-ded-cc" style="font-size:.74rem;color:var(--muted);">0 characters</div>'
+    +'<button onclick="clearDedSample()" style="font-size:.68rem;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline;font-family:\'Jost\',sans-serif;">Clear</button>'
+    +'</div></div>'
+    +'</div>'
+    +'<div class="form-section">Overlay Text</div>'
+    +'<div class="fgrp"><label class="flbl">Message <span style="font-weight:400;color:var(--muted);">(optional — {{babyname}} and {{giver}} supported)</span></label>'
+    +'<textarea class="ftextarea" id="intro-msg" rows="3" oninput="introTextChange()">'+LL.escHtml(msg)+'</textarea></div>'
+    +'<div class="form-section">Text Position</div>'
+    +'<div class="f3col">'
+    +'<div class="fgrp"><label class="flbl">Left % (X)</label><input class="finput" type="number" id="intro-lx" min="0" max="100" value="'+(ly.startX!=null?ly.startX:50)+'" oninput="introLayoutChange()"></div>'
+    +'<div class="fgrp"><label class="flbl">Top % (Y)</label><input class="finput" type="number" id="intro-ly" min="0" max="100" value="'+(ly.startY!=null?ly.startY:80)+'" oninput="introLayoutChange()"></div>'
+    +'<div class="fgrp"><label class="flbl">Max Width %</label><input class="finput" type="number" id="intro-mw" min="10" max="100" value="'+(ly.maxWidth!=null?ly.maxWidth:80)+'" oninput="introLayoutChange()"></div>'
+    +'</div>'
+    +'<div class="form-section">Text Style</div>'
+    +'<div class="frow"><div class="fgrp"><label class="flbl">Font</label><select class="fsel" id="intro-font" onchange="introLayoutChange()">'+fontOptions(ly.font||'Lora')+'</select></div>'
+    +'<div class="fgrp"><label class="flbl">Size (px)</label><input class="finput" type="number" id="intro-sz" min="6" max="60" value="'+(ly.fontSize||13)+'" oninput="introLayoutChange()"></div></div>'
+    +'<div class="frow">'+colorRow('Color','intro-col',ly.color||'#FFFFFF','introLayoutChange()')
+    +'<div class="fgrp"><label class="flbl">Weight</label><select class="fsel" id="intro-bold" onchange="introLayoutChange()"><option value="0"'+(!ly.bold?' selected':'')+'>Normal</option><option value="1"'+(ly.bold?' selected':'')+'>Bold</option></select></div></div>'
+    +'<div class="frow"><div class="fgrp"><label class="flbl">Transform</label><select class="fsel" id="intro-transform" onchange="introLayoutChange()"><option value=""'+((!ly.textTransform||ly.textTransform==='')?" selected":"")+'>None</option><option value="uppercase"'+(ly.textTransform==="uppercase"?' selected':'')+'>UPPERCASE</option><option value="lowercase"'+(ly.textTransform==="lowercase"?' selected':'')+'>lowercase</option></select></div><div class="fgrp"></div></div>'
+    +'<div class="form-section">Text Outline</div>'
+    +'<div class="fgrp"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;">'
+    +'<input type="checkbox" id="intro-outline-on" '+(ly.outlineEnabled?'checked':'')+' onchange="introLayoutChange();introToggleOutlineControls()">'
+    +'<span style="font-size:.82rem;font-weight:600;">Enable Text Outline</span></label></div>'
+    +'<div id="intro-outline-controls" style="display:'+(ly.outlineEnabled?'block':'none')+';margin-top:6px;">'
+    +'<div class="frow">'
+    +colorRow('Outline Color','intro-outline-col',ly.outlineColor||'#000000','introLayoutChange()')
+    +'<div class="fgrp"><label class="flbl">Width (px)</label>'
+    +'<input class="finput" type="number" id="intro-outline-w" min="0.5" max="8" step="0.5" value="'+(ly.outlineWidth||1)+'" oninput="introLayoutChange()">'
+    +'<div class="fhint">0.5–8px · 1px typical, 2–3px bold</div></div>'
+    +'</div></div>'
+    +(idx>0&&idx<n-1?'<div class="form-section">Actions</div><button class="btn btn-sm btn-err" onclick="introDeletePage('+idx+')">Delete Page</button>':'');
+  updateIntroPreview();
+}
+
+function resetIntroForm(){
+  var f=document.getElementById('intro-form');
+  if(f)f.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:.84rem;">Select a page to edit it.</div>';
+}
+
+function introUploadImg(input){
+  var f=input.files[0]; if(!f||_introIdx<0)return;
+  var s=document.getElementById('intro-upload-status');
+  if(s){s.style.display='flex';s.className='upload-status loading';s.textContent='Uploading to Cloudinary...';}
+  var folder='bookofpsalms_uploads/'+ST.activeGender+'/intro';
+  loadImgFile(f, folder).then(function(url){
+    _ensureD();
+    D().introImages[_introIdx]=url;
+    localStorage.setItem('bop_state',JSON.stringify(ST));
+    markUnsaved();
+    if(s){s.className='upload-status ok';s.textContent='Uploaded!';setTimeout(function(){s.style.display='none';},3500);}
+    selectIntroPage(_introIdx);
+  }).catch(function(e){
+    if(s){s.className='upload-status err';s.textContent='Upload failed: '+e.message;}
+    toast('Upload failed: '+e.message,'err');
+    console.error('[CL] introUploadImg:',e);
+  });
+}
+
+function introRmImg(){
+  if(_introIdx<0)return;
+  D().introImages[_introIdx]=null;
+  markUnsaved(); selectIntroPage(_introIdx);
+}
+
+function introTogglePhotoControls(){
+  var cb=document.getElementById('intro-use-photo');
+  var ct=document.getElementById('intro-photo-controls');
+  if(ct)ct.style.display=(cb&&cb.checked)?'block':'none';
+  updateIntroPreview();
+}
+
+function introTextChange(){
+  if(_introIdx<0)return;
+  _ensureD();
+  D().introMessages[_introIdx]=gv('intro-msg');
+  markUnsaved(); updateIntroPreview();
+}
+
+function introToggleOutlineControls(){
+  var cb=document.getElementById('intro-outline-on');
+  var ct=document.getElementById('intro-outline-controls');
+  if(ct)ct.style.display=(cb&&cb.checked)?'block':'none';
+  updateIntroPreview();
+}
+
+function onDedSample(el){
+  var len=el.value.length;
+  var cc=document.getElementById('intro-ded-cc');
+  if(cc){
+    cc.textContent=len+' character'+(len!==1?'s':'');
+    cc.style.color=len>300?'var(--err)':len>200?'var(--gold)':'var(--muted)';
+  }
+  // Store sample on the layout so it survives re-renders
+  if(_introIdx>=0){
+    _ensureD();
+    var ly2=D().introLayouts[_introIdx]||{};
+    ly2._dedSample=el.value;
+    D().introLayouts[_introIdx]=ly2;
+  }
+  updateIntroPreview();
+}
+
+function clearDedSample(){
+  var el=document.getElementById('intro-ded-sample');
+  if(el){el.value='';onDedSample(el);}
+}
+
+function introToggleDedControls(){
+  var cb=document.getElementById('intro-use-ded');
+  var ct=document.getElementById('intro-ded-controls');
+  if(ct)ct.style.display=(cb&&cb.checked)?'block':'none';
+  updateIntroPreview();
+}
+
+function introToggleDedOutlineControls(){
+  var cb=document.getElementById('intro-ded-outline-on');
+  var ct=document.getElementById('intro-ded-outline-controls');
+  if(ct)ct.style.display=(cb&&cb.checked)?'block':'none';
+  updateIntroPreview();
+}
+
+function introLayoutChange(){
+  if(_introIdx<0)return;
+  _ensureD();
+  var usePhoto=!!(document.getElementById('intro-use-photo')&&document.getElementById('intro-use-photo').checked);
+  var useDed=!!(document.getElementById('intro-use-ded')&&document.getElementById('intro-use-ded').checked);
+  var outlineOn=!!(document.getElementById('intro-outline-on')&&document.getElementById('intro-outline-on').checked);
+  var dedOutlineOn=!!(document.getElementById('intro-ded-outline-on')&&document.getElementById('intro-ded-outline-on').checked);
+  D().introLayouts[_introIdx]={
+    startX:gn('intro-lx',50),startY:gn('intro-ly',80),maxWidth:gn('intro-mw',80),
+    fontSize:gn('intro-sz',13),font:gv('intro-font')||'Lora',
+    bold:gv('intro-bold')==='1',color:gv('intro-col-txt')||'#FFFFFF',
+    textTransform:gv('intro-transform')||'',
+    useCustomerPhoto:usePhoto,
+    photoTop:gn('intro-pt',10),
+    photoBottom:gn('intro-pb',160),
+    photoLeft:gn('intro-pl',0),
+    photoRight:gn('intro-pr',420),
+    useDedication:useDed,
+    dedWidth:gn('intro-dw',70),
+    dedX:gn('intro-dx',50),
+    dedY:gn('intro-dy',60),
+    dedFont:gv('intro-ded-font')||'Lora',
+    dedFontSize:gn('intro-ded-sz',12),
+    dedColor:gv('intro-ded-col-txt')||'#FFFFFF',
+    dedBold:gv('intro-ded-bold')==='1',
+    dedOutlineEnabled:dedOutlineOn,
+    dedOutlineColor:gv('intro-ded-outline-col-txt')||'#000000',
+    dedOutlineWidth:gn('intro-ded-outline-w',1),
+    outlineEnabled:outlineOn,
+    outlineColor:gv('intro-outline-col-txt')||'#000000',
+    outlineWidth:gn('intro-outline-w',1),
+  };
+  markUnsaved(); updateIntroPreview();
+}
+
+function updateIntroPreview(){
+  var el=document.getElementById('intro-live-preview'); if(!el)return;
+  if(_introIdx<0){el.innerHTML='<div style="width:100%;height:100%;background:#12100E;display:flex;align-items:center;justify-content:center;"><span style="font-size:.7rem;color:rgba(255,255,255,.2);font-style:italic;">No page selected</span></div>';return;}
+  var ly0=(D().introLayouts||[])[_introIdx]||{};
+  // Admin preview: use sample textarea text, or hardcoded fallback — never null
+  // (null = engine skips rendering entirely, which is correct for customer pages with no ded)
+  var sampleEl=document.getElementById('intro-ded-sample');
+  var dedPreview=ly0.useDedication
+    ? (sampleEl&&sampleEl.value.trim() ? sampleEl.value : 'To my little miracle — you are God\'s greatest gift to us. We love you beyond words.')
+    : null;
+  el.innerHTML=LL.renderPage({
+    type:'intro',image:LL.resolveImg((D().introImages||[])[_introIdx]),
+    title:'',verse:'',message:(D().introMessages||[])[_introIdx]||'',
+    meta:{layout:ly0,pageNum:_introIdx+1,isFrontCover:_introIdx===0,customerPhoto:null,
+      dedication: ly0.useDedication ? dedPreview : null},
+  },'Ryne','Sample Giver');
+  requestAnimationFrame(function(){ applyLpZoom(el.closest('.lp-wrap')); });
+}
+
+function introDeletePage(idx){
+  showConfirm('Delete intro page '+(idx+1)+'? This cannot be undone.',function(){
+    var n=introCount(); if(n<=2){toast('Minimum 2 pages.','err');return;}
+    if(D().introImages)D().introImages.splice(idx,1);
+    if(D().introMessages)D().introMessages.splice(idx,1);
+    if(D().introLayouts)D().introLayouts.splice(idx,1);
+    sv('intro-count',n-1); if(!ST.config)ST.config={}; ST.config.introCount=n-1;
+    _introIdx=-1; markUnsaved(); renderIntroNav(); resetIntroForm(); toast('Page deleted.','ok');
+  });
+}
+
+// ----------------------------------------------------------------
+// OUTRO PAGE EDITOR  (identical structure, reads/writes through A)
+// ----------------------------------------------------------------
+function outroCount(){return parseInt((document.getElementById('outro-count')||{}).value)||5;}
+
+function outroCountChange(){
+  var n=outroCount();
+  if(!ST.config)ST.config={};
+  ST.config.outroCount=n;
+  markUnsaved(); renderOutroNav();
+  if(_outroIdx>=n){_outroIdx=-1;resetOutroForm();}
+}
+
+function outroAddPage(){sv('outro-count',outroCount()+1);outroCountChange();}
+
+function renderOutroNav(){
+  var list=document.getElementById('outro-nav-list'); if(!list)return;
+  var n=outroCount(); list.innerHTML='';
+  for(var i=0;i<n;i++){
+    var d2=D();var img=(d2.outroImages||[])[i];
+    var label=i===n-1?'Back Cover':'Page '+(i+1);
+    var isAct=_outroIdx===i;
+    var thumb=img?'<img src="'+LL.escHtml(img)+'" alt="">':'<div class="ped-no-img">P'+(i+1)+'</div>';
+    var el=document.createElement('div');
+    el.className='ped-thumb'+(isAct?' act':'')+(img?' has-img':'');
+    el.innerHTML='<div class="ped-thumb-img">'+thumb+'</div>'
+      +'<div class="ped-thumb-info"><div class="ped-thumb-name">'+label+'</div>'
+      +'<div class="ped-thumb-num">Outro '+(i+1)+' of '+n+'</div></div>'
+      +'<div class="ped-thumb-dot" title="Has image"></div>';
+    el.onclick=(function(idx){return function(){selectOutroPage(idx);};})(i);
+    list.appendChild(el);
+  }
+}
+
+function selectOutroPage(idx){
+  _outroIdx=idx;
+  var d2=D();var img=(d2.outroImages||[])[idx];
+  var msg=(d2.outroMessages||[])[idx]||'';
+  var ly=(d2.outroLayouts||[])[idx]||{};
+  var n=outroCount();
+  var label=idx===n-1?'Back Cover':'Outro Page '+(idx+1);
+  renderOutroNav();
+  var formEl=document.getElementById('outro-form'); if(!formEl)return;
+  var imgHtml=img
+    ?'<img src="'+LL.escHtml(img)+'" alt=""><button class="rm" onclick="outroRmImg()">Remove</button>'
+    :'<span class="iz-icon">🌅</span><span class="iz-lbl">Click to upload image</span>';
+  formEl.innerHTML='<div class="ped-form-title">'+label+' <span class="ped-form-badge">'+ST.activeGender.toUpperCase()+'</span></div>'
+    +'<div class="form-section">Page Image &amp; Preview</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px;">'
+    +'<div><div class="flbl" style="margin-bottom:5px;">Upload Image</div>'
+    +'<div class="form-img-zone" style="aspect-ratio:210/148;height:auto;"><input type="file" accept="image/*" onchange="outroUploadImg(this)">'+imgHtml+'</div>'
+    +'<div id="outro-upload-status" class="upload-status" style="display:none;"></div></div>'
+    +'<div><div class="flbl" style="margin-bottom:5px;">Live Preview <span style="font-weight:400;color:var(--muted);font-size:.6rem;">(name: Ryne)</span></div>'
+    +'<div class="lp-wrap"><div class="lp-page" id="outro-live-preview"></div></div></div>'
+    +'</div>'
+    +'<div class="form-section">Customer Photo</div>'
+    +'<div class="fgrp"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;">'
+    +'<input type="checkbox" id="outro-use-photo" '+(ly.useCustomerPhoto?'checked':'')+' onchange="outroLayoutChange();outroTogglePhotoControls()">'
+    +'<span style="font-size:.82rem;">Show customer photo on this page</span></label>'
+    +'<div class="fhint">Customer\'s uploaded photo appears as an overlay. Admin preview shows a placeholder.</div></div>'
+    +'<div id="outro-photo-controls" style="display:'+(ly.useCustomerPhoto?'block':'none')+';">'
+    +'<div class="fhint" style="margin-bottom:8px;">Set exact pixel position on the 420×296px page.</div>'
+    +'<div class="f3col">'
+    +'<div class="fgrp"><label class="flbl">Top (px)</label><input class="finput" type="number" id="outro-pt" min="0" max="295" value="'+(ly.photoTop!=null?ly.photoTop:10)+'" oninput="outroLayoutChange()"></div>'
+    +'<div class="fgrp"><label class="flbl">Bottom (px)</label><input class="finput" type="number" id="outro-pb" min="1" max="296" value="'+(ly.photoBottom!=null?ly.photoBottom:160)+'" oninput="outroLayoutChange()"></div>'
+    +'</div>'
+    +'<div class="f3col">'
+    +'<div class="fgrp"><label class="flbl">Left (px)</label><input class="finput" type="number" id="outro-pl" min="0" max="419" value="'+(ly.photoLeft!=null?ly.photoLeft:0)+'" oninput="outroLayoutChange()"></div>'
+    +'<div class="fgrp"><label class="flbl">Right (px)</label><input class="finput" type="number" id="outro-pr" min="1" max="420" value="'+(ly.photoRight!=null?ly.photoRight:420)+'" oninput="outroLayoutChange()"></div>'
+    +'</div></div>'
+    +'<div class="form-section">Overlay Text</div>'
+    +'<div class="fgrp"><label class="flbl">Message <span style="font-weight:400;color:var(--muted);">(optional — {{babyname}} and {{giver}} supported)</span></label>'
+    +'<textarea class="ftextarea" id="outro-msg" rows="3" oninput="outroTextChange()">'+LL.escHtml(msg)+'</textarea></div>'
+    +'<div class="form-section">Text Position</div>'
+    +'<div class="f3col">'
+    +'<div class="fgrp"><label class="flbl">Left % (X)</label><input class="finput" type="number" id="outro-lx" min="0" max="100" value="'+(ly.startX!=null?ly.startX:50)+'" oninput="outroLayoutChange()"></div>'
+    +'<div class="fgrp"><label class="flbl">Top % (Y)</label><input class="finput" type="number" id="outro-ly" min="0" max="100" value="'+(ly.startY!=null?ly.startY:80)+'" oninput="outroLayoutChange()"></div>'
+    +'<div class="fgrp"><label class="flbl">Max Width %</label><input class="finput" type="number" id="outro-mw" min="10" max="100" value="'+(ly.maxWidth!=null?ly.maxWidth:80)+'" oninput="outroLayoutChange()"></div>'
+    +'</div>'
+    +'<div class="form-section">Text Style</div>'
+    +'<div class="frow"><div class="fgrp"><label class="flbl">Font</label><select class="fsel" id="outro-font" onchange="outroLayoutChange()">'+fontOptions(ly.font||'Lora')+'</select></div>'
+    +'<div class="fgrp"><label class="flbl">Size (px)</label><input class="finput" type="number" id="outro-sz" min="6" max="60" value="'+(ly.fontSize||13)+'" oninput="outroLayoutChange()"></div></div>'
+    +'<div class="frow">'+colorRow('Color','outro-col',ly.color||'#FFFFFF','outroLayoutChange()')
+    +'<div class="fgrp"><label class="flbl">Weight</label><select class="fsel" id="outro-bold" onchange="outroLayoutChange()"><option value="0"'+(!ly.bold?' selected':'')+'>Normal</option><option value="1"'+(ly.bold?' selected':'')+'>Bold</option></select></div></div>'
+    +'<div class="frow"><div class="fgrp"><label class="flbl">Transform</label><select class="fsel" id="outro-transform" onchange="outroLayoutChange()"><option value=""'+((!ly.textTransform||ly.textTransform==='')?'selected':'')+'>None</option><option value="uppercase"'+(ly.textTransform==='uppercase'?' selected':'')+'>UPPERCASE</option><option value="lowercase"'+(ly.textTransform==='lowercase'?' selected':'')+'>lowercase</option></select></div><div class="fgrp"></div></div>'
+    +'<div class="form-section">Text Outline</div>'
+    +'<div class="fgrp"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;">'
+    +'<input type="checkbox" id="outro-outline-on" '+(ly.outlineEnabled?'checked':'')+' onchange="outroLayoutChange();outroToggleOutlineControls()">'
+    +'<span style="font-size:.82rem;font-weight:600;">Enable Text Outline</span></label></div>'
+    +'<div id="outro-outline-controls" style="display:'+(ly.outlineEnabled?'block':'none')+';margin-top:6px;">'
+    +'<div class="frow">'
+    +colorRow('Outline Color','outro-outline-col',ly.outlineColor||'#000000','outroLayoutChange()')
+    +'<div class="fgrp"><label class="flbl">Width (px)</label>'
+    +'<input class="finput" type="number" id="outro-outline-w" min="0.5" max="8" step="0.5" value="'+(ly.outlineWidth||1)+'" oninput="outroLayoutChange()">'
+    +'<div class="fhint">0.5–8px · 1px typical, 2–3px bold</div></div>'
+    +'</div></div>'
+    +(idx>0&&idx<n-2?'<div class="form-section">Actions</div><button class="btn btn-sm btn-err" onclick="outroDeletePage('+idx+')">Delete Page</button>':'');
+  updateOutroPreview();
+}
+
+function resetOutroForm(){
+  var f=document.getElementById('outro-form');
+  if(f)f.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:.84rem;">Select a page to edit it.</div>';
+}
+
+function outroUploadImg(input){
+  var f=input.files[0]; if(!f||_outroIdx<0)return;
+  var s=document.getElementById('outro-upload-status');
+  if(s){s.style.display='flex';s.className='upload-status loading';s.textContent='Uploading to Cloudinary...';}
+  var folder='bookofpsalms_uploads/'+ST.activeGender+'/outro';
+  loadImgFile(f, folder).then(function(url){
+    _ensureD();
+    D().outroImages[_outroIdx]=url;
+    localStorage.setItem('bop_state',JSON.stringify(ST));
+    markUnsaved();
+    if(s){s.className='upload-status ok';s.textContent='Uploaded!';setTimeout(function(){s.style.display='none';},3500);}
+    selectOutroPage(_outroIdx);
+  }).catch(function(e){
+    if(s){s.className='upload-status err';s.textContent='Upload failed: '+e.message;}
+    toast('Upload failed: '+e.message,'err');
+    console.error('[CL] outroUploadImg:',e);
+  });
+}
+
+function outroRmImg(){
+  if(_outroIdx<0)return;
+  D().outroImages[_outroIdx]=null;
+  markUnsaved(); selectOutroPage(_outroIdx);
+}
+
+function outroTextChange(){
+  if(_outroIdx<0)return;
+  _ensureD();
+  D().outroMessages[_outroIdx]=gv('outro-msg');
+  markUnsaved(); updateOutroPreview();
+}
+
+function outroTogglePhotoControls(){
+  var cb=document.getElementById('outro-use-photo');
+  var ct=document.getElementById('outro-photo-controls');
+  if(ct)ct.style.display=(cb&&cb.checked)?'block':'none';
+  updateOutroPreview();
+}
+
+function outroToggleOutlineControls(){
+  var cb=document.getElementById('outro-outline-on');
+  var ct=document.getElementById('outro-outline-controls');
+  if(ct)ct.style.display=(cb&&cb.checked)?'block':'none';
+  updateOutroPreview();
+}
+
+function outroLayoutChange(){
+  if(_outroIdx<0)return;
+  _ensureD();
+  var usePhoto=!!(document.getElementById('outro-use-photo')&&document.getElementById('outro-use-photo').checked);
+  var outlineOn=!!(document.getElementById('outro-outline-on')&&document.getElementById('outro-outline-on').checked);
+  D().outroLayouts[_outroIdx]={
+    startX:gn('outro-lx',50),startY:gn('outro-ly',80),maxWidth:gn('outro-mw',80),
+    fontSize:gn('outro-sz',13),font:gv('outro-font')||'Lora',
+    bold:gv('outro-bold')==='1',color:gv('outro-col-txt')||'#FFFFFF',
+    textTransform:gv('outro-transform')||'',
+    useCustomerPhoto:usePhoto,
+    photoTop:gn('outro-pt',10),
+    photoBottom:gn('outro-pb',160),
+    photoLeft:gn('outro-pl',0),
+    photoRight:gn('outro-pr',420),
+    outlineEnabled:outlineOn,
+    outlineColor:gv('outro-outline-col-txt')||'#000000',
+    outlineWidth:gn('outro-outline-w',1),
+  };
+  markUnsaved(); updateOutroPreview();
+}
+
+function updateOutroPreview(){
+  var el=document.getElementById('outro-live-preview'); if(!el)return;
+  if(_outroIdx<0){el.innerHTML='<div style="width:100%;height:100%;background:#12100E;display:flex;align-items:center;justify-content:center;"><span style="font-size:.7rem;color:rgba(255,255,255,.2);font-style:italic;">No page selected</span></div>';return;}
+  var dO=D();
+  var img=(dO.outroImages||[])[_outroIdx];
+  var msg=(dO.outroMessages||[])[_outroIdx]||'';
+  var ly=(dO.outroLayouts||[])[_outroIdx]||{};
+  var n=outroCount();
+  // Always render as 'intro' type so all layout fields (photo, text, outline) apply correctly
+  var page={type:'intro',image:LL.resolveImg(img),title:'',verse:'',message:msg,
+    meta:{layout:ly,pageNum:_outroIdx+1,isFrontCover:false,customerPhoto:null}};
+  el.innerHTML=LL.renderPage(page,'Ryne','Sample Giver');
+  requestAnimationFrame(function(){ applyLpZoom(el.closest('.lp-wrap')); });
+}
+
+function outroDeletePage(idx){
+  showConfirm('Delete outro page '+(idx+1)+'? Cannot be undone.',function(){
+    var n=outroCount(); if(n<=2){toast('Minimum 2 pages.','err');return;}
+    if(D().outroImages)D().outroImages.splice(idx,1);
+    if(D().outroMessages)D().outroMessages.splice(idx,1);
+    if(D().outroLayouts)D().outroLayouts.splice(idx,1);
+    sv('outro-count',n-1); if(!ST.config)ST.config={}; ST.config.outroCount=n-1;
+    _outroIdx=-1; markUnsaved(); renderOutroNav(); resetOutroForm(); toast('Page deleted.','ok');
+  });
+}
+
+// ----------------------------------------------------------------
+// LETTER EDITOR  (reads/writes through A)
+// ----------------------------------------------------------------
+var LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+function renderLetterNav(){
+  var list=document.getElementById('letter-nav-list'); if(!list)return;
+  list.innerHTML=LETTERS.map(function(l){
+    var lData=(D().letters||{})[l]||{};
+    var vars=lData.variations||[];
+    var v0=vars[0]||{};
+    var leftImg=LL.resolveImg(v0.leftImg);
+    var isAct=l===_currentLetter;
+    var iconHtml=leftImg?'<img src="'+LL.escHtml(leftImg)+'" alt="">':l;
+    return '<div class="ped-letter-thumb'+(isAct?' act':'')+'" onclick="selectLetter(\''+l+'\')"><div class="ped-letter-icon">'+iconHtml+'</div>'
+      +'<div><div class="ped-letter-label">'+l+'</div><div class="ped-letter-sub">'+vars.length+' var'+(v0.leftImg?' ✓':'')+'</div></div></div>';
+  }).join('');
+}
+
+function selectLetter(l){
+  _currentLetter=l; _currentVariation=0;
+  renderLetterNav(); renderLetterEditor();
+}
+
+function renderLetterEditor(){
+  var l=_currentLetter;
+  var lData=(D().letters||{})[l]||{};
+  var vars=lData.variations||[];
+  var formEl=document.getElementById('letter-form'); if(!formEl)return;
+  var variation=vars[_currentVariation]||{};
+  var ly=variation.layout||{}, tc=variation.text||{};
+  // Default meanings fallback — uses DEFAULT_MEANINGS[letter][variationIndex]
+  var defMeanings=(typeof DEFAULT_MEANINGS!=='undefined'&&DEFAULT_MEANINGS[l])||[];
+  var defM=defMeanings[_currentVariation]||defMeanings[0]||{title:'',text:'',verse:''};
+  var leftImg=LL.resolveImg(variation.leftImg), rightImg=LL.resolveImg(variation.rightImg);
+  var varTabsHtml=vars.map(function(_,i){
+    return '<button class="var-tab'+(i===_currentVariation?' act':'')+'" onclick="selectVar('+i+')">'+(i===0?'Default':'Var '+(i+1))+'</button>';
+  }).join('');
+  var lImgHtml=leftImg?'<img src="'+LL.escHtml(leftImg)+'" alt=""><button class="rm" onclick="rmLetterImg(\'left\')">Remove</button>':'<span class="iz-icon">📸</span><span class="iz-lbl">Left page illustration</span>';
+  var rImgHtml=rightImg?'<img src="'+LL.escHtml(rightImg)+'" alt=""><button class="rm" onclick="rmLetterImg(\'right\')">Remove</button>':'<span class="iz-icon">📝</span><span class="iz-lbl">Right page bg (optional)</span>';
+
+  formEl.innerHTML='<div class="ped-form-title">Letter '+l+' <span class="ped-form-badge">'+ST.activeGender.toUpperCase()+'</span></div>'
+    +'<div class="form-section">Variations</div>'
+    +'<div class="var-tabs">'+varTabsHtml+'<button class="var-add" onclick="addVariation()">+ Add</button>'+(vars.length>1?'<button class="btn btn-xs btn-err" onclick="removeVariation()">Remove</button>':'')+'</div>'
+    +'<div class="form-section">Left Page — Illustration</div>'    +'<div class="fgrp"><div class="form-img-zone" style="aspect-ratio:210/296;height:auto;max-height:140px;"><input type="file" accept="image/*" onchange="uploadLetterImg(this,\'left\')">'+lImgHtml+'</div></div>'    +'<div id="letter-upload-status" class="upload-status" style="display:none;"></div>'    +'<div class="form-section">Right Page — Blessing &amp; Preview</div>'    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px;">'    +'<div><div class="flbl" style="margin-bottom:5px;">Background (optional)</div>'    +'<div class="form-img-zone" style="aspect-ratio:210/296;height:auto;max-height:140px;"><input type="file" accept="image/*" onchange="uploadLetterImg(this,\'right\')">'+rImgHtml+'</div></div>'    +'<div><div class="flbl" style="margin-bottom:5px;">Live Preview <span style="font-weight:400;color:var(--muted);font-size:.6rem;">(name: Ryne)</span></div>'    +'<div class="lp-wrap"><div class="lp-page" id="letter-preview-r"></div></div></div>'    +'</div>'    +'<div class="form-section">Blessing Text</div>'    +'<div class="fgrp"><label class="flbl">Title / Blessing</label><input class="finput" id="lc-blessing" value="'+LL.escHtml(tc.blessing||defM.title||'')+'" oninput="setLetterText(\'blessing\',this.value)"></div>'    +'<div class="fgrp"><label class="flbl">Message <span style="font-weight:400;color:var(--muted);">({{babyname}} and {{giver}} supported)</span></label><textarea class="ftextarea" id="lc-message" rows="3" oninput="setLetterText(\'message\',this.value)">'+LL.escHtml(tc.message||defM.text||'')+'</textarea></div>'    +'<div class="fgrp"><label class="flbl">Verse Reference</label><textarea class="ftextarea" id="lc-verse" rows="3" oninput="setLetterText(\'verse\',this.value)">'+LL.escHtml(tc.verse||defM.verse||'')+'</textarea></div>'    +'<div class="form-section">Text Position</div>'    +'<div class="f3col">'    +'<div class="fgrp"><label class="flbl">Max Width %</label><input class="finput" type="number" id="ly-maxWidth" min="10" max="100" value="'+(ly.maxWidth!=null?ly.maxWidth:80)+'" oninput="setLetterLayout(\'maxWidth\',+this.value)"></div>'    +'<div class="fgrp"><label class="flbl">Left % (X)</label><input class="finput" type="number" id="ly-startX" min="0" max="100" value="'+(ly.startX!=null?ly.startX:50)+'" oninput="setLetterLayout(\'startX\',+this.value)"></div>'    +'<div class="fgrp"><label class="flbl">Top % (Y)</label><input class="finput" type="number" id="ly-startY" min="0" max="100" value="'+(ly.startY!=null?ly.startY:50)+'" oninput="setLetterLayout(\'startY\',+this.value)"></div>'    +'</div>'    +'<div class="form-section">Typography</div>'    +'<div class="frow"><div class="fgrp"><label class="flbl">Blessing Font</label><select class="fsel" id="ly-blessingFont" onchange="setLetterLayout(\'blessingFont\',this.value)">'+fontOptions(ly.blessingFont||'Poppins')+'</select></div>'    +'<div class="fgrp"><label class="flbl">Blessing Size (px)</label><input class="finput" type="number" id="ly-blessingSize" value="'+(ly.blessingSize||20)+'" oninput="setLetterLayout(\'blessingSize\',+this.value)"></div>'    +'<div class="fgrp"><label class="flbl">Blessing Bold</label><select class="fsel" id="ly-blessingBold" onchange="setLetterLayout(\'blessingBold\',this.value===\'1\')"><option value="0"'+(ly.blessingBold===false?'':' selected')+'>Normal</option><option value="1"'+(ly.blessingBold?' selected':'')+'>Bold</option></select></div></div>'    +'<div class="frow"><div class="fgrp"><label class="flbl">Message Font</label><select class="fsel" id="ly-messageFont" onchange="setLetterLayout(\'messageFont\',this.value)">'+fontOptions(ly.messageFont||'Poppins')+'</select></div>'    +'<div class="fgrp"><label class="flbl">Message Size (px)</label><input class="finput" type="number" id="ly-messageSize" value="'+(ly.messageSize||10)+'" oninput="setLetterLayout(\'messageSize\',+this.value)"></div>'    +'<div class="fgrp"><label class="flbl">Message Bold</label><select class="fsel" id="ly-messageBold" onchange="setLetterLayout(\'messageBold\',this.value===\'1\')"><option value="0"'+(ly.messageBold?'':' selected')+'>Normal</option><option value="1"'+(ly.messageBold?' selected':'')+'>Bold</option></select></div></div>'    +'<div class="frow"><div class="fgrp"><label class="flbl">Verse Font</label><select class="fsel" id="ly-verseFont" onchange="setLetterLayout(\'verseFont\',this.value)">'+fontOptions(ly.verseFont||'Lora')+'</select></div>'    +'<div class="fgrp"><label class="flbl">Verse Size (px)</label><input class="finput" type="number" id="ly-verseSize" value="'+(ly.verseSize||8)+'" oninput="setLetterLayout(\'verseSize\',+this.value)"></div>'    +'<div class="fgrp"><label class="flbl">Verse Bold</label><select class="fsel" id="ly-verseBold" onchange="setLetterLayout(\'verseBold\',this.value===\'1\')"><option value="0"'+(ly.verseBold?'':' selected')+'>Normal</option><option value="1"'+(ly.verseBold?' selected':'')+'>Bold</option></select></div></div>'    +'<div class="frow">'+colorRow('Blessing Color','ly-blessingColor',ly.blessingColor||'#051d40',"setLetterLayout('blessingColor',gv('ly-blessingColor-txt'))")    +colorRow('Message Color','ly-messageColor',ly.messageColor||'#051d40',"setLetterLayout('messageColor',gv('ly-messageColor-txt'))")+'</div>'    +'<div class="frow">'+colorRow('Verse Color','ly-verseColor',ly.verseColor||'#051d40',"setLetterLayout('verseColor',gv('ly-verseColor-txt'))")+'<div class="fgrp"></div></div>'
+    +'<div class="form-section">Text Outline</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">'
+    // --- Blessing outline ---
+    +'<div class="card" style="padding:12px;margin-bottom:0;">'
+    +'<div class="flbl" style="margin-bottom:8px;">Blessing</div>'
+    +'<div class="fgrp"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;">'
+    +'<input type="checkbox" id="ly-blessingOutline" '+(ly.blessingOutlineEnabled?'checked':'')+' onchange="setLetterLayout(\'blessingOutlineEnabled\',this.checked);letterToggleOutline(\'blessing\')">'
+    +'<span style="font-size:.78rem;">Enable</span></label></div>'
+    +'<div id="letter-blessing-outline-ctrl" style="display:'+(ly.blessingOutlineEnabled?'block':'none')+';margin-top:6px;">'
+    +colorRow('Color','ly-blessingOutlineColor',ly.blessingOutlineColor||'#000000',"setLetterLayout('blessingOutlineColor',gv('ly-blessingOutlineColor-txt'))")
+    +'<div class="fgrp"><label class="flbl">Width (px)</label><input class="finput" type="number" id="ly-blessingOutlineWidth" min="0.5" max="8" step="0.5" value="'+(ly.blessingOutlineWidth||1)+'" oninput="setLetterLayout(\'blessingOutlineWidth\',+this.value)"></div>'
+    +'</div></div>'
+    // --- Message outline ---
+    +'<div class="card" style="padding:12px;margin-bottom:0;">'
+    +'<div class="flbl" style="margin-bottom:8px;">Message</div>'
+    +'<div class="fgrp"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;">'
+    +'<input type="checkbox" id="ly-messageOutline" '+(ly.messageOutlineEnabled?'checked':'')+' onchange="setLetterLayout(\'messageOutlineEnabled\',this.checked);letterToggleOutline(\'message\')">'
+    +'<span style="font-size:.78rem;">Enable</span></label></div>'
+    +'<div id="letter-message-outline-ctrl" style="display:'+(ly.messageOutlineEnabled?'block':'none')+';margin-top:6px;">'
+    +colorRow('Color','ly-messageOutlineColor',ly.messageOutlineColor||'#000000',"setLetterLayout('messageOutlineColor',gv('ly-messageOutlineColor-txt'))")
+    +'<div class="fgrp"><label class="flbl">Width (px)</label><input class="finput" type="number" id="ly-messageOutlineWidth" min="0.5" max="8" step="0.5" value="'+(ly.messageOutlineWidth||1)+'" oninput="setLetterLayout(\'messageOutlineWidth\',+this.value)"></div>'
+    +'</div></div>'
+    // --- Verse outline ---
+    +'<div class="card" style="padding:12px;margin-bottom:0;">'
+    +'<div class="flbl" style="margin-bottom:8px;">Verse</div>'
+    +'<div class="fgrp"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;">'
+    +'<input type="checkbox" id="ly-verseOutline" '+(ly.verseOutlineEnabled?'checked':'')+' onchange="setLetterLayout(\'verseOutlineEnabled\',this.checked);letterToggleOutline(\'verse\')">'
+    +'<span style="font-size:.78rem;">Enable</span></label></div>'
+    +'<div id="letter-verse-outline-ctrl" style="display:'+(ly.verseOutlineEnabled?'block':'none')+';margin-top:6px;">'
+    +colorRow('Color','ly-verseOutlineColor',ly.verseOutlineColor||'#000000',"setLetterLayout('verseOutlineColor',gv('ly-verseOutlineColor-txt'))")
+    +'<div class="fgrp"><label class="flbl">Width (px)</label><input class="finput" type="number" id="ly-verseOutlineWidth" min="0.5" max="8" step="0.5" value="'+(ly.verseOutlineWidth||1)+'" oninput="setLetterLayout(\'verseOutlineWidth\',+this.value)"></div>'
+    +'</div></div>'
+    +'</div>';
+
+  updateLetterPreview();
+}
+
+function selectVar(i){_currentVariation=i;renderLetterEditor();}
+
+function addVariation(){
+  ensureLetterVar();
+  var l = _currentLetter;
+  var newIdx = D().letters[l].variations.length;
+  // Pre-populate with DEFAULT_MEANINGS for this variation index if available
+  var defEntry = (typeof DEFAULT_MEANINGS!=='undefined' && DEFAULT_MEANINGS[l] && DEFAULT_MEANINGS[l][newIdx]) || {};
+  var newVar = {leftImg:null, rightImg:null, layout:{blessingFont:'Poppins',blessingSize:20,blessingBold:true,messageFont:'Poppins',messageSize:10,verseFont:'Lora',verseSize:8,blessingColor:'#051d40',messageColor:'#051d40',verseColor:'#051d40'}, text:{}};
+  if (defEntry.title) newVar.text.blessing = defEntry.title;
+  if (defEntry.text)  newVar.text.message  = defEntry.text;
+  if (defEntry.verse) newVar.text.verse    = defEntry.verse;
+  D().letters[l].variations.push(newVar);
+  _currentVariation = D().letters[l].variations.length - 1;
+  markUnsaved(); renderLetterNav(); renderLetterEditor();
+}
+
+function removeVariation(){
+  var vars=(D().letters[_currentLetter]||{}).variations||[];
+  if(vars.length<=1){toast('Need at least one variation.','err');return;}
+  vars.splice(_currentVariation,1);
+  _currentVariation=Math.max(0,_currentVariation-1);
+  markUnsaved(); renderLetterNav(); renderLetterEditor();
+}
+
+function uploadLetterImg(input, side){
+  var f=input.files[0]; if(!f)return;
+  var s=document.getElementById('letter-upload-status');
+  if(s){s.style.display='flex';s.className='upload-status loading';s.textContent='Uploading to Cloudinary...';}
+  var folder='bookofpsalms_uploads/'+ST.activeGender+'/letters/'+_currentLetter;
+  loadImgFile(f, folder).then(function(url){
+    ensureLetterVar();
+    var v=D().letters[_currentLetter].variations[_currentVariation];
+    if(side==='left')  v.leftImg  = url;
+    if(side==='right') v.rightImg = url;
+    localStorage.setItem('bop_state', JSON.stringify(ST));
+    markUnsaved();
+    if(s){s.className='upload-status ok';s.textContent='Uploaded!';setTimeout(function(){s.style.display='none';},3500);}
+    renderLetterNav(); renderLetterEditor();
+  }).catch(function(e){
+    if(s){s.className='upload-status err';s.textContent='Upload failed: '+e.message;}
+    toast('Upload failed: '+e.message,'err');
+    console.error('[CL] uploadLetterImg:',e);
+  });
+}
+
+function rmLetterImg(side){
+  ensureLetterVar();
+  D().letters[_currentLetter].variations[_currentVariation].leftImg  = side==='left'  ? null : D().letters[_currentLetter].variations[_currentVariation].leftImg;
+  D().letters[_currentLetter].variations[_currentVariation].rightImg = side==='right' ? null : D().letters[_currentLetter].variations[_currentVariation].rightImg;
+  markUnsaved(); renderLetterNav(); renderLetterEditor();
+}
+
+function setLetterText(key,val){
+  ensureLetterVar();
+  var tc=D().letters[_currentLetter].variations[_currentVariation].text||{};
+  tc[key]=val; D().letters[_currentLetter].variations[_currentVariation].text=tc;
+  markUnsaved(); updateLetterPreview();
+}
+
+function changeAdminPassword() {
+  var DEFAULT_PW = 'llstrybk0902';
+  var stored = localStorage.getItem('bop_admin_pw') || DEFAULT_PW;
+  var current = document.getElementById('cfg-pw-current').value;
+  var newPw   = document.getElementById('cfg-pw-new').value;
+  var confirm = document.getElementById('cfg-pw-confirm').value;
+  if (current !== stored)  { toast('Current password is incorrect.', 'err'); return; }
+  if (!newPw.trim())       { toast('New password cannot be empty.', 'err'); return; }
+  if (newPw !== confirm)   { toast('New passwords do not match.', 'err'); return; }
+  if (newPw.length < 6)   { toast('Password must be at least 6 characters.', 'err'); return; }
+  localStorage.setItem('bop_admin_pw', newPw);
+  document.getElementById('cfg-pw-current').value = '';
+  document.getElementById('cfg-pw-new').value = '';
+  document.getElementById('cfg-pw-confirm').value = '';
+  toast('Password updated successfully!', 'ok');
+}
+
+function letterToggleOutline(layer){
+  var map={blessing:'letter-blessing-outline-ctrl',message:'letter-message-outline-ctrl',verse:'letter-verse-outline-ctrl'};
+  var cbMap={blessing:'ly-blessingOutline',message:'ly-messageOutline',verse:'ly-verseOutline'};
+  var cb=document.getElementById(cbMap[layer]);
+  var ct=document.getElementById(map[layer]);
+  if(ct&&cb)ct.style.display=cb.checked?'block':'none';
+  updateLetterPreview();
+}
+
+function setLetterLayout(key,val){
+  ensureLetterVar();
+  var ly=D().letters[_currentLetter].variations[_currentVariation].layout||{};
+  ly[key]=val; D().letters[_currentLetter].variations[_currentVariation].layout=ly;
+  markUnsaved(); updateLetterPreview();
+}
+
+function ensureLetterVar(){
+  if(!D().letters)D().letters={};
+  if(!D().letters[_currentLetter])D().letters[_currentLetter]={};
+  if(!D().letters[_currentLetter].variations){
+    // Pre-populate first variation with DEFAULT_MEANINGS
+    var l = _currentLetter;
+    var defEntry = (typeof DEFAULT_MEANINGS!=='undefined' && DEFAULT_MEANINGS[l] && DEFAULT_MEANINGS[l][0]) || {};
+    var firstVar = {leftImg:null, rightImg:null, layout:{blessingFont:'Poppins',blessingSize:20,blessingBold:true,messageFont:'Poppins',messageSize:10,verseFont:'Lora',verseSize:8,blessingColor:'#051d40',messageColor:'#051d40',verseColor:'#051d40'}, text:{}};
+    if (defEntry.title) firstVar.text.blessing = defEntry.title;
+    if (defEntry.text)  firstVar.text.message  = defEntry.text;
+    if (defEntry.verse) firstVar.text.verse    = defEntry.verse;
+    D().letters[_currentLetter].variations = [firstVar];
+  }
+  while(D().letters[_currentLetter].variations.length<=_currentVariation)D().letters[_currentLetter].variations.push({});
+  var v=D().letters[_currentLetter].variations[_currentVariation];
+  if(!v.layout)v.layout={};
+  if(!v.text)v.text={};
+}
+
+function updateLetterPreview(){
+  var rEl=document.getElementById('letter-preview-r');
+  if(!rEl)return;
+  var l=_currentLetter, lData=(D().letters||{})[l]||{}, vars=lData.variations||[];
+  var variation=vars[_currentVariation]||{}, ly=variation.layout||{}, tc=variation.text||{};
+  var meanings=(lData.meanings&&lData.meanings.length)?lData.meanings:(typeof DEFAULT_MEANINGS!=='undefined'&&DEFAULT_MEANINGS[l])||[];
+  var meaning=meanings[0]||{title:'',text:'',verse:''};
+  rEl.innerHTML=LL.renderPage({type:'letter-r',image:LL.resolveImg(variation.rightImg),
+    title:tc.blessing||meaning.title||'',
+    message:tc.message||meaning.text||'',
+    verse:tc.verse||meaning.verse||'',
+    meta:{letter:l,layout:ly,nameLen:5}},'Ryne','Sample Giver');
+  requestAnimationFrame(function(){ applyLpZoom(rEl.closest('.lp-wrap')); });
+}
+
+// ----------------------------------------------------------------
+// DASHBOARD
+// ----------------------------------------------------------------
+function renderDashboard(){
+  LL.loadOrders(function(orders){
+    var pending=orders.filter(function(o){return(o.payment||{}).status==='pending';});
+    var revenue=orders.reduce(function(sum,o){return sum+((o.payment||{}).amount||0);},0);
+    var boyLC=Object.keys(ST.boy.letters||{}).filter(function(l){return((ST.boy.letters[l]||{}).variations||[]).length>0;}).length;
+    var girlLC=Object.keys(ST.girl.letters||{}).filter(function(l){return((ST.girl.letters[l]||{}).variations||[]).length>0;}).length;
+    setText('ds-total',orders.length);
+    setText('ds-pending',pending.length);
+    setText('ds-rev','\u20B1'+revenue.toLocaleString());
+    setText('ds-letters',boyLC+'/'+girlLC);
+    var badge=document.getElementById('sb-orders-badge');
+    if(badge){badge.textContent=pending.length;badge.classList.toggle('show',pending.length>0);}
+    var list=document.getElementById('dash-orders-list'); if(!list)return;
+    if(!orders.length){list.innerHTML='<div class="empty">No orders yet.</div>';return;}
+    list.innerHTML=renderOrdersTable(orders.slice(0,10));
+  });
+}
+
+// ----------------------------------------------------------------
+// ORDERS
+// ----------------------------------------------------------------
+var _ordersFilter='';
+function renderOrders(){
+  LL.loadOrders(function(orders){
+    if(_ordersFilter){
+      var q=_ordersFilter.toLowerCase();
+      orders=orders.filter(function(o){ return (o.ref||'').toLowerCase().includes(q)||((o.child||{}).name||'').toLowerCase().includes(q)||((o.payment||{}).status||'').toLowerCase().includes(q)||((o.buyer||{}).name||'').toLowerCase().includes(q)||((o.buyer||{}).phone||'').toLowerCase().includes(q); });
+    }
+    var wrap=document.getElementById('orders-wrap'); if(!wrap)return;
+    if(!orders.length){wrap.innerHTML='<div class="empty">No orders found.</div>';return;}
+    wrap.innerHTML=renderOrdersTable(orders);
+  });
+}
+
+function renderOrdersTable(orders){
+  var rows=orders.map(function(o){
+    var child=o.child||{},buyer=o.buyer||{},pay=o.payment||{};
+    var ref=o.ref||'--';
+    var gender=(child.gender||'boy');
+    var gBadge='<span style="font-size:.6rem;padding:2px 6px;border-radius:8px;font-weight:700;background:'+(gender==='girl'?'var(--girl-p)':'var(--boy-p)')+';color:'+(gender==='girl'?'var(--girl)':'var(--boy)')+';">'+(gender==='girl'?'Girl':'Boy')+'</span>';
+    return '<tr>'
+      +'<td>'+ref+'</td><td>'+LL.escHtml(child.name||'--')+' '+gBadge+'</td>'
+      +'<td>'+LL.escHtml(buyer.name||'--')+'</td>'
+      +'<td>'+LL.escHtml(buyer.phone||'--')+'</td>'
+      +'<td>\u20B1'+((pay.amount||0).toLocaleString())+'</td>'
+      +'<td><select class="status-sel" onchange="updateOrderStatus(\''+ref+'\',this.value)">'
+        +['pending','confirmed','shipped','completed','cancelled'].map(function(s){return'<option value="'+s+'"'+(pay.status===s?' selected':'')+'>'+s+'</option>';}).join('')+'</select></td>'
+      +'<td>'+new Date(o.timestamp||o.created||Date.now()).toLocaleDateString('en-PH')+'</td>'
+      +'<td><div class="act-btns"><button class="act-btn p" onclick="adminDownloadOrderPDF(\''+ref+'\')">PDF</button><button class="act-btn danger" onclick="promptDeleteOrder(\''+ref+'\')">Del</button></div></td>'
+      +'</tr>';
+  }).join('');
+  return '<table><thead><tr><th>Ref</th><th>Child</th><th>Buyer Name</th><th>Phone</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody>'+rows+'</tbody></table>';
+}
+
+function filterOrders(q){_ordersFilter=q;renderOrders();}
+
+function updateOrderStatus(ref,status){
+  var orders=[]; try{orders=JSON.parse(localStorage.getItem('ht_orders')||'[]');}catch(e){}
+  orders.forEach(function(o){if(o.ref===ref&&o.payment)o.payment.status=status;});
+  localStorage.setItem('ht_orders',JSON.stringify(orders));
+  toast('Order '+ref+' -> '+status,'ok');
+}
+
+function clearOrders(){
+  showConfirm('Clear ALL orders? Cannot be undone.',function(){
+    // Fetch full bin, wipe orders key, write back
+    var xhr1=new XMLHttpRequest();
+    xhr1.open('GET',LL.WORKER_URL+'/db/get');xhr1.setRequestHeader('X-App-Token',LL.APP_TOKEN);
+    xhr1.onload=function(){
+      var bin={}; try{bin=JSON.parse(xhr1.responseText);}catch(e){}
+      bin.orders=[];
+      var xhr2=new XMLHttpRequest();
+      xhr2.open('PUT',LL.WORKER_URL+'/db/put');xhr2.setRequestHeader('X-App-Token',LL.APP_TOKEN);
+      xhr2.setRequestHeader('Content-Type','application/json');
+      xhr2.onload=function(){ renderOrders();renderDashboard();toast('All orders cleared.','ok'); };
+      xhr2.send(JSON.stringify(bin));
+    };
+    xhr1.send();
+  });
+}
+
+function promptDeleteOrder(ref){
+  showConfirm('Permanently delete order '+ref+'?',function(){
+    var cb=function(orders){
+      orders=orders.filter(function(o){return o.ref!==ref;});
+      var xhr1=new XMLHttpRequest();
+      xhr1.open('GET',LL.WORKER_URL+'/db/get');xhr1.setRequestHeader('X-App-Token',LL.APP_TOKEN);
+      xhr1.onload=function(){
+        var bin={}; try{bin=JSON.parse(xhr1.responseText);}catch(e){}
+        bin.orders=orders;
+        var xhr2=new XMLHttpRequest();
+        xhr2.open('PUT',LL.WORKER_URL+'/db/put');xhr2.setRequestHeader('X-App-Token',LL.APP_TOKEN);
+        xhr2.setRequestHeader('Content-Type','application/json');
+        xhr2.onload=function(){ renderOrders();renderDashboard();toast('Order '+ref+' deleted.','ok'); };
+        xhr2.send(JSON.stringify(bin));
+      };
+      xhr1.send();
+    };
+    LL.loadOrders(cb);
+  });
+}
+
+// ----------------------------------------------------------------
+// ADMIN PDF DOWNLOAD
+// Uses ST (full state) + order's gender to build the correct page model.
+// ST.active is irrelevant here -- PDF always uses the order's gender.
+// ----------------------------------------------------------------
+var _adminPDFCancelled=false;
+function closeAdminPDFModal(){_adminPDFCancelled=true;document.getElementById('admin-pdf-modal').classList.remove('open');}
+
+async function adminDownloadOrderPDF(ref){
+  if(!window.jspdf||!window.html2canvas){toast('PDF libraries loading -- wait.','err');return;}
+  var orders=[]; try{orders=JSON.parse(localStorage.getItem('ht_orders')||'[]');}catch(e){}
+  var order=orders.find(function(o){return o.ref===ref;});
+  if(!order){toast('Order not found: '+ref,'err');return;}
+  var child=order.child||{};
+  var childName=child.name||'Child';
+  var gender=child.gender||'boy';
+
+  // Build pages using the correct gender dataset from full ST
+  var userData={raw:childName,letters:childName.replace(/\s/g,'').toUpperCase(),gender:gender,photo:child.photo||null,ded:order.dedication||'',giver:order.giver||''};
+  var pages=LL.buildPageModel(ST,userData,{raw:true}); // full-res for PDF
+
+  _adminPDFCancelled=false;
+  document.getElementById('admin-pdf-modal').classList.add('open');
+  function setP(pct,msg){
+    var bar=document.getElementById('admin-pdf-bar'),lbl=document.getElementById('admin-pdf-msg');
+    if(bar)bar.style.width=pct+'%';if(lbl)lbl.textContent=msg;
+  }
+
+  await document.fonts.ready;
+  var jsPDF=window.jspdf.jsPDF;
+  var doc=new jsPDF({orientation:'landscape',unit:'px',format:[420,296]});
+  var first=true;
+  var stageF=document.getElementById('admin-pdf-cover-front'); // reused for all pages
+  async function rAF(){return new Promise(function(r){requestAnimationFrame(r);});}
+  async function wait(ms){return new Promise(function(r){setTimeout(r,ms);});}
+  // cap() removed — inlined into page loop below
+  // renderCap removed — using single-stage page-by-page loop below
+  // Reuse a single 420x296 stage element — render each page at full size
+  var stage=stageF; // reuse the cover-front stage as the render target
+  stage.style.width='420px'; stage.style.height='296px';
+
+  try{
+    var total=pages.length;
+    for(var i=0;i<pages.length;i++){
+      if(_adminPDFCancelled)break;
+      var page=pages[i];
+      if(!page||page.type==='filler')continue; // skip filler padding pages
+
+      var pct=Math.round(((i+1)/total)*98)+1;
+      setP(pct,'Page '+(i+1)+' of '+total+': '+page.type+'...');
+
+      // Choose background by page type
+      var bg='#FEFAF3';
+      if(page.type==='intro'||page.type==='outro') bg='#12100E';
+      if(page.image) bg='transparent';
+
+      stage.innerHTML=LL.renderPage(page,childName,order.giver||'');
+      await rAF();await rAF();await wait(150);
+
+      var c=await html2canvas(stage,{scale:3,useCORS:true,allowTaint:false,
+        backgroundColor:bg==='transparent'?null:bg,width:420,height:296,logging:false});
+      var imgData=c.toDataURL('image/jpeg',0.95);
+      if(!first)doc.addPage([420,296],'landscape');
+      first=false;
+      doc.addImage(imgData,'JPEG',0,0,420,296);
+    }
+    if(!_adminPDFCancelled){
+      setP(100,'Saving...');await wait(100);
+      doc.save('LittleLight_'+childName.trim().replace(/\s+/g,'_')+'_'+ref+'.pdf');
+      toast('PDF downloaded for '+childName+' ('+pages.filter(function(p){return p&&p.type!=='filler';}).length+' pages)!','ok');
+    }
+  }catch(err){toast('PDF error: '+err.message,'err');console.error('[LL PDF]',err);}
+  stage.innerHTML='';
+  document.getElementById('admin-pdf-modal').classList.remove('open');
+}
+
+// ----------------------------------------------------------------
+// RECOVERY TOOL
+// ----------------------------------------------------------------
+function rlog(msg,cls){
+  var el=document.getElementById('recovery-log'); if(!el)return;
+  var line=document.createElement('div');
+  if(cls)line.style.color=cls==='ok'?'#4ade80':cls==='err'?'#f87171':'#fbbf24';
+  line.textContent=msg; el.appendChild(line); el.scrollTop=el.scrollHeight;
+}
+
+function runDiagnose(){
+  var el=document.getElementById('recovery-log'); if(el)el.innerHTML='';
+  _localST=null;_remoteST=null;
+  rlog('-- Step 1: Reading localStorage --');
+  try{
+    var raw=localStorage.getItem('bop_state');
+    if(!raw){rlog('[FAIL] No bop_state in localStorage','err');return;}
+    _localST=JSON.parse(raw);
+    rlog('[OK] localStorage loaded','ok');
+    var fmt=(_localST.boy||_localST.girl)?'new (boy/girl)':'legacy flat';
+    rlog('Format: '+fmt);
+    if(_localST.boy||_localST.girl){
+      ['boy','girl'].forEach(function(g){
+        var d=_localST[g]||{};
+        var lc=Object.keys(d.letters||{}).length;
+        var ic=(d.introImages||[]).filter(Boolean).length;
+        var oc=(d.outroImages||[]).filter(Boolean).length;
+        rlog(g+': letters='+lc+' introImgs='+ic+' outroImgs='+oc,lc?'ok':'warn');
+      });
+    }
+  }catch(e){rlog('[FAIL] Parse error: '+e.message,'err');return;}
+  rlog('-- Step 2: Reading JSONBin --');
+  var xhr=new XMLHttpRequest();
+  xhr.open('GET',LL.WORKER_URL+'/db/get',true);xhr.setRequestHeader('X-App-Token',LL.APP_TOKEN);
+  xhr.onload=function(){
+    if(xhr.status!==200){rlog('[FAIL] JSONBin HTTP '+xhr.status,'err');return;}
+    try{
+      _remoteST=JSON.parse(xhr.responseText).record || (JSON.parse(xhr.responseText).boy ? JSON.parse(xhr.responseText) : null);
+      rlog('[OK] JSONBin loaded','ok');
+      var hasBoth=_remoteST.boy&&_remoteST.girl;
+      rlog('Remote format: '+(hasBoth?'new (boy/girl)':'legacy flat'));
+      if(hasBoth){
+        ['boy','girl'].forEach(function(g){
+          var d=_remoteST[g]||{};
+          rlog(g+': letters='+Object.keys(d.letters||{}).length+' introImgs='+(d.introImages||[]).filter(Boolean).length,Object.keys(d.letters||{}).length?'ok':'warn');
+        });
+      }
+      document.getElementById('sync-btn').disabled=false;
+    }catch(e){rlog('[FAIL] JSONBin parse error: '+e.message,'err');}
+  };
+  xhr.onerror=function(){rlog('[FAIL] Network error','err');};
+  xhr.send();
+}
+
+function runSync(){
+  if(!_localST){rlog('[FAIL] Run Diagnose first','err');return;}
+  rlog('-- Force Sync: localStorage -> JSONBin --');
+  rlog('Pushing '+Math.round(JSON.stringify(_localST).length/1024)+' KB...');
+  LL.saveRemoteState(_localST,function(ok){
+    if(ok){rlog('[OK] JSONBin updated!','ok');document.getElementById('verify-btn').disabled=false;}
+    else   rlog('[FAIL] Sync failed.','err');
+  });
+}
+
+function runVerify(){
+  rlog('-- Verify: Reading JSONBin --');
+  var xhr=new XMLHttpRequest();
+  xhr.open('GET',LL.WORKER_URL+'/db/get',true);xhr.setRequestHeader('X-App-Token',LL.APP_TOKEN);
+  xhr.onload=function(){
+    if(xhr.status!==200){rlog('[FAIL] HTTP '+xhr.status,'err');return;}
+    try{
+      var st=JSON.parse(xhr.responseText).record || (JSON.parse(xhr.responseText).boy ? JSON.parse(xhr.responseText) : null);
+      ['boy','girl'].forEach(function(g){
+        var d=st[g]||{};
+        rlog(g+': letters='+Object.keys(d.letters||{}).length+' introImgs='+(d.introImages||[]).filter(Boolean).length,(Object.keys(d.letters||{}).length?'ok':'warn'));
+      });
+      rlog('[OK] Verification complete.','ok');
+    }catch(e){rlog('[FAIL] Parse error: '+e.message,'err');}
+  };
+  xhr.onerror=function(){rlog('[FAIL] Network error','err');};
+  xhr.send();
+}
+
+// ----------------------------------------------------------------
+// SHARED CONFIRM MODAL
+// ----------------------------------------------------------------
+function showConfirm(msg,callback){
+  _confirmCallback=callback;
+  setText('confirm-modal-msg',msg);
+  document.getElementById('confirm-modal').classList.add('open');
+  var ok=document.getElementById('confirm-modal-ok');
+  if(ok)ok.onclick=function(){
+    var cb=_confirmCallback;
+    closeConfirmModal();
+    if(cb)cb();
+  };
+}
+function closeConfirmModal(){_confirmCallback=null;document.getElementById('confirm-modal').classList.remove('open');}
+
+// ----------------------------------------------------------------
+// UTILS
+// ----------------------------------------------------------------
+function toast(msg,type){
+  var t=document.getElementById('toast'); if(!t)return;
+  t.textContent=msg; t.className='toast-admin '+(type||'')+' show';
+  clearTimeout(toast._timer); toast._timer=setTimeout(function(){t.classList.remove('show');},3500);
+}
+function setText(id,val){var e=document.getElementById(id);if(e)e.textContent=val;}
+
+document.addEventListener('input',function(e){
+  var t=e.target; if(t.closest&&t.closest('.view'))markUnsaved();
+});
+document.addEventListener('click',function(e){
+  if(e.target.classList.contains('modal-overlay'))closeConfirmModal();
+});
+
+// ── SAMPLES PAGE ─────────────────────────────────────────────────
+function getSamples() { return ST.samplesPage || {}; }
+
+function renderSamplesEditor() {
+  var sp = ST.samplesPage || {};
+  var hero = sp.hero || {};
+  var std  = sp.standard || {};
+  var hb   = sp.hardbound || {};
+  var foot = sp.footer || {};
+
+  function setVal(id, val, def) {
+    var el = document.getElementById(id);
+    if (el) el.value = val || def || '';
+  }
+
+  setVal('sp-eyebrow',  hero.eyebrow,  'CRAFTED WITH LOVE');
+  setVal('sp-title',    hero.title,    'See the Quality for Yourself');
+  setVal('sp-subtitle', hero.subtitle, 'Every book is a memory your child will carry forever. See what makes Little Light truly special.');
+  setVal('sp-std-badge', std.badge, '✦ STANDARD OPTION');
+  setVal('sp-std-title', std.title, '220 GSM Premium Glossy');
+  setVal('sp-std-desc',  std.desc,  'A5 Landscape · Staple-bound · Vibrant full-color print on every page');
+  setVal('sp-std-video', std.video, '');
+  setVal('sp-std-cta',   std.cta,   '✦ Create Your Book');
+  setVal('sp-hb-badge', hb.badge, '✦ HARDBOUND OPTION');
+  setVal('sp-hb-title', hb.title, 'Rigid Hardcover · Built to Last');
+  setVal('sp-hb-desc',  hb.desc,  'A5 · 48 pages · Glossy laminated cover · Side-stitched binding');
+  setVal('sp-hb-video', hb.video, '');
+  setVal('sp-hb-cta',   hb.cta,   '✦ Create Your Book');
+  var specs = hb.specs || [
+    'Thick rigid hardcover with glossy protective coating — won\'t bend, won\'t tear',
+    'Smooth high-quality inside pages — colors pop beautifully',
+    '48 pages of fully personalized content',
+    'Side-stitched — stays together after hundreds of reads',
+    'Feels like a real published book from a bookstore'
+  ];
+  for (var i = 1; i <= 5; i++) setVal('sp-hb-spec'+i, specs[i-1], '');
+  setVal('sp-footer-quote', foot.quote, 'A story written with love is a gift that lasts forever.');
+
+  renderSamplesPhotos('sp-std-photos', std.photos || [], 3, 'standard');
+  renderSamplesPhotos('sp-hb-photos',  hb.photos  || [], 4, 'hardbound');
+}
+
+function renderSamplesPhotos(containerId, photos, max, type) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+  var html = '';
+  for (var i = 0; i < max; i++) {
+    var url = photos[i] || '';
+    html += '<div style="position:relative;">';
+    if (url) {
+      html += '<img src="'+LL.escHtml(url)+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;border:1px solid var(--border);">';
+      html += '<button class="rm" onclick="removeSamplePhoto(\''+type+'\','+i+')" style="position:absolute;top:4px;right:4px;">✕</button>';
+    } else {
+      html += '<div onclick="document.getElementById(\'sp-photo-'+type+'-'+i+'\').click()" style="width:100%;aspect-ratio:1;background:var(--card-bg);border:1.5px dashed var(--border);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;">';
+      html += '<span style="font-size:1.5rem;">📷</span><span style="font-size:.72rem;color:var(--muted);margin-top:4px;">Upload</span></div>';
+      html += '<input type="file" id="sp-photo-'+type+'-'+i+'" accept="image/*" style="display:none" onchange="uploadSamplePhoto(\''+type+'\','+i+',this)">';
+    }
+    html += '</div>';
+  }
+  el.innerHTML = html;
+}
+
+function uploadSamplePhoto(type, idx, input) {
+  var f = input.files[0]; if (!f) return;
+  toast('Uploading photo...', 'ok');
+  LL.uploadToCloudinary(f, 'bookofpsalms_uploads/samples/'+type, null, 'template').then(function(url) {
+    if (!ST.samplesPage) ST.samplesPage = {};
+    if (!ST.samplesPage[type]) ST.samplesPage[type] = {};
+    if (!ST.samplesPage[type].photos) ST.samplesPage[type].photos = [];
+    ST.samplesPage[type].photos[idx] = url;
+    markUnsaved();
+    renderSamplesEditor();
+    toast('Photo uploaded!', 'ok');
+  }).catch(function(e) { toast('Upload failed: '+e.message, 'err'); });
+}
+
+function removeSamplePhoto(type, idx) {
+  if (!ST.samplesPage || !ST.samplesPage[type] || !ST.samplesPage[type].photos) return;
+  ST.samplesPage[type].photos[idx] = null;
+  markUnsaved();
+  renderSamplesEditor();
+}
+
+function saveSamples() {
+  if (!ST.samplesPage) ST.samplesPage = {};
+  var sp = ST.samplesPage;
+
+  sp.hero = {
+    eyebrow:  document.getElementById('sp-eyebrow').value,
+    title:    document.getElementById('sp-title').value,
+    subtitle: document.getElementById('sp-subtitle').value
+  };
+  var stdPhotos = (sp.standard && sp.standard.photos) || [];
+  sp.standard = {
+    badge:  document.getElementById('sp-std-badge').value,
+    title:  document.getElementById('sp-std-title').value,
+    desc:   document.getElementById('sp-std-desc').value,
+    video:  document.getElementById('sp-std-video').value,
+    cta:    document.getElementById('sp-std-cta').value,
+    photos: stdPhotos
+  };
+  var hbPhotos = (sp.hardbound && sp.hardbound.photos) || [];
+  var specs = [];
+  for (var i = 1; i <= 5; i++) specs.push(document.getElementById('sp-hb-spec'+i).value);
+  sp.hardbound = {
+    badge:  document.getElementById('sp-hb-badge').value,
+    title:  document.getElementById('sp-hb-title').value,
+    desc:   document.getElementById('sp-hb-desc').value,
+    video:  document.getElementById('sp-hb-video').value,
+    cta:    document.getElementById('sp-hb-cta').value,
+    specs:  specs,
+    photos: hbPhotos
+  };
+  sp.footer = { quote: document.getElementById('sp-footer-quote').value };
+
+  LL.saveRemoteState(ST, function(ok) {
+    if (ok) { toast('Samples page saved!', 'ok'); }
+    else toast('Save failed — try again', 'err');
+  });
+}
+</script>
+</body>
+</html>
