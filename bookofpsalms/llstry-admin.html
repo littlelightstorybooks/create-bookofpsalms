@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Little Book of Psalms — Admin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600;700&family=Lora:wght@400;600&family=Montserrat:wght@400;600&family=Poppins:wght@400;600;700&family=Luckiest+Guy&family=Kanit:wght@400;700&family=Margarine&family=Sniglet&family=Galindo&family=Darumadrop+One&family=Mochiy+Pop+P+One&family=Londrina+Solid&family=Belanosima:wght@400;700&family=Lilita+One&family=Braah+One&family=Gorditas:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600;700&family=Lora:wght@400;600&family=Montserrat:wght@400;600&family=Poppins:wght@400;600;700&family=Luckiest+Guy&family=Kanit:wght@400;700&family=Margarine&family=Sniglet&family=Galindo&family=Darumadrop+One&family=Mochiy+Pop+P+One&family=Londrina+Solid&family=Belanosima:wght@400;700&family=Lilita+One&family=Braah+One&family=Gorditas:wght@400;700&family=Cause:wght@100..900&family=Gaegu:wght@300;400;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
 <link rel="dns-prefetch" href="https://res.cloudinary.com">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -857,13 +857,15 @@ function setGender(g, tab) {
 // INIT
 // ----------------------------------------------------------------
 // ── ADMIN PASSWORD GATE ──────────────────────────────────────────
-if (!sessionStorage.getItem('bop_admin_unlocked')) {
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('admin-shell').style.display = 'none';
-} else {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('admin-shell').style.display = 'block';
-}
+document.addEventListener('DOMContentLoaded', function() {
+  if (!sessionStorage.getItem('bop_admin_unlocked')) {
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('admin-shell').style.display = 'none';
+  } else {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-shell').style.display = 'block';
+  }
+});
 
 async function doLogin() {
   var pw = document.getElementById('pw-input').value.trim();
@@ -1097,7 +1099,7 @@ function collectConfig() {
 // ----------------------------------------------------------------
 // SHARED UTILITIES
 // ----------------------------------------------------------------
-var FONTS=['Lora','Montserrat','Poppins','Playfair Display','Open Sans','Jost','Merriweather','Georgia','serif','sans-serif','Luckiest Guy','Kanit','Margarine','Sniglet','Galindo','Darumadrop One','Mochiy Pop P One','Londrina Solid','Belanosima','Lilita One','Braah One','Gorditas'];
+var FONTS=['Lora','Montserrat','Poppins','Playfair Display','Open Sans','Jost','Merriweather','Georgia','serif','sans-serif','Luckiest Guy','Kanit','Margarine','Sniglet','Galindo','Darumadrop One','Mochiy Pop P One','Londrina Solid','Belanosima','Lilita One','Braah One','Gorditas','Cause','Gaegu'];
 
 function fontOptions(sel) {
   return FONTS.map(function(f){ return '<option value="'+f+'"'+(f===sel?' selected':'')+'>'+f+'</option>'; }).join('');
