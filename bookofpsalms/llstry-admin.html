@@ -306,9 +306,34 @@ tr:hover td{background:var(--gold-p);}
 .modal-box h3{font-family:'Cormorant Garamond',serif;font-size:1.25rem;margin-bottom:10px;}
 .modal-box p{font-size:.84rem;color:var(--muted);margin-bottom:22px;line-height:1.6;}
 .modal-actions{display:flex;gap:8px;justify-content:flex-end;}
+
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(160deg,#2b1f14,#3d2916);}
+.login-box{background:#fff;border-radius:16px;padding:2.5rem 2rem;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.login-logo{font-family:'Playfair Display',serif;font-style:italic;font-size:1.3rem;color:#1a1a1a;margin-bottom:.3rem;}
+.login-sub{font-size:.82rem;color:#7a7069;margin-bottom:1.8rem;}
+.login-box label{display:block;font-size:.78rem;font-weight:600;color:#7a7069;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem;}
+.login-box input{width:100%;padding:.75rem 1rem;border:1.5px solid #ddd4c6;border-radius:8px;font-size:.95rem;font-family:'Open Sans',sans-serif;outline:none;transition:border-color .2s;}
+.login-box input:focus{border-color:#e77737;}
+.login-btn{width:100%;margin-top:1.2rem;padding:.85rem;background:#e77737;color:#fff;border:none;border-radius:8px;font-family:'Open Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:background .2s;}
+.login-btn:hover{background:#f0956a;}
+.login-err{margin-top:.8rem;font-size:.82rem;color:#b33a3a;display:none;}
 </style>
 </head>
 <body>
+<!-- LOGIN SCREEN -->
+<div id="login-screen" style="display:none;">
+  <div class="login-box">
+    <div class="login-logo">✦ Little Book of Psalms</div>
+    <div class="login-sub">Admin Panel — Enter your password to continue</div>
+    <label for="pw-input">Password</label>
+    <input type="password" id="pw-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="login-err" id="login-err">Incorrect password. Please try again.</div>
+  </div>
+</div>
+
+<div id="admin-shell">
+
 
 <div id="save-bar"></div>
 <div class="toast-admin" id="toast"></div>
@@ -832,21 +857,38 @@ function setGender(g, tab) {
 // INIT
 // ----------------------------------------------------------------
 // ── ADMIN PASSWORD GATE ──────────────────────────────────────────
-(function() {
-  var DEFAULT_PW = 'llstrybk0902';
-  var session = sessionStorage.getItem('ht_admin_unlocked');
-  if (session === '1') return;
-  var stored = localStorage.getItem('bop_admin_pw') || DEFAULT_PW;
-  var attempts = 0;
-  while (attempts < 3) {
-    var input = prompt('Little Light Admin\n\nEnter password:');
-    if (input === null) { document.body.innerHTML = ''; return; }
-    if (input === stored) { sessionStorage.setItem('ht_admin_unlocked', '1'); return; }
-    attempts++;
-    if (attempts < 3) alert('Incorrect password. ' + (3 - attempts) + ' attempt(s) remaining.');
+if (!sessionStorage.getItem('bop_admin_unlocked')) {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('admin-shell').style.display = 'none';
+} else {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-shell').style.display = 'block';
+}
+
+async function doLogin() {
+  var pw = document.getElementById('pw-input').value.trim();
+  if (!pw) return;
+  var errEl = document.getElementById('login-err');
+  errEl.style.display = 'none';
+  try {
+    var res = await fetch(LL.WORKER_URL + '/api/admin/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw })
+    });
+    var data = await res.json();
+    if (data.valid) {
+      sessionStorage.setItem('bop_admin_unlocked', '1');
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-shell').style.display = 'block';
+    } else {
+      errEl.style.display = 'block';
+    }
+  } catch(e) {
+    errEl.textContent = 'Could not reach server. Try again.';
+    errEl.style.display = 'block';
   }
-  document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#888;">Access denied.</div>';
-})();
+}
 
 document.addEventListener('DOMContentLoaded', function() {
   LL.loadRemoteState(function(remoteState) {
@@ -1740,8 +1782,7 @@ function setLetterText(key,val){
 }
 
 function changeAdminPassword() {
-  var DEFAULT_PW = 'llstrybk0902';
-  var stored = localStorage.getItem('bop_admin_pw') || DEFAULT_PW;
+  var stored = (ST.config && ST.config.adminPassword) ? ST.config.adminPassword : '';
   var current = document.getElementById('cfg-pw-current').value;
   var newPw   = document.getElementById('cfg-pw-new').value;
   var confirm = document.getElementById('cfg-pw-confirm').value;
@@ -1749,7 +1790,12 @@ function changeAdminPassword() {
   if (!newPw.trim())       { toast('New password cannot be empty.', 'err'); return; }
   if (newPw !== confirm)   { toast('New passwords do not match.', 'err'); return; }
   if (newPw.length < 6)   { toast('Password must be at least 6 characters.', 'err'); return; }
-  localStorage.setItem('bop_admin_pw', newPw);
+  if (!ST.config) ST.config = {};
+  ST.config.adminPassword = newPw;
+  LL.saveRemoteState(ST, function(ok){
+    if (ok) { toast('Password updated successfully.', 'ok'); }
+    else { toast('Save failed. Try again.', 'err'); }
+  });
   document.getElementById('cfg-pw-current').value = '';
   document.getElementById('cfg-pw-new').value = '';
   document.getElementById('cfg-pw-confirm').value = '';
@@ -2237,5 +2283,6 @@ function saveSamples() {
 }
 
 </script>
+</div>
 </body>
 </html>
