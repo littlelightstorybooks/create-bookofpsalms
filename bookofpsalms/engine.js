@@ -964,7 +964,7 @@ LL.exportPDF = async function(pageModels, childName, goSpreadFn, spreadCount, ge
   await document.fonts.ready;
 
   var jsPDF = window.jspdf.jsPDF;
-  var doc   = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a5' });
+  var doc   = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a5' });
   var first = true;
   var name  = (childName || 'Book').trim();
   var giver = (giverName || '').trim();
@@ -993,7 +993,7 @@ LL.exportPDF = async function(pageModels, childName, goSpreadFn, spreadCount, ge
     var imgData = canvas.toDataURL('image/jpeg', 0.95);
     if (!first) doc.addPage('a5', 'landscape');
     first = false;
-    doc.addImage(imgData, 'JPEG', 0, 0, 210, 148);
+    doc.addImage(imgData, 'JPEG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight());
   }
 
   // Render one page model into the stage and capture it
