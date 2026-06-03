@@ -518,7 +518,7 @@ LL.renderPage = function(page, name, giver) {
         + 'font-weight:' + (ly.bold ? '700' : '400') + ';color:' + (ly.color || '#FFFFFF') + ';'
         + 'text-transform:' + (ly.textTransform || 'none') + ';'
         + outlineCssFb
-        + 'text-align:center;line-height:1.6;padding:10%;word-break:break-word;white-space:pre-wrap;">'
+        + 'text-align:center;line-height:1.6;padding:0;word-break:break-word;white-space:pre-wrap;">'
         + LL.escHtml(msg) + '</div>'
       : '<span style="font-size:10px;color:rgba(255,255,255,.15);font-style:italic;">Intro ' + meta.pageNum + '</span>';
     // Customer photo overlay on no-background pages too
@@ -592,7 +592,7 @@ LL.renderPage = function(page, name, giver) {
     return '<div style="width:100%;height:100%;'
       + 'background:linear-gradient(135deg,#1E3A1E,#2E5A2E);'
       + 'display:flex;flex-direction:column;align-items:center;'
-      + 'justify-content:center;text-align:center;padding:8%;">'
+      + 'justify-content:center;text-align:center;padding:0;">'
       + '<div style="font-family:Lora,serif;color:rgba(255,255,255,.9);font-size:10px;'
       + 'font-style:italic;line-height:1.6;">'
       + '&ldquo;You are fearfully and wonderfully made.&rdquo;</div>'
