@@ -970,15 +970,13 @@ LL.exportPDF = async function(pageModels, childName, goSpreadFn, spreadCount, ge
   var giver = (giverName || '').trim();
 
   // Create a dedicated off-screen render stage
-  var stage = document.getElementById('pdf-render-stage');
-  if (!stage) {
-    stage = document.createElement('div');
-    stage.id = 'pdf-render-stage';
-    stage.style.cssText = 'position:fixed;left:-9999px;top:0;width:446.58px;height:314.46px;overflow:hidden;z-index:-1;pointer-events:none;container-type:inline-size;';
-    document.body.appendChild(stage);
-  }
-  stage.style.width  = '446.58px';
-  stage.style.height = '314.46px';
+  // Always remove and recreate stage to guarantee correct dimensions
+  var oldStage = document.getElementById('pdf-render-stage');
+  if (oldStage) oldStage.parentNode.removeChild(oldStage);
+  var stage = document.createElement('div');
+  stage.id = 'pdf-render-stage';
+  stage.style.cssText = 'position:fixed;left:-9999px;top:0;width:446.58px;height:314.46px;overflow:hidden;z-index:-1;pointer-events:none;container-type:inline-size;';
+  document.body.appendChild(stage);
 
   async function wait(ms) { return new Promise(function(r){ setTimeout(r, ms); }); }
   async function rAF()    { return new Promise(function(r){ requestAnimationFrame(r); }); }
