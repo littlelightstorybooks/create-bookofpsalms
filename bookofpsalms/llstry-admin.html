@@ -2001,7 +2001,7 @@ async function adminDownloadOrderPDF(ref){
 
   await document.fonts.ready;
   var jsPDF=window.jspdf.jsPDF;
-  var doc=new jsPDF({orientation:'landscape',unit:'px',format:[420,296]});
+  var doc=new jsPDF({orientation:'landscape',unit:'mm',format:[210,148]});
   var first=true;
   var stageF=document.getElementById('admin-pdf-cover-front'); // reused for all pages
   async function rAF(){return new Promise(function(r){requestAnimationFrame(r);});}
@@ -2033,9 +2033,9 @@ async function adminDownloadOrderPDF(ref){
       var c=await html2canvas(stage,{scale:3,useCORS:true,allowTaint:false,
         backgroundColor:bg==='transparent'?null:bg,width:420,height:296,logging:false});
       var imgData=c.toDataURL('image/jpeg',0.95);
-      if(!first)doc.addPage([420,296],'landscape');
+      if(!first)doc.addPage([210,148],'landscape');
       first=false;
-      doc.addImage(imgData,'JPEG',0,0,420,296);
+      var w=doc.internal.pageSize.getWidth();var h=doc.internal.pageSize.getHeight();doc.addImage(imgData,'JPEG',0,0,w,h);
     }
     if(!_adminPDFCancelled){
       setP(100,'Saving...');await wait(100);
