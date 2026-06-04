@@ -964,9 +964,7 @@ LL.exportPDF = async function(pageModels, childName, goSpreadFn, spreadCount, ge
   await document.fonts.ready;
 
   var jsPDF = window.jspdf.jsPDF;
-  var doc   = new jsPDF({ orientation: 'landscape', unit: 'px', format: [467.72, 329.53] });
-  // Tell PDF viewer/printer to scale pages to fit paper
-  doc.internal.write('/ViewerPreferences << /PrintScaling /AppDefault >>');
+  var doc   = new jsPDF({ orientation: 'landscape', unit: 'px', format: [446.58, 314.46] });
   var first = true;
   var name  = (childName || 'Book').trim();
   var giver = (giverName || '').trim();
@@ -977,7 +975,7 @@ LL.exportPDF = async function(pageModels, childName, goSpreadFn, spreadCount, ge
   if (oldStage) oldStage.parentNode.removeChild(oldStage);
   var stage = document.createElement('div');
   stage.id = 'pdf-render-stage';
-  stage.style.cssText = 'position:fixed;left:-9999px;top:0;width:467.72px;height:329.53px;overflow:hidden;z-index:-1;pointer-events:none;container-type:inline-size;';
+  stage.style.cssText = 'position:fixed;left:-9999px;top:0;width:420px;height:296px;overflow:hidden;z-index:-1;pointer-events:none;container-type:inline-size;';
   document.body.appendChild(stage);
 
   async function wait(ms) { return new Promise(function(r){ setTimeout(r, ms); }); }
@@ -988,13 +986,13 @@ LL.exportPDF = async function(pageModels, childName, goSpreadFn, spreadCount, ge
     var canvas = await html2canvas(stage, {
       scale: 3, useCORS: true, allowTaint: false,
       backgroundColor: bg || '#FEFAF3',
-      width: 467.72, height: 329.53, logging: false,
+      width: 420, height: 296, logging: false,
     });
     
     var imgData = canvas.toDataURL('image/jpeg', 0.95);
-    if (!first) doc.addPage([467.72, 329.53], 'landscape');
+    if (!first) doc.addPage([446.58, 314.46], 'landscape');
     first = false;
-    doc.addImage(imgData, 'JPEG', 0, 0, 467.72, 329.53);
+    doc.addImage(imgData, 'JPEG', 0, 0, 446.58, 314.46);
   }
 
   // Render one page model into the stage and capture it
