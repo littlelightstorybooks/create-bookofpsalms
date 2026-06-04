@@ -985,15 +985,23 @@ LL.exportPDF = async function(pageModels, childName, goSpreadFn, spreadCount, ge
 
   // Capture the stage as a PDF page
   async function capturePage(bg) {
+    // Render at scale:3 for high quality (1260x888 canvas)
     var canvas = await html2canvas(stage, {
       scale: 3, useCORS: true, allowTaint: false,
       backgroundColor: bg || '#FEFAF3',
       width: 420, height: 296, logging: false,
     });
-    var imgData = canvas.toDataURL('image/jpeg', 0.95);
+    // Resize canvas to exact A5 pt dimensions (595x420px)
+    // This prevents jsPDF from recalculating page size from pixel count
+    var resized = document.createElement('canvas');
+    resized.width  = 595;
+    resized.height = 420;
+    var ctx = resized.getContext('2d');
+    ctx.drawImage(canvas, 0, 0, 595, 420);
+    var imgData = resized.toDataURL('image/jpeg', 0.95);
     if (!first) doc.addPage('a5', 'landscape');
     first = false;
-    doc.addImage(imgData, 'JPEG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight());
+    doc.addImage(imgData, 'JPEG', 0, 0, 595.28, 419.53);
   }
 
   // Render one page model into the stage and capture it
