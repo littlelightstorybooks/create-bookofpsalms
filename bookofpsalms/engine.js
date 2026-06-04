@@ -949,6 +949,8 @@ LL._readLocalState = function() {
 // This guarantees 1:1 correspondence between page count and PDF pages.
 // ----------------------------------------------------------------
 LL.exportPDF = async function(pageModels, childName, goSpreadFn, spreadCount, getSpreadEls, onProgress, onDone, giverName) {
+  console.log('ACTIVE EXPORT FUNCTION RUNNING');
+  console.log('jsPDF unit: mm, format: [210, 148]');
   if (!window.jspdf || !window.html2canvas) {
     alert('PDF libraries still loading -- please wait a moment and try again.');
     return;
@@ -965,6 +967,12 @@ LL.exportPDF = async function(pageModels, childName, goSpreadFn, spreadCount, ge
 
   var jsPDF = window.jspdf.jsPDF;
   var doc   = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [210, 148] });
+  // Add CropBox matching Canva export behavior
+  doc.internal.events.subscribe('addPage', function() {
+    var w = doc.internal.pageSize.getWidth();
+    var h = doc.internal.pageSize.getHeight();
+    doc.internal.write('/CropBox [0 0 ' + (w/25.4*72).toFixed(3) + ' ' + (h/25.4*72).toFixed(3) + ']');
+  });
   var first = true;
   var name  = (childName || 'Book').trim();
   var giver = (giverName || '').trim();
@@ -994,7 +1002,8 @@ LL.exportPDF = async function(pageModels, childName, goSpreadFn, spreadCount, ge
     first = false;
     var w = doc.internal.pageSize.getWidth();
     var h = doc.internal.pageSize.getHeight();
-    doc.addImage(imgData, 'JPEG', 0, 0, w, h);
+    var bleed = 1.02;
+    doc.addImage(imgData, 'JPEG', -(w*(bleed-1)/2), -(h*(bleed-1)/2), w*bleed, h*bleed);
   }
 
   // Render one page model into the stage and capture it
