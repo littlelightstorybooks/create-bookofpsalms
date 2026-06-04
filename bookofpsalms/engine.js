@@ -964,7 +964,7 @@ LL.exportPDF = async function(pageModels, childName, goSpreadFn, spreadCount, ge
   await document.fonts.ready;
 
   var jsPDF = window.jspdf.jsPDF;
-  var doc   = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a5' });
+  var doc   = new jsPDF({ orientation: 'landscape', unit: 'px', format: [446.58, 314.46] });
   var first = true;
   var name  = (childName || 'Book').trim();
   var giver = (giverName || '').trim();
@@ -974,34 +974,26 @@ LL.exportPDF = async function(pageModels, childName, goSpreadFn, spreadCount, ge
   if (!stage) {
     stage = document.createElement('div');
     stage.id = 'pdf-render-stage';
-    stage.style.cssText = 'position:fixed;left:-9999px;top:0;width:420px;height:296px;overflow:hidden;z-index:-1;pointer-events:none;container-type:inline-size;';
+    stage.style.cssText = 'position:fixed;left:-9999px;top:0;width:446.58px;height:314.46px;overflow:hidden;z-index:-1;pointer-events:none;container-type:inline-size;';
     document.body.appendChild(stage);
   }
-  stage.style.width  = '420px';
-  stage.style.height = '296px';
+  stage.style.width  = '446.58px';
+  stage.style.height = '314.46px';
 
   async function wait(ms) { return new Promise(function(r){ setTimeout(r, ms); }); }
   async function rAF()    { return new Promise(function(r){ requestAnimationFrame(r); }); }
 
   // Capture the stage as a PDF page
   async function capturePage(bg) {
-    // Render at scale:3 for high quality (1260x888 canvas)
     var canvas = await html2canvas(stage, {
       scale: 3, useCORS: true, allowTaint: false,
       backgroundColor: bg || '#FEFAF3',
-      width: 420, height: 296, logging: false,
+      width: 446.58, height: 314.46, logging: false,
     });
-    // Resize canvas to exact A5 pt dimensions (595x420px)
-    // This prevents jsPDF from recalculating page size from pixel count
-    var resized = document.createElement('canvas');
-    resized.width  = 595;
-    resized.height = 420;
-    var ctx = resized.getContext('2d');
-    ctx.drawImage(canvas, 0, 0, 595, 420);
-    var imgData = resized.toDataURL('image/jpeg', 0.95);
-    if (!first) doc.addPage('a5', 'landscape');
+    var imgData = canvas.toDataURL('image/jpeg', 0.95);
+    if (!first) doc.addPage([446.58, 314.46], 'landscape');
     first = false;
-    doc.addImage(imgData, 'JPEG', 0, 0, 595.28, 419.53);
+    doc.addImage(imgData, 'JPEG', 0, 0, 446.58, 314.46);
   }
 
   // Render one page model into the stage and capture it
