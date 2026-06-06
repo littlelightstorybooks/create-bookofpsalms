@@ -1307,6 +1307,7 @@ function updateModalPrice() {
   var bt    = LL.PRICING[S.book];
   var over  = Math.max(0, S.letters.length - bt.maxL);
   var total = bt.base + over * bt.ex;
+  // Summary panel
   document.getElementById('sp-base-lbl').textContent = bt.label + ' · up to ' + bt.maxL + ' letters';
   document.getElementById('sp-base-val').textContent = '₱' + bt.base.toLocaleString();
   document.getElementById('sp-total').textContent    = '₱' + total.toLocaleString();
@@ -1318,11 +1319,41 @@ function updateModalPrice() {
   } else {
     er.style.display = 'none';
   }
-  document.getElementById('modal-amount').textContent = '₱' + total.toLocaleString();
+  // COD breakdown
+  document.getElementById('cod-base-lbl').textContent = bt.label + ' · up to ' + bt.maxL + ' letters';
+  document.getElementById('cod-base-val').textContent = '₱' + bt.base.toLocaleString();
+  document.getElementById('cod-total').textContent    = '₱' + total.toLocaleString();
+  var codEr = document.getElementById('cod-extra-row');
+  if (over > 0) {
+    codEr.style.display = 'flex';
+    document.getElementById('cod-extra-lbl').textContent = over + ' extra letter' + (over > 1 ? 's' : '');
+    document.getElementById('cod-extra-val').textContent = '+₱' + (over * bt.ex).toLocaleString();
+  } else { codEr.style.display = 'none'; }
+  // GCash breakdown
+  document.getElementById('gc-base-lbl').textContent = bt.label + ' · up to ' + bt.maxL + ' letters';
+  document.getElementById('gc-base-val').textContent = '₱' + bt.base.toLocaleString();
+  document.getElementById('gc-total').textContent    = '₱' + total.toLocaleString();
+  var gcEr = document.getElementById('gc-extra-row');
+  if (over > 0) {
+    gcEr.style.display = 'flex';
+    document.getElementById('gc-extra-lbl').textContent = over + ' extra letter' + (over > 1 ? 's' : '');
+    document.getElementById('gc-extra-val').textContent = '+₱' + (over * bt.ex).toLocaleString();
+  } else { gcEr.style.display = 'none'; }
+  document.getElementById('modal-amount') && (document.getElementById('modal-amount').textContent = '₱' + total.toLocaleString());
   return total;
 }
 
 // ── PAYMENT ────────────────────────────────────────────────────
+var S_payMethod = 'cod'; // default
+
+function selectPayMethod(method) {
+  S_payMethod = method;
+  document.getElementById('pmc-cod').classList.toggle('active', method === 'cod');
+  document.getElementById('pmc-gcash').classList.toggle('active', method === 'gcash');
+  document.getElementById('pay-cod-section').style.display   = method === 'cod'   ? 'block' : 'none';
+  document.getElementById('pay-gcash-section').style.display = method === 'gcash' ? 'block' : 'none';
+}
+
 function openPayment() {
   // Session lock — prevent duplicate orders in same session
   if (sessionStorage.getItem('bop_order_placed') === '1') {
@@ -1345,22 +1376,33 @@ function openPayment() {
   var qw = document.getElementById('gcash-qr-wrap');
   if (cfg.gcashQR) qw.innerHTML = '<img src="' + cfg.gcashQR + '" alt="GCash QR">';
   document.getElementById('modal-ref').textContent = S.ref;
+  document.getElementById('cod-ref').textContent = S.ref;
+  // Reset to COD by default
+  selectPayMethod('cod');
   updateModalPrice();
   oModal('pay-modal');
 }
 
 function confirmOrder() {
-  var bn = document.getElementById('b-name').value.trim();
-  var ph = document.getElementById('b-phone').value.trim();
-  var ad = document.getElementById('b-addr').value.trim();
-  var ok = true;
+  var bn  = document.getElementById('b-name').value.trim();
+  var ph  = document.getElementById('b-phone').value.trim();
+  var a1  = document.getElementById('b-addr1').value.trim();
+  var a2  = document.getElementById('b-addr2').value.trim();
+  var a3  = document.getElementById('b-addr3').value.trim();
+  var a4  = document.getElementById('b-addr4').value.trim();
+  var ok  = true;
   function showE(id, on) { document.getElementById(id).classList.toggle('show', on); }
-  if (!bn)       { showE('e-bname',  true); ok = false; } else showE('e-bname',  false);
+  if (!bn)        { showE('e-bname',  true); ok = false; } else showE('e-bname',  false);
   if (!phoneOK()) { showE('e-bphone', true); ok = false; } else showE('e-bphone', false);
-  if (!ad)       { showE('e-baddr',  true); ok = false; } else showE('e-baddr',  false);
-  if (!S.ss)     { showE('e-ss',     true); ok = false; } else showE('e-ss',     false);
+  if (!a1)        { showE('e-baddr1', true); ok = false; } else showE('e-baddr1', false);
+  if (!a2)        { showE('e-baddr2', true); ok = false; } else showE('e-baddr2', false);
+  if (!a3)        { showE('e-baddr3', true); ok = false; } else showE('e-baddr3', false);
+  if (!a4)        { showE('e-baddr4', true); ok = false; } else showE('e-baddr4', false);
+  // Screenshot only required for GCash/Bank Transfer
+  if (S_payMethod === 'gcash' && !S.ss) { showE('e-ss', true); ok = false; } else showE('e-ss', false);
   if (!ok) { LL.toast('Please fix the errors above', 'err'); return; }
 
+  var ad = [a1, a2, a3, a4].join(', ');
   S.bName = bn; S.phone = ph; S.addr = ad;
   var bt     = LL.PRICING[S.book];
   var over   = Math.max(0, S.letters.length - bt.maxL);
@@ -1378,7 +1420,7 @@ function confirmOrder() {
     giver:      S.giver,
     bookType:   S.book,
     buyer:      { name: S.bName, phone: S.phone, address: S.addr },
-    payment:    { screenshot: S.ss, amount: total, status: 'pending' },
+    payment:    { screenshot: S.ss, amount: total, status: 'pending', method: S_payMethod === 'cod' ? 'COD' : 'GCash / Bank Transfer' },
     pages:      totalPg,
     created:    Date.now(),
   };
