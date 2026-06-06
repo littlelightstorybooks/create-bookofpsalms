@@ -1307,39 +1307,38 @@ function updateModalPrice() {
   var bt    = LL.PRICING[S.book];
   var over  = Math.max(0, S.letters.length - bt.maxL);
   var total = bt.base + over * bt.ex;
+  function setEl(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
+  function setDisp(id, val) { var el = document.getElementById(id); if (el) el.style.display = val; }
   // Summary panel
-  document.getElementById('sp-base-lbl').textContent = bt.label + ' · up to ' + bt.maxL + ' letters';
-  document.getElementById('sp-base-val').textContent = '₱' + bt.base.toLocaleString();
-  document.getElementById('sp-total').textContent    = '₱' + total.toLocaleString();
-  var er = document.getElementById('sp-extra-row');
+  setEl('sp-base-lbl', bt.label + ' · up to ' + bt.maxL + ' letters');
+  setEl('sp-base-val', '₱' + bt.base.toLocaleString());
+  setEl('sp-total', '₱' + total.toLocaleString());
   if (over > 0) {
-    er.style.display = 'flex';
-    document.getElementById('sp-extra-lbl').textContent = over + ' extra letter' + (over > 1 ? 's' : '');
-    document.getElementById('sp-extra-val').textContent = '+₱' + (over * bt.ex).toLocaleString();
+    setDisp('sp-extra-row', 'flex');
+    setEl('sp-extra-lbl', over + ' extra letter' + (over > 1 ? 's' : ''));
+    setEl('sp-extra-val', '+₱' + (over * bt.ex).toLocaleString());
   } else {
-    er.style.display = 'none';
+    setDisp('sp-extra-row', 'none');
   }
   // COD breakdown
-  document.getElementById('cod-base-lbl').textContent = bt.label + ' · up to ' + bt.maxL + ' letters';
-  document.getElementById('cod-base-val').textContent = '₱' + bt.base.toLocaleString();
-  document.getElementById('cod-total').textContent    = '₱' + total.toLocaleString();
-  var codEr = document.getElementById('cod-extra-row');
+  setEl('cod-base-lbl', bt.label + ' · up to ' + bt.maxL + ' letters');
+  setEl('cod-base-val', '₱' + bt.base.toLocaleString());
+  setEl('cod-total', '₱' + total.toLocaleString());
   if (over > 0) {
-    codEr.style.display = 'flex';
-    document.getElementById('cod-extra-lbl').textContent = over + ' extra letter' + (over > 1 ? 's' : '');
-    document.getElementById('cod-extra-val').textContent = '+₱' + (over * bt.ex).toLocaleString();
-  } else { codEr.style.display = 'none'; }
+    setDisp('cod-extra-row', 'flex');
+    setEl('cod-extra-lbl', over + ' extra letter' + (over > 1 ? 's' : ''));
+    setEl('cod-extra-val', '+₱' + (over * bt.ex).toLocaleString());
+  } else { setDisp('cod-extra-row', 'none'); }
   // GCash breakdown
-  document.getElementById('gc-base-lbl').textContent = bt.label + ' · up to ' + bt.maxL + ' letters';
-  document.getElementById('gc-base-val').textContent = '₱' + bt.base.toLocaleString();
-  document.getElementById('gc-total').textContent    = '₱' + total.toLocaleString();
-  var gcEr = document.getElementById('gc-extra-row');
+  setEl('gc-base-lbl', bt.label + ' · up to ' + bt.maxL + ' letters');
+  setEl('gc-base-val', '₱' + bt.base.toLocaleString());
+  setEl('gc-total', '₱' + total.toLocaleString());
   if (over > 0) {
-    gcEr.style.display = 'flex';
-    document.getElementById('gc-extra-lbl').textContent = over + ' extra letter' + (over > 1 ? 's' : '');
-    document.getElementById('gc-extra-val').textContent = '+₱' + (over * bt.ex).toLocaleString();
-  } else { gcEr.style.display = 'none'; }
-  document.getElementById('modal-amount') && (document.getElementById('modal-amount').textContent = '₱' + total.toLocaleString());
+    setDisp('gc-extra-row', 'flex');
+    setEl('gc-extra-lbl', over + ' extra letter' + (over > 1 ? 's' : ''));
+    setEl('gc-extra-val', '+₱' + (over * bt.ex).toLocaleString());
+  } else { setDisp('gc-extra-row', 'none'); }
+  setEl('modal-amount', '₱' + total.toLocaleString());
   return total;
 }
 
