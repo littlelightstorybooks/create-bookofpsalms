@@ -404,6 +404,29 @@ body.loading{overflow:hidden;}
 .faq-item.open .faq-icon{transform:rotate(45deg);}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;padding:0 20px;font-size:.83rem;color:var(--muted);line-height:1.7;}
 .faq-item.open .faq-a{max-height:400px;padding:0 20px 16px;}
+
+/* ── PAYMENT METHOD SELECTOR ─────────────────────────────────── */
+.pay-method-wrap{display:flex;gap:10px;margin-bottom:18px;}
+.pay-method-card{flex:1;border:2px solid var(--bd);border-radius:12px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s;background:var(--parch);}
+.pay-method-card.active{border-color:var(--accent);background:var(--accent-p);}
+.pay-method-card .pmc-icon{font-size:1.6rem;margin-bottom:5px;}
+.pay-method-card .pmc-label{font-size:.8rem;font-weight:700;color:var(--deep);line-height:1.3;}
+.pay-method-card.active .pmc-label{color:var(--accent);}
+/* ── COD REMINDER ────────────────────────────────────────────── */
+.cod-reminder{background:#fffaf3;border:1px solid #e8d5a3;border-radius:12px;padding:16px;margin-bottom:14px;}
+.cod-reminder-title{font-family:var(--head-font);font-size:.95rem;font-weight:700;color:var(--deep);margin-bottom:8px;}
+.cod-reminder p{font-size:.83rem;color:var(--body);margin:0 0 8px 0;}
+.cod-reminder ul{margin:0 0 10px 0;padding-left:16px;}
+.cod-reminder ul li{font-size:.83rem;color:var(--body);margin-bottom:5px;line-height:1.5;}
+.cod-reminder-note{font-size:.8rem;color:var(--brown);font-style:italic;border-top:1px solid #e8d5a3;padding-top:9px;margin-top:2px;line-height:1.5;}
+/* ── AMOUNT BREAKDOWN ────────────────────────────────────────── */
+.modal-amt-breakdown{background:var(--accent-p);border:1px solid rgba(231,119,55,.22);border-radius:10px;padding:14px 16px;margin-bottom:16px;}
+.mab-row{display:flex;justify-content:space-between;align-items:baseline;font-size:.85rem;color:var(--body);margin-bottom:5px;}
+.mab-row.total{border-top:1px solid rgba(231,119,55,.22);padding-top:8px;margin-top:4px;margin-bottom:0;font-weight:700;}
+.mab-row.total .mab-val{font-family:var(--head-font);font-size:1.5rem;color:var(--accent);}
+.mab-shipping{font-size:.72rem;color:var(--muted);text-align:center;margin-top:6px;font-style:italic;}
+.mab-ref{font-size:.76rem;color:var(--muted);text-align:center;margin-top:3px;}
+.mab-ref strong{color:var(--deep);font-size:.85rem;}
 </style>
 <body class="loading">
 
