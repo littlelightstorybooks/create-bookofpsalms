@@ -683,24 +683,83 @@ body.loading{overflow:hidden;}
   </footer>
 </div>
 
-<!-- GCASH PAYMENT MODAL -->
+<!-- PAYMENT MODAL -->
 <div class="modal-ov" id="pay-modal">
   <div class="modal">
     <button class="modal-x" onclick="cModal('pay-modal')">✕</button>
-    <div class="modal-tag">GCash Payment</div>
-    <div class="modal-h">Send Your Payment</div>
-    <div class="modal-sub">Please send the exact amount to the GCash account below, then upload a screenshot of your payment for verification.<br><br>You may also transfer using your banking app by selecting:<br><strong>Transfer → E-Wallet → GCash</strong><br><br>Account Name: <strong>LLSTRYBKS</strong><br>GCash Number: <strong>0919 093 4772</strong></div>
-    <div class="gcash-box">
-      <div class="gcash-qr" id="gcash-qr-wrap">
-        <span style="font-size:.7rem;color:var(--muted)">QR Code</span>
+    <div class="modal-tag">Choose Your Payment Method</div>
+    <div class="modal-h">Complete Your Order</div>
+
+    <!-- Payment method selector -->
+    <div class="pay-method-wrap">
+      <div class="pay-method-card active" id="pmc-cod" onclick="selectPayMethod('cod')">
+        <div class="pmc-icon">🏠</div>
+        <div class="pmc-label">Cash on Delivery</div>
       </div>
-      <div class="gcash-num" id="gcash-num-display">09XX-XXX-XXXX</div>
-      <div class="gcash-nm" id="gcash-acct-display">Account Name</div>
+      <div class="pay-method-card" id="pmc-gcash" onclick="selectPayMethod('gcash')">
+        <div class="pmc-icon">💳</div>
+        <div class="pmc-label">GCash / Bank Transfer</div>
+      </div>
     </div>
-    <div class="amt-box">
-      Amount to send: <strong id="modal-amount">—</strong><br>
-      <span style="font-size:.78rem;opacity:.7;">Reference: <strong id="modal-ref">—</strong></span>
+
+    <!-- COD SECTION -->
+    <div id="pay-cod-section">
+      <div class="cod-reminder">
+        <div class="cod-reminder-title">✦ A Little Reminder with Love</div>
+        <p style="font-size:.85rem;color:var(--body);margin:0 0 10px 0;">We're so excited to bring this book to your doorstep! Before you proceed, please take a moment to ensure:</p>
+        <ul>
+          <li><strong>Someone will be home</strong> to receive and pay for the package when our courier arrives</li>
+          <li><strong>Your contact number is reachable</strong> — our courier will call ahead before delivery</li>
+          <li><strong>You are committed to receiving this order</strong> — every book is lovingly made just for your child</li>
+        </ul>
+        <div class="cod-reminder-note">After placing this order, we will confirm and contact you at the number you provided before we proceed with production and delivery.</div>
+      </div>
+      <div class="modal-amt-breakdown">
+        <div class="mab-row"><span id="cod-base-lbl">Standard · up to 8 letters</span><span id="cod-base-val">—</span></div>
+        <div class="mab-row" id="cod-extra-row" style="display:none;"><span id="cod-extra-lbl"></span><span id="cod-extra-val" style="color:var(--err)"></span></div>
+        <div class="mab-row total"><span>Total</span><span class="mab-val" id="cod-total">—</span></div>
+        <div class="mab-shipping">✦ Inclusive of shipping fee</div>
+        <div class="mab-ref">Reference: <strong id="cod-ref">—</strong></div>
+      </div>
     </div>
+
+    <!-- GCASH / BANK TRANSFER SECTION -->
+    <div id="pay-gcash-section" style="display:none;">
+      <div class="modal-sub" style="margin-bottom:12px;">Please send the exact amount to the GCash account below, then upload a screenshot of your payment for verification.<br><br>You may also transfer using your banking app by selecting:<br><strong>Transfer → E-Wallet → GCash</strong></div>
+      <div class="gcash-box">
+        <div class="gcash-qr" id="gcash-qr-wrap">
+          <span style="font-size:.7rem;color:var(--muted)">QR Code</span>
+        </div>
+        <div class="gcash-num" id="gcash-num-display">09XX-XXX-XXXX</div>
+        <div class="gcash-nm" id="gcash-acct-display">Account Name</div>
+      </div>
+      <div class="modal-amt-breakdown">
+        <div class="mab-row"><span id="gc-base-lbl">Standard · up to 8 letters</span><span id="gc-base-val">—</span></div>
+        <div class="mab-row" id="gc-extra-row" style="display:none;"><span id="gc-extra-lbl"></span><span id="gc-extra-val" style="color:var(--err)"></span></div>
+        <div class="mab-row total"><span>Total</span><span class="mab-val" id="gc-total">—</span></div>
+        <div class="mab-shipping">✦ Inclusive of shipping fee</div>
+        <div class="mab-ref">Reference: <strong id="modal-ref">—</strong></div>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Payment Screenshot <span style="color:var(--err)">*</span></label>
+        <div class="ss-zone">
+          <input type="file" id="ss-in" accept="image/*" onchange="onSS(this)">
+          <div id="ss-ph"><div style="font-size:1.6rem;margin-bottom:6px;">🖼️</div>
+            <div style="font-size:.82rem;color:var(--brown);font-weight:500;">Tap to upload payment screenshot</div></div>
+          <div id="ss-done" style="display:none;padding:8px;">
+            <div id="ss-progress-wrap" style="display:none;margin-bottom:6px;">
+              <div style="background:rgba(255,255,255,.1);border-radius:20px;height:6px;overflow:hidden;">
+                <div id="ss-progress-bar" style="height:100%;width:0%;background:var(--gold);border-radius:20px;transition:width .2s;"></div>
+              </div>
+              <div id="ss-progress-pct" style="font-size:.72rem;color:var(--gold);margin-top:4px;">0%</div>
+            </div>
+            <div id="ss-success-msg" style="color:var(--ok);font-size:.82rem;">✓ Screenshot uploaded</div>
+          </div>
+        </div>
+        <div class="ferr" id="e-ss">Please upload your payment screenshot.</div>
+      </div>
+    </div>
+
     <!-- Delivery details -->
     <div style="margin-bottom:14px;">
       <div style="font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Delivery Details</div>
@@ -715,31 +774,28 @@ body.loading{overflow:hidden;}
         <div class="fhint">11 digits · must start with 09</div>
         <div class="ferr" id="e-bphone">Valid 11-digit PH number required.</div>
       </div>
+      <div class="fgrp">
+        <label class="flbl">House No. / Street / Village / Subdivision / Purok / Sitio <span style="color:var(--err)">*</span></label>
+        <input class="finput" id="b-addr1" type="text" placeholder="e.g. 123 Sampaguita St., Villa Maria Subd.">
+        <div class="ferr" id="e-baddr1">Required.</div>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Barangay <span style="color:var(--err)">*</span></label>
+        <input class="finput" id="b-addr2" type="text" placeholder="e.g. Brgy. San Antonio">
+        <div class="ferr" id="e-baddr2">Required.</div>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">City / Municipality <span style="color:var(--err)">*</span></label>
+        <input class="finput" id="b-addr3" type="text" placeholder="e.g. Quezon City">
+        <div class="ferr" id="e-baddr3">Required.</div>
+      </div>
       <div class="fgrp" style="margin-bottom:0;">
-        <label class="flbl">Complete Delivery Address <span style="color:var(--err)">*</span></label>
-        <textarea class="ftextarea" id="b-addr" rows="3"
-          placeholder="House/Unit No., Street, Barangay, City, Province, ZIP Code"></textarea>
-        <div class="ferr" id="e-baddr">Required.</div>
+        <label class="flbl">Province <span style="color:var(--err)">*</span></label>
+        <input class="finput" id="b-addr4" type="text" placeholder="e.g. Metro Manila">
+        <div class="ferr" id="e-baddr4">Required.</div>
       </div>
     </div>
-    <div class="fgrp">
-      <label class="flbl">GCash Screenshot <span style="color:var(--err)">*</span></label>
-      <div class="ss-zone">
-        <input type="file" id="ss-in" accept="image/*" onchange="onSS(this)">
-        <div id="ss-ph"><div style="font-size:1.6rem;margin-bottom:6px;">🖼️</div>
-          <div style="font-size:.82rem;color:var(--brown);font-weight:500;">Tap to upload payment screenshot</div></div>
-        <div id="ss-done" style="display:none;padding:8px;">
-          <div id="ss-progress-wrap" style="display:none;margin-bottom:6px;">
-            <div style="background:rgba(255,255,255,.1);border-radius:20px;height:6px;overflow:hidden;">
-              <div id="ss-progress-bar" style="height:100%;width:0%;background:var(--gold);border-radius:20px;transition:width .2s;"></div>
-            </div>
-            <div id="ss-progress-pct" style="font-size:.72rem;color:var(--gold);margin-top:4px;">0%</div>
-          </div>
-          <div id="ss-success-msg" style="color:var(--ok);font-size:.82rem;">✓ Screenshot uploaded</div>
-        </div>
-      </div>
-      <div class="ferr" id="e-ss">Please upload your payment screenshot.</div>
-    </div>
+
     <button class="btn btn-gold btn-full" onclick="confirmOrder()">Confirm Order ✓</button>
   </div>
 </div>
