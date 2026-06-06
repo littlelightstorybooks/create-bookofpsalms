@@ -587,10 +587,10 @@ body.loading{overflow:hidden;}
         <!-- Dedication -->
         <div class="fgrp">
           <label class="flbl">Dedication Message <span style="color:var(--err);font-size:.72rem;font-weight:600;">Required*</span></label>
-          <textarea class="ftextarea" id="ded-msg" rows="5" maxlength="700"
+          <textarea class="ftextarea" id="ded-msg" rows="5" maxlength="600" onkeydown="if(event.key==='Enter'){event.preventDefault();}"
             placeholder="Write a heartfelt message for your child. This will appear on the dedication page.&#10;&#10;Example:&#10;To my little miracle — you are God's greatest gift to us. We love you beyond words."
             oninput="onDed(this)"></textarea>
-          <div class="fcc" id="ded-cc">0 / 700 characters</div>
+          <div class="fcc" id="ded-cc">0 / 600 characters</div>
           <div class="ferr" id="e-ded">Please write a dedication message.</div>
         </div>
 
@@ -1101,11 +1101,12 @@ function rmPhoto(e) {
 }
 
 function onDed(el) {
-  if (el.value.length > 700) el.value = el.value.slice(0, 700);
+  el.value = el.value.replace(/[\r\n]+/g, ' ');
+  if (el.value.length > 600) el.value = el.value.slice(0, 600);
   var len = el.value.length;
   var cc = document.getElementById('ded-cc');
-  cc.textContent = len + ' / 700 characters';
-  cc.classList.toggle('warn', len > 600);
+  cc.textContent = len + ' / 600 characters';
+  cc.classList.toggle('warn', len > 500);
   S.ded = el.value;
 }
 

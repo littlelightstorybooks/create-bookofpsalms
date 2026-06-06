@@ -487,7 +487,7 @@ LL.renderPage = function(page, name, giver) {
         var dTop  = (ly.dedY    != null ? ly.dedY     : 60) + '%';
         var dLeft = (ly.dedX    != null ? ly.dedX     : 50) + '%';
         var dBox  = 'position:absolute;left:'+dLeft+';top:'+dTop+';transform:translate(-50%,-50%);'
-                  + 'width:'+dW+';pointer-events:none;text-align:center;z-index:3;';
+                  + 'width:'+dW+';pointer-events:none;text-align:justify;z-index:3;';
         var dFnt  = (ly.dedFont     || 'Lora') + ',serif';
         var dSz   = (ly.dedFontSize || 12) + 'px';
         var dCol  = ly.dedColor || '#FFFFFF';
@@ -499,7 +499,7 @@ LL.renderPage = function(page, name, giver) {
         dedContent = dedContent.replace(/\n{2,}/g, '\n');
         dedHtml = '<div style="'+dBox+'">'
           + '<div style="font-family:'+dFnt+';font-size:'+dSz+';font-weight:'+dWgt+';'
-          + 'color:'+dCol+';font-style:italic;line-height:1.75;word-break:break-word;white-space:pre-wrap;'
+          + 'color:'+dCol+';font-style:italic;line-height:1.75;word-break:break-word;white-space:normal;'
           + dOutline
           + (isPlaceholder ? 'opacity:.65;outline:1px dashed rgba(255,255,255,.4);padding:4px 8px;border-radius:3px;' : '')
           + '">'
@@ -555,7 +555,7 @@ LL.renderPage = function(page, name, giver) {
       var dTop2  = (ly.dedY    != null ? ly.dedY     : 60) + '%';
       var dLeft2 = (ly.dedX    != null ? ly.dedX     : 50) + '%';
       var dBox2  = 'position:absolute;left:'+dLeft2+';top:'+dTop2+';transform:translate(-50%,-50%);'
-                 + 'width:'+dW2+';pointer-events:none;text-align:center;z-index:3;';
+                 + 'width:'+dW2+';pointer-events:none;text-align:justify;z-index:3;';
       var dFnt2    = (ly.dedFont     || 'Lora') + ',serif';
       var dSz2     = (ly.dedFontSize || 12) + 'px';
       var dCol2    = ly.dedColor || '#FFFFFF';
@@ -565,7 +565,7 @@ LL.renderPage = function(page, name, giver) {
       var dedContent2 = dedText2.trim() || 'Sample dedication text';
       dedHtml2 = '<div style="'+dBox2+'">'
         + '<div style="font-family:'+dFnt2+';font-size:'+dSz2+';font-weight:'+dWgt2+';'
-        + 'color:'+dCol2+';font-style:italic;line-height:1.75;word-break:break-word;white-space:pre-wrap;'
+        + 'color:'+dCol2+';font-style:italic;line-height:1.75;word-break:break-word;white-space:normal;'
         + dOutline2
         + (isPlaceholder2 ? 'opacity:.65;outline:1px dashed rgba(255,255,255,.4);padding:4px 8px;border-radius:3px;' : '')
         + '">'

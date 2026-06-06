@@ -1254,7 +1254,7 @@ function selectIntroPage(idx){
     +'<div style="font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px;">Sample Text Tester</div>'
     +'<div class="fgrp">'
     +'<div style="font-size:.76rem;color:var(--body);margin-bottom:6px;line-height:1.5;">Type a sample dedication below to see exactly how it fits at the current font size, width, and position. This text is for preview only — the real dedication comes from the customer.</div>'
-    +'<textarea class="ftextarea" id="intro-ded-sample" rows="4" placeholder="Type a sample dedication here…&#10;&#10;e.g. To my little miracle — you are God\'s greatest gift to us. We love you more than words can say." oninput="onDedSample(this)" style="font-family:Lora,serif;font-style:italic;">'+(ly._dedSample||'')+'</textarea>'
+    +'<textarea class="ftextarea" id="intro-ded-sample" rows="4" maxlength="600" placeholder="Type a sample dedication here… e.g. To my little miracle — you are God\'s greatest gift to us. We love you more than words can say." oninput="onDedSample(this)" style="font-family:Lora,serif;font-style:italic;text-align:justify;resize:none;">'+(ly._dedSample||'')+'</textarea>'
     +'<div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px;">'
     +'<div id="intro-ded-cc" style="font-size:.74rem;color:var(--muted);">0 characters</div>'
     +'<button onclick="clearDedSample()" style="font-size:.68rem;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline;font-family:\'Jost\',sans-serif;">Clear</button>'
@@ -1342,11 +1342,13 @@ function introToggleOutlineControls(){
 }
 
 function onDedSample(el){
+  el.value=el.value.replace(/[\r\n]+/g,' ');
+  if(el.value.length>600) el.value=el.value.slice(0,600);
   var len=el.value.length;
   var cc=document.getElementById('intro-ded-cc');
   if(cc){
-    cc.textContent=len+' character'+(len!==1?'s':'');
-    cc.style.color=len>300?'var(--err)':len>200?'var(--gold)':'var(--muted)';
+    cc.textContent=len+' / 600 characters';
+    cc.style.color=len>550?'var(--err)':len>400?'var(--gold)':'var(--muted)';
   }
   // Store sample on the layout so it survives re-renders
   if(_introIdx>=0){
