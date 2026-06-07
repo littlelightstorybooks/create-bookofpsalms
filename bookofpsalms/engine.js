@@ -950,7 +950,6 @@ LL._readLocalState = function() {
 // ----------------------------------------------------------------
 LL.exportPDF = async function(pageModels, childName, goSpreadFn, spreadCount, getSpreadEls, onProgress, onDone, giverName) {
   console.log('ACTIVE EXPORT FUNCTION RUNNING');
-  console.log('jsPDF unit: mm, format: [210, 148]');
   if (!window.jspdf || !window.html2canvas) {
     alert('PDF libraries still loading -- please wait a moment and try again.');
     return;
