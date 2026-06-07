@@ -2035,12 +2035,12 @@ async function adminDownloadOrderPDF(ref){
       stage.innerHTML=LL.renderPage(page,childName,order.giver||'');
       await rAF();await rAF();await wait(150);
 
-      var c=await html2canvas(stage,{scale:3,useCORS:true,allowTaint:false,
+      var c=await html2canvas(stage,{scale:5,useCORS:true,allowTaint:false,
         backgroundColor:bg==='transparent'?null:bg,width:420,height:296,logging:false});
-      var imgData=c.toDataURL('image/jpeg',0.95);
+      var imgData=c.toDataURL('image/png');
       if(!first)doc.addPage([210,148],'landscape');
       first=false;
-      var w=doc.internal.pageSize.getWidth();var h=doc.internal.pageSize.getHeight();doc.addImage(imgData,'JPEG',0,0,w,h);
+      var w=doc.internal.pageSize.getWidth();var h=doc.internal.pageSize.getHeight();doc.addImage(imgData,'PNG',0,0,w,h);
     }
     if(!_adminPDFCancelled){
       setP(100,'Saving...');await wait(100);

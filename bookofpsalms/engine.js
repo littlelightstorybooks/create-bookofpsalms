@@ -992,18 +992,18 @@ LL.exportPDF = async function(pageModels, childName, goSpreadFn, spreadCount, ge
   // Capture the stage as a PDF page
   async function capturePage(bg) {
     var canvas = await html2canvas(stage, {
-      scale: 3, useCORS: true, allowTaint: false,
+      scale: 5, useCORS: true, allowTaint: false,
       backgroundColor: bg || '#FEFAF3',
       width: 420, height: 296, logging: false,
     });
     
-    var imgData = canvas.toDataURL('image/jpeg', 0.95);
+    var imgData = canvas.toDataURL('image/png');
     if (!first) doc.addPage([210, 148], 'landscape');
     first = false;
     var w = doc.internal.pageSize.getWidth();
     var h = doc.internal.pageSize.getHeight();
     var bleed = 1.02;
-    doc.addImage(imgData, 'JPEG', -(w*(bleed-1)/2), -(h*(bleed-1)/2), w*bleed, h*bleed);
+    doc.addImage(imgData, 'PNG', -(w*(bleed-1)/2), -(h*(bleed-1)/2), w*bleed, h*bleed);
   }
 
   // Render one page model into the stage and capture it
