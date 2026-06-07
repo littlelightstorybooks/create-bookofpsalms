@@ -1470,6 +1470,9 @@ function selectPayMethod(method) {
 }
 
 function openPayment() {
+  // Hide sticky button when modal opens
+  var sw = document.getElementById('sticky-order-btn-wrap');
+  if (sw) sw.style.display = 'none';
   // Session lock — prevent duplicate orders in same session
   if (sessionStorage.getItem('bop_order_placed') === '1') {
     LL.toast('Order already placed. Click "Create Another Book" to start a new order.', 'err');
