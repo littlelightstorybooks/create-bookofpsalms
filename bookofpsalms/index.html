@@ -429,38 +429,37 @@ body.loading{overflow:hidden;}
 .mab-ref strong{color:var(--deep);font-size:.85rem;}
 
 /* ── STICKY ORDER NOW (mobile only) ─────────────────────────── */
-@media (max-width: 768px) {
-  #sticky-order-btn-wrap {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 999;
-    padding: 12px 16px 20px;
-    background: linear-gradient(to top, rgba(254,250,243,1) 70%, rgba(254,250,243,0));
-    display: none;
-  }
-  #sticky-order-btn-wrap .btn {
-    width: 100%;
-    font-size: 1rem;
-    padding: .9rem;
-    box-shadow: 0 4px 20px rgba(231,119,55,.35);
-  }
-  @keyframes headshake {
-    0%   { transform: translateX(0); }
-    10%  { transform: translateX(-6px) rotate(-1deg); }
-    20%  { transform: translateX(6px) rotate(1deg); }
-    30%  { transform: translateX(-5px) rotate(-1deg); }
-    40%  { transform: translateX(5px) rotate(1deg); }
-    50%  { transform: translateX(-3px); }
-    60%  { transform: translateX(3px); }
-    70%  { transform: translateX(-2px); }
-    80%  { transform: translateX(2px); }
-    100% { transform: translateX(0); }
-  }
-  .headshake {
-    animation: headshake 0.8s ease-in-out;
-  }
+/* Sticky order button — hidden by default, shown by JS on mobile */
+#sticky-order-btn-wrap {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  padding: 12px 16px 20px;
+  background: linear-gradient(to top, rgba(254,250,243,1) 70%, rgba(254,250,243,0));
+}
+#sticky-order-btn-wrap .btn {
+  width: 100%;
+  font-size: 1rem;
+  padding: .9rem;
+  box-shadow: 0 4px 20px rgba(231,119,55,.35);
+}
+@keyframes headshake {
+  0%   { transform: translateX(0); }
+  10%  { transform: translateX(-6px) rotate(-1deg); }
+  20%  { transform: translateX(6px) rotate(1deg); }
+  30%  { transform: translateX(-5px) rotate(-1deg); }
+  40%  { transform: translateX(5px) rotate(1deg); }
+  50%  { transform: translateX(-3px); }
+  60%  { transform: translateX(3px); }
+  70%  { transform: translateX(-2px); }
+  80%  { transform: translateX(2px); }
+  100% { transform: translateX(0); }
+}
+.headshake {
+  animation: headshake 0.8s ease-in-out;
 }
 </style>
 <body class="loading">
@@ -1729,9 +1728,10 @@ function toggleFAQ(i) {
 
   function checkVisibility() {
     if (!stickyWrap || !orderBtn) return;
-    if (window.innerWidth > 768) { stickyWrap.style.display = 'none'; return; }
     var step2 = document.getElementById('step2');
-    if (!step2 || !step2.classList.contains('act')) {
+    var isMobile = window.innerWidth <= 768;
+    var isStep2Active = step2 && step2.classList.contains('act');
+    if (!isMobile || !isStep2Active) {
       stickyWrap.style.display = 'none';
       return;
     }
@@ -1763,7 +1763,10 @@ function toggleFAQ(i) {
     var step2 = document.getElementById('step2');
     if (step2) {
       observer = new MutationObserver(function() {
-        checkVisibility();
+        // Small delay so browser paints step2 before measuring positions
+        setTimeout(function() {
+          checkVisibility();
+        }, 300);
         if (step2.classList.contains('act')) {
           // Start shake loop
           if (!shakeTimer) {
