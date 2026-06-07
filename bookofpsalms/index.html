@@ -427,6 +427,41 @@ body.loading{overflow:hidden;}
 .mab-shipping{font-size:.72rem;color:var(--muted);text-align:center;margin-top:6px;font-style:italic;}
 .mab-ref{font-size:.76rem;color:var(--muted);text-align:center;margin-top:3px;}
 .mab-ref strong{color:var(--deep);font-size:.85rem;}
+
+/* ── STICKY ORDER NOW (mobile only) ─────────────────────────── */
+@media (max-width: 768px) {
+  #sticky-order-btn-wrap {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    padding: 12px 16px 20px;
+    background: linear-gradient(to top, rgba(254,250,243,1) 70%, rgba(254,250,243,0));
+    display: none;
+  }
+  #sticky-order-btn-wrap .btn {
+    width: 100%;
+    font-size: 1rem;
+    padding: .9rem;
+    box-shadow: 0 4px 20px rgba(231,119,55,.35);
+  }
+  @keyframes headshake {
+    0%   { transform: translateX(0); }
+    10%  { transform: translateX(-6px) rotate(-1deg); }
+    20%  { transform: translateX(6px) rotate(1deg); }
+    30%  { transform: translateX(-5px) rotate(-1deg); }
+    40%  { transform: translateX(5px) rotate(1deg); }
+    50%  { transform: translateX(-3px); }
+    60%  { transform: translateX(3px); }
+    70%  { transform: translateX(-2px); }
+    80%  { transform: translateX(2px); }
+    100% { transform: translateX(0); }
+  }
+  .headshake {
+    animation: headshake 0.8s ease-in-out;
+  }
+}
 </style>
 <body class="loading">
 
@@ -1681,6 +1716,84 @@ function toggleFAQ(i) {
   // Open clicked if it was closed
   if (!isOpen) item.classList.add('open');
 }
+</script>
+
+<!-- STICKY ORDER NOW (mobile only) -->
+<div id="sticky-order-btn-wrap">
+  <button class="btn btn-gold" id="sticky-order-btn" onclick="openPayment()">Order Now →</button>
+</div>
+<script>
+// ── STICKY ORDER NOW BUTTON (mobile only) ──────────────────────
+(function() {
+  var stickyWrap = null;
+  var stickyBtn  = null;
+  var orderBtn   = null;
+  var shakeTimer = null;
+
+  function initSticky() {
+    stickyWrap = document.getElementById('sticky-order-btn-wrap');
+    stickyBtn  = document.getElementById('sticky-order-btn');
+    orderBtn   = document.getElementById('order-now-btn');
+    if (!stickyWrap || !orderBtn) return;
+
+    // Show sticky only in step 2 (preview) and mobile
+    function checkVisibility() {
+      if (window.innerWidth > 768) { stickyWrap.style.display = 'none'; return; }
+      var step2 = document.getElementById('step-2');
+      if (!step2 || step2.style.display === 'none' || step2.classList.contains('hidden')) {
+        stickyWrap.style.display = 'none';
+        return;
+      }
+      // Hide sticky when original Order Now button is visible in viewport
+      var rect = orderBtn.getBoundingClientRect();
+      var inView = rect.top >= 0 && rect.bottom <= window.innerHeight;
+      stickyWrap.style.display = inView ? 'none' : 'flex';
+    }
+
+    window.addEventListener('scroll', checkVisibility, { passive: true });
+    window.addEventListener('resize', checkVisibility);
+
+    // Headshake every 4 seconds
+    function startShake() {
+      shakeTimer = setInterval(function() {
+        if (!stickyBtn || stickyWrap.style.display === 'none') return;
+        stickyBtn.classList.remove('headshake');
+        void stickyBtn.offsetWidth; // reflow to restart animation
+        stickyBtn.classList.add('headshake');
+        stickyBtn.addEventListener('animationend', function() {
+          stickyBtn.classList.remove('headshake');
+        }, { once: true });
+      }, 4000);
+    }
+
+    // Start when entering step 2
+    var origGoStep2 = window.goStep2;
+    window.goStep2 = function() {
+      if (origGoStep2) origGoStep2.apply(this, arguments);
+      setTimeout(function() {
+        checkVisibility();
+        startShake();
+      }, 500);
+    };
+
+    // Stop when going back to step 1
+    var origGoStep1 = window.goStep1;
+    window.goStep1 = function() {
+      if (origGoStep1) origGoStep1.apply(this, arguments);
+      stickyWrap.style.display = 'none';
+      if (shakeTimer) { clearInterval(shakeTimer); shakeTimer = null; }
+    };
+
+    // Also disable sticky when order is placed
+    var origOpenPayment = window.openPayment;
+    window.openPayment = function() {
+      stickyWrap.style.display = 'none';
+      if (origOpenPayment) origOpenPayment.apply(this, arguments);
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded', initSticky);
+})();
 </script>
 </body>
 </html>
