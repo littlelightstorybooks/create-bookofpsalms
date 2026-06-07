@@ -1739,8 +1739,8 @@ function toggleFAQ(i) {
     // Show sticky only in step 2 (preview) and mobile
     function checkVisibility() {
       if (window.innerWidth > 768) { stickyWrap.style.display = 'none'; return; }
-      var step2 = document.getElementById('step-2');
-      if (!step2 || step2.style.display === 'none' || step2.classList.contains('hidden')) {
+      var step2 = document.getElementById('step2');
+      if (!step2 || !step2.classList.contains('act')) {
         stickyWrap.style.display = 'none';
         return;
       }
