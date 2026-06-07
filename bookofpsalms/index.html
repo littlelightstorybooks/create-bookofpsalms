@@ -1725,74 +1725,60 @@ function toggleFAQ(i) {
 <script>
 // ── STICKY ORDER NOW BUTTON (mobile only) ──────────────────────
 (function() {
-  var stickyWrap = null;
-  var stickyBtn  = null;
-  var orderBtn   = null;
-  var shakeTimer = null;
+  var stickyWrap, stickyBtn, orderBtn, shakeTimer, observer;
 
-  function initSticky() {
+  function checkVisibility() {
+    if (!stickyWrap || !orderBtn) return;
+    if (window.innerWidth > 768) { stickyWrap.style.display = 'none'; return; }
+    var step2 = document.getElementById('step2');
+    if (!step2 || !step2.classList.contains('act')) {
+      stickyWrap.style.display = 'none';
+      return;
+    }
+    var rect = orderBtn.getBoundingClientRect();
+    var inView = rect.top >= 0 && rect.bottom <= window.innerHeight;
+    stickyWrap.style.display = inView ? 'none' : 'flex';
+  }
+
+  function triggerShake() {
+    if (!stickyBtn || !stickyWrap || stickyWrap.style.display === 'none') return;
+    stickyBtn.classList.remove('headshake');
+    void stickyBtn.offsetWidth;
+    stickyBtn.classList.add('headshake');
+    stickyBtn.addEventListener('animationend', function() {
+      stickyBtn.classList.remove('headshake');
+    }, { once: true });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
     stickyWrap = document.getElementById('sticky-order-btn-wrap');
     stickyBtn  = document.getElementById('sticky-order-btn');
     orderBtn   = document.getElementById('order-now-btn');
     if (!stickyWrap || !orderBtn) return;
 
-    // Show sticky only in step 2 (preview) and mobile
-    function checkVisibility() {
-      if (window.innerWidth > 768) { stickyWrap.style.display = 'none'; return; }
-      var step2 = document.getElementById('step2');
-      if (!step2 || !step2.classList.contains('act')) {
-        stickyWrap.style.display = 'none';
-        return;
-      }
-      // Hide sticky when original Order Now button is visible in viewport
-      var rect = orderBtn.getBoundingClientRect();
-      var inView = rect.top >= 0 && rect.bottom <= window.innerHeight;
-      stickyWrap.style.display = inView ? 'none' : 'flex';
-    }
-
     window.addEventListener('scroll', checkVisibility, { passive: true });
     window.addEventListener('resize', checkVisibility);
 
-    // Headshake every 4 seconds
-    function startShake() {
-      shakeTimer = setInterval(function() {
-        if (!stickyBtn || stickyWrap.style.display === 'none') return;
-        stickyBtn.classList.remove('headshake');
-        void stickyBtn.offsetWidth; // reflow to restart animation
-        stickyBtn.classList.add('headshake');
-        stickyBtn.addEventListener('animationend', function() {
-          stickyBtn.classList.remove('headshake');
-        }, { once: true });
-      }, 4000);
+    // Watch step2 class changes via MutationObserver
+    var step2 = document.getElementById('step2');
+    if (step2) {
+      observer = new MutationObserver(function() {
+        checkVisibility();
+        if (step2.classList.contains('act')) {
+          // Start shake loop
+          if (!shakeTimer) {
+            shakeTimer = setInterval(triggerShake, 4000);
+            setTimeout(triggerShake, 1500); // first shake after 1.5s
+          }
+        } else {
+          if (shakeTimer) { clearInterval(shakeTimer); shakeTimer = null; }
+        }
+      });
+      observer.observe(step2, { attributes: true, attributeFilter: ['class'] });
     }
 
-    // Start when entering step 2
-    var origGoStep2 = window.goStep2;
-    window.goStep2 = function() {
-      if (origGoStep2) origGoStep2.apply(this, arguments);
-      setTimeout(function() {
-        checkVisibility();
-        startShake();
-      }, 500);
-    };
-
-    // Stop when going back to step 1
-    var origGoStep1 = window.goStep1;
-    window.goStep1 = function() {
-      if (origGoStep1) origGoStep1.apply(this, arguments);
-      stickyWrap.style.display = 'none';
-      if (shakeTimer) { clearInterval(shakeTimer); shakeTimer = null; }
-    };
-
-    // Also disable sticky when order is placed
-    var origOpenPayment = window.openPayment;
-    window.openPayment = function() {
-      stickyWrap.style.display = 'none';
-      if (origOpenPayment) origOpenPayment.apply(this, arguments);
-    };
-  }
-
-  document.addEventListener('DOMContentLoaded', initSticky);
+    checkVisibility();
+  });
 })();
 </script>
 </body>
