@@ -655,7 +655,11 @@ LL.renderPage = function(page, name, giver) {
     var top = (ly.startY   != null ? ly.startY   : 50) + '%';
     var empty = rows || '<span style="font-size:9px;color:rgba(0,0,0,.15);font-style:italic;">' + LL.escHtml(meta.letter || '') + '</span>';
 
-    return '<div style="width:100%;height:100%;' + bgStyle + ';position:relative;overflow:hidden;">'
+    var bgLayer = img
+      ? '<img src="' + LL.escHtml(img) + '" crossorigin="anonymous" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" alt="">'
+      : '';
+    return '<div style="width:100%;height:100%;background:' + (img ? 'transparent' : '#FEFAF3') + ';position:relative;overflow:hidden;">'
+      + bgLayer
       + '<div style="position:absolute;left:' + lft + ';top:' + top + ';'
       + 'transform:translate(-50%,-50%);width:' + mw + ';text-align:center;'
       + 'word-break:break-word;white-space:pre-wrap;">'

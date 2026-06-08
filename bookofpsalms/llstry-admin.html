@@ -2033,7 +2033,17 @@ async function adminDownloadOrderPDF(ref){
       if(page.image) bg='transparent';
 
       stage.innerHTML=LL.renderPage(page,childName,order.giver||'');
-      await rAF();await rAF();await wait(150);
+      // Wait for all images in stage to fully load before capturing
+      await new Promise(function(resolve){
+        var imgs=stage.querySelectorAll('img');
+        if(!imgs.length){resolve();return;}
+        var loaded=0;
+        imgs.forEach(function(im){
+          if(im.complete){loaded++;if(loaded===imgs.length)resolve();}
+          else{im.onload=im.onerror=function(){loaded++;if(loaded===imgs.length)resolve();}}
+        });
+      });
+      await rAF();await rAF();await wait(100);
 
       var c=await html2canvas(stage,{scale:5,useCORS:true,allowTaint:false,
         backgroundColor:bg==='transparent'?null:bg,width:420,height:296,logging:false});
