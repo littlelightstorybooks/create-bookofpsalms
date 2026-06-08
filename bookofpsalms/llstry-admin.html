@@ -2045,7 +2045,7 @@ async function adminDownloadOrderPDF(ref){
       });
       await rAF();await rAF();await wait(100);
 
-      var c=await html2canvas(stage,{scale:5,useCORS:true,allowTaint:false,
+      var c=await html2canvas(stage,{scale:(pages.length<=16?5:pages.length<=24?4:3),useCORS:true,allowTaint:false,
         backgroundColor:bg==='transparent'?null:bg,width:420,height:296,logging:false});
       var imgData=c.toDataURL('image/png');
       if(!first)doc.addPage([210,148],'landscape');
