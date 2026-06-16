@@ -1867,14 +1867,14 @@ function confirmOrder() {
       html += '<div class="suc-gcash-pay-lbl">Pay via GCash / Bank</div>';
       html += '<div style="text-align:center;margin-bottom:12px;">';
       if (window._gcashQR) {
-        html += '<div style="width:90px;height:90px;margin:0 auto 12px;background:white;border:1px solid var(--bd);border-radius:8px;overflow:hidden;"><img src="' + window._gcashQR + '" alt="GCash QR" style="width:100%;height:100%;object-fit:contain;"></div>';
+        html += '<div style="width:126px;height:126px;margin:0 auto 12px;background:white;border:1px solid var(--bd);border-radius:8px;overflow:hidden;"><img src="' + window._gcashQR + '" alt="GCash QR" style="width:100%;height:100%;object-fit:contain;"></div>';
       } else {
-        html += '<div style="width:90px;height:90px;margin:0 auto 12px;background:white;border:1px solid var(--bd);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--muted);">QR Code</div>';
+        html += '<div style="width:126px;height:126px;margin:0 auto 12px;background:white;border:1px solid var(--bd);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--muted);">QR Code</div>';
       }
       html += '<div style="font-size:.68rem;color:var(--brown);font-weight:500;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px;">GCash Account Number</div>';
-      html += '<div style="font-family:var(--head-font);font-size:1.4rem;color:var(--accent);margin-bottom:8px;">' + (window._gcashNum || '—') + '</div>';
+      html += '<div style="font-size:1rem;color:var(--deep);font-weight:700;margin-bottom:8px;">' + (window._gcashNum || '—') + '</div>';
       html += '<div style="font-size:.68rem;color:var(--brown);font-weight:500;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px;">GCash Account Name</div>';
-      html += '<div style="font-size:.9rem;color:var(--deep);font-weight:600;">' + (window._gcashName || '—') + '</div>';
+      html += '<div style="font-size:1rem;color:var(--deep);font-weight:700;">' + (window._gcashName || '—') + '</div>';
       html += '</div><hr style="border:none;border-top:1px solid rgba(231,119,55,.18);margin:10px 0;">';
 
       // Breakdown inside GCash card
