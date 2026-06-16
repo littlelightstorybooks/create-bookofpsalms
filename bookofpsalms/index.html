@@ -331,6 +331,46 @@ body.loading{overflow:hidden;}
 .ss-zone:hover{border-color:var(--accent);background:var(--accent-p);}
 .ss-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
 
+/* ── MODAL STEPS ── */
+.modal-step{display:none;}
+.modal-step.act{display:block;}
+.msi-wrap{display:flex;gap:6px;margin-bottom:20px;}
+.msi-dot{flex:1;height:3px;border-radius:2px;background:var(--bd);transition:background .3s;}
+.msi-dot.act{background:var(--accent);}
+.msi-dot.done{background:var(--ok);}
+.modal-step-nav{display:flex;gap:10px;margin-top:20px;}
+.modal-step-nav .btn{flex:1;}
+/* Price hero */
+.mph-block{background:var(--accent-p);border:1px solid rgba(231,119,55,.22);border-radius:12px;padding:16px 18px;margin-bottom:18px;text-align:center;}
+.mph-amount{font-family:var(--head-font);font-size:2.4rem;color:var(--accent);margin:0 0 2px;}
+.mph-sub{font-size:.78rem;color:var(--brown);margin:0 0 10px;}
+.mph-includes{border-top:1px solid rgba(231,119,55,.18);padding-top:10px;display:flex;flex-direction:column;gap:5px;text-align:left;}
+.mph-row{font-size:.8rem;color:var(--brown);display:flex;align-items:center;gap:7px;}
+.mph-row::before{content:'✓';color:var(--ok);font-weight:700;flex-shrink:0;}
+.mph-extra{font-size:.76rem;color:var(--err);margin-top:4px;text-align:left;display:none;}
+/* Book strip */
+.modal-book-strip{background:var(--warm);border:1px solid var(--bd-l);border-radius:8px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.mbs-icon{font-size:1.4rem;}
+.mbs-title{font-size:.88rem;font-weight:600;color:var(--deep);}
+.mbs-sub{font-size:.76rem;color:var(--muted);}
+/* GCash note */
+.gcash-choice-note{display:none;background:#f0faf4;border:1px solid #b6dfc8;border-radius:8px;padding:10px 14px;margin-top:-6px;margin-bottom:14px;font-size:.8rem;color:#2e6e40;line-height:1.5;}
+/* Review card */
+.mrc{background:var(--warm);border:1px solid var(--bd-l);border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.mrc-lbl{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+.mrc-row{display:flex;justify-content:space-between;align-items:baseline;font-size:.84rem;padding:3px 0;border-bottom:1px solid var(--bd-l);}
+.mrc-row:last-child{border-bottom:none;}
+.mrc-k{color:var(--muted);}
+.mrc-v{font-weight:600;color:var(--deep);text-align:right;max-width:200px;word-break:break-word;}
+.mrc-total{font-family:var(--head-font);font-size:1.4rem;color:var(--accent);}
+/* GCash success box */
+.suc-gcash{display:none;background:var(--accent-p);border:1px solid rgba(231,119,55,.25);border-radius:14px;padding:22px;margin:20px auto;max-width:440px;text-align:left;}
+.suc-gcash-lbl{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brown);margin-bottom:10px;}
+.suc-gcash-num{font-family:var(--head-font);font-size:1.7rem;color:var(--accent);margin:0 0 2px;}
+.suc-gcash-name{font-size:.84rem;color:var(--brown);margin:0 0 12px;}
+.suc-gcash-hr{border:none;border-top:1px solid rgba(231,119,55,.2);margin:12px 0;}
+.suc-gcash-note{font-size:.84rem;color:var(--brown);line-height:1.6;margin:0;}
+
 /* ── SUCCESS ── */
 .suc{display:none;text-align:center;padding:88px 32px;background:#0d0a08 !important;min-height:100vh;color:rgba(245,237,224,.85);}
 .suc.on{display:block;}
@@ -712,9 +752,28 @@ body.loading{overflow:hidden;}
 <div class="suc" id="suc">
   <div style="font-size:3rem;margin-bottom:16px;">✦</div>
   <div style="font-family:var(--head-font);font-size:2rem;margin-bottom:8px;">Order Received!</div>
-  <div style="color:var(--muted);margin-bottom:24px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7;" id="suc-msg">
+  <div style="color:var(--muted);margin-bottom:20px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7;" id="suc-msg">
     We've received your order <strong id="suc-ref"></strong>. We'll send your book to <strong id="suc-phone"></strong> within the delivery window. God bless you! ✦
   </div>
+
+  <!-- GCash payment details — shown only when payment method is GCash -->
+  <div class="suc-gcash" id="suc-gcash-box">
+    <div class="suc-gcash-lbl">📲 GCash Payment Details</div>
+    <div class="suc-gcash-num" id="suc-gcash-num">—</div>
+    <div class="suc-gcash-name" id="suc-gcash-name">—</div>
+    <div id="suc-gcash-qr" style="margin-bottom:10px;"></div>
+    <hr class="suc-gcash-hr">
+    <p class="suc-gcash-note">
+      Please send <strong id="suc-gcash-total">—</strong> to the number above.<br>
+      After paying, <strong>send your screenshot via Messenger</strong> — we'll confirm your order within the hour.<br><br>
+      Reference: <strong id="suc-gcash-ref">—</strong>
+    </p>
+    <a href="https://m.me/littlelightstorybooks" target="_blank" rel="noopener"
+       style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;background:#0084FF;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:.85rem;font-weight:600;text-decoration:none;font-family:var(--body-font);">
+      📩 Send screenshot via Messenger
+    </a>
+  </div>
+
   <a href="#" class="btn btn-gold" onclick="sessionStorage.removeItem('bop_order_placed');location.reload();return false;">Create Another Book</a>
 
   <!-- FAQ -->
@@ -746,116 +805,167 @@ body.loading{overflow:hidden;}
 <div class="modal-ov" id="pay-modal">
   <div class="modal">
     <button class="modal-x" onclick="cModal('pay-modal')">✕</button>
-    <div class="modal-tag">Choose Your Payment Method</div>
-    <div class="modal-h">Complete Your Order</div>
 
-    <!-- Payment method selector -->
-    <div class="pay-method-wrap">
-      <div class="pay-method-card active" id="pmc-cod" onclick="selectPayMethod('cod')">
-        <div class="pmc-icon">🏠</div>
-        <div class="pmc-label">Cash on Delivery</div>
-      </div>
-      <div class="pay-method-card" id="pmc-gcash" onclick="selectPayMethod('gcash')">
-        <div class="pmc-icon">💳</div>
-        <div class="pmc-label">GCash / Bank Transfer</div>
-      </div>
+    <!-- Step progress dots -->
+    <div class="msi-wrap">
+      <div class="msi-dot act" id="msi-1"></div>
+      <div class="msi-dot" id="msi-2"></div>
+      <div class="msi-dot" id="msi-3"></div>
     </div>
 
-    <!-- COD SECTION -->
-    <div id="pay-cod-section">
-      <div class="cod-reminder">
-        <div class="cod-reminder-title">✦ A Little Reminder with Love</div>
-        <p style="font-size:.85rem;color:var(--body);margin:0 0 10px 0;">We're so excited to bring this book to your doorstep! Before you proceed, please take a moment to ensure:</p>
-        <ul>
-          <li><strong>Someone will be home</strong> to receive and pay for the package when our courier arrives</li>
-          <li><strong>Your contact number is reachable</strong> — our courier will call ahead before delivery</li>
-          <li><strong>You are committed to receiving this order</strong> — every book is lovingly made just for your child</li>
-        </ul>
-        <div class="cod-reminder-note">After placing this order, we will confirm and contact you at the number you provided before we proceed with production and delivery.</div>
-      </div>
-      <div class="modal-amt-breakdown">
-        <div class="mab-row"><span id="cod-base-lbl">Standard · up to 8 letters</span><span id="cod-base-val">—</span></div>
-        <div class="mab-row" id="cod-extra-row" style="display:none;"><span id="cod-extra-lbl"></span><span id="cod-extra-val" style="color:var(--err)"></span></div>
-        <div class="mab-row total"><span>Total</span><span class="mab-val" id="cod-total">—</span></div>
-        <div class="mab-shipping">✦ Inclusive of shipping fee</div>
-        <div class="mab-ref">Reference: <strong id="cod-ref">—</strong></div>
-      </div>
-    </div>
+    <!-- ═══ STEP 1 — Price + Payment method ═══ -->
+    <div class="modal-step act" id="modal-step-1">
+      <div class="modal-tag">Step 1 of 3</div>
+      <div class="modal-h">Here's what you're getting</div>
 
-    <!-- GCASH / BANK TRANSFER SECTION -->
-    <div id="pay-gcash-section" style="display:none;">
-      <div class="modal-sub" style="margin-bottom:12px;">Please send the exact amount to the GCash account below, then upload a screenshot of your payment for verification.<br><br>You may also transfer using your banking app by selecting:<br><strong>Transfer → E-Wallet → GCash</strong></div>
-      <div class="gcash-box">
-        <div class="gcash-qr" id="gcash-qr-wrap">
-          <span style="font-size:.7rem;color:var(--muted)">QR Code</span>
+      <!-- Book carry-over from preview -->
+      <div class="modal-book-strip">
+        <div class="mbs-icon">📖</div>
+        <div>
+          <div class="mbs-title" id="mbs-book">—</div>
+          <div class="mbs-sub" id="mbs-child">—</div>
         </div>
-        <div class="gcash-num" id="gcash-num-display">09XX-XXX-XXXX</div>
-        <div class="gcash-nm" id="gcash-acct-display">Account Name</div>
       </div>
-      <div class="modal-amt-breakdown">
-        <div class="mab-row"><span id="gc-base-lbl">Standard · up to 8 letters</span><span id="gc-base-val">—</span></div>
-        <div class="mab-row" id="gc-extra-row" style="display:none;"><span id="gc-extra-lbl"></span><span id="gc-extra-val" style="color:var(--err)"></span></div>
-        <div class="mab-row total"><span>Total</span><span class="mab-val" id="gc-total">—</span></div>
-        <div class="mab-shipping">✦ Inclusive of shipping fee</div>
-        <div class="mab-ref">Reference: <strong id="modal-ref">—</strong></div>
-      </div>
-      <div class="fgrp">
-        <label class="flbl">Payment Screenshot <span style="color:var(--err)">*</span></label>
-        <div class="ss-zone">
-          <input type="file" id="ss-in" accept="image/*" onchange="onSS(this)">
-          <div id="ss-ph"><div style="font-size:1.6rem;margin-bottom:6px;">🖼️</div>
-            <div style="font-size:.82rem;color:var(--brown);font-weight:500;">Tap to upload payment screenshot</div></div>
-          <div id="ss-done" style="display:none;padding:8px;">
-            <div id="ss-progress-wrap" style="display:none;margin-bottom:6px;">
-              <div style="background:rgba(255,255,255,.1);border-radius:20px;height:6px;overflow:hidden;">
-                <div id="ss-progress-bar" style="height:100%;width:0%;background:var(--gold);border-radius:20px;transition:width .2s;"></div>
-              </div>
-              <div id="ss-progress-pct" style="font-size:.72rem;color:var(--gold);margin-top:4px;">0%</div>
-            </div>
-            <div id="ss-success-msg" style="color:var(--ok);font-size:.82rem;">✓ Screenshot uploaded</div>
-          </div>
+
+      <!-- Price hero — answers "magkano?" immediately -->
+      <div class="mph-block">
+        <div class="mph-amount" id="mph-total">—</div>
+        <div class="mph-sub">one-time · no hidden charges · shipping included</div>
+        <div class="mph-includes">
+          <div class="mph-row">Printed personalized storybook</div>
+          <div class="mph-row">Custom dedication message inside</div>
+          <div class="mph-row">Delivered to your door</div>
         </div>
-        <div class="ferr" id="e-ss">Please upload your payment screenshot.</div>
+        <div class="mph-extra" id="mph-extra"></div>
+      </div>
+
+      <!-- Payment choice -->
+      <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">How will you pay?</div>
+      <div class="pay-method-wrap">
+        <div class="pay-method-card active" id="pmc-cod" onclick="selectPayMethod('cod')">
+          <div class="pmc-icon">🏠</div>
+          <div class="pmc-label">Cash on Delivery<br><span style="font-size:.68rem;color:var(--ok);font-weight:700;">Most popular</span></div>
+          <div class="pmc-unavail">Not available for Hardbound</div>
+        </div>
+        <div class="pay-method-card" id="pmc-gcash" onclick="selectPayMethod('gcash')">
+          <div class="pmc-icon">💳</div>
+          <div class="pmc-label">GCash / Bank<br><span style="font-size:.68rem;color:var(--muted);font-weight:400;">Details shown after order</span></div>
+        </div>
+      </div>
+
+      <!-- GCash note (shows when GCash is selected) -->
+      <div class="gcash-choice-note" id="gcash-choice-note">
+        ✓ After you place your order, we'll show you the GCash number to send payment to. Just send your screenshot via Messenger — we'll confirm within the hour.
+      </div>
+
+      <div class="modal-step-nav">
+        <button class="btn btn-gold" style="flex:1;" onclick="goModalStep(2)">Continue →</button>
       </div>
     </div>
 
-    <!-- Delivery details -->
-    <div style="margin-bottom:14px;">
-      <div style="font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Delivery Details</div>
+    <!-- ═══ STEP 2 — Delivery ═══ -->
+    <div class="modal-step" id="modal-step-2">
+      <div class="modal-tag">Step 2 of 3</div>
+      <div class="modal-h">Where should we send it?</div>
+
       <div class="fgrp">
         <label class="flbl">Your Full Name <span style="color:var(--err)">*</span></label>
-        <input class="finput" id="b-name" type="text" placeholder="Your complete name">
+        <input class="finput" id="b-name" type="text" placeholder="Your complete name" autocomplete="name">
         <div class="ferr" id="e-bname">Required.</div>
       </div>
       <div class="fgrp">
         <label class="flbl">Contact Number <span style="color:var(--err)">*</span></label>
-        <input class="finput" id="b-phone" type="tel" placeholder="09XXXXXXXXX" maxlength="11" oninput="onPhone(this)">
-        <div class="fhint">11 digits · must start with 09</div>
+        <input class="finput" id="b-phone" type="tel" placeholder="09XXXXXXXXX" maxlength="11" oninput="onPhone(this)" autocomplete="tel">
+        <div class="fhint">11 digits · must start with 09 · courier will call this number</div>
         <div class="ferr" id="e-bphone">Valid 11-digit PH number required.</div>
       </div>
       <div class="fgrp">
-        <label class="flbl">House No. / Street / Village / Subdivision / Purok / Sitio <span style="color:var(--err)">*</span></label>
-        <input class="finput" id="b-addr1" type="text" placeholder="e.g. 123 Sampaguita St., Villa Maria Subd.">
+        <label class="flbl">House No. / Street / Village / Subdivision <span style="color:var(--err)">*</span></label>
+        <input class="finput" id="b-addr1" type="text" placeholder="e.g. 123 Sampaguita St., Villa Maria Subd." autocomplete="address-line1">
         <div class="ferr" id="e-baddr1">Required.</div>
       </div>
       <div class="fgrp">
         <label class="flbl">Barangay <span style="color:var(--err)">*</span></label>
-        <input class="finput" id="b-addr2" type="text" placeholder="e.g. Brgy. San Antonio">
+        <input class="finput" id="b-addr2" type="text" placeholder="e.g. Brgy. San Antonio" autocomplete="address-line2">
         <div class="ferr" id="e-baddr2">Required.</div>
       </div>
       <div class="fgrp">
         <label class="flbl">City / Municipality <span style="color:var(--err)">*</span></label>
-        <input class="finput" id="b-addr3" type="text" placeholder="e.g. Quezon City">
+        <input class="finput" id="b-addr3" type="text" placeholder="e.g. Quezon City" autocomplete="address-level2">
         <div class="ferr" id="e-baddr3">Required.</div>
       </div>
       <div class="fgrp" style="margin-bottom:0;">
         <label class="flbl">Province <span style="color:var(--err)">*</span></label>
-        <input class="finput" id="b-addr4" type="text" placeholder="e.g. Metro Manila">
+        <input class="finput" id="b-addr4" type="text" placeholder="e.g. Metro Manila" autocomplete="address-level1">
         <div class="ferr" id="e-baddr4">Required.</div>
+      </div>
+
+      <div class="modal-step-nav" style="margin-top:24px;">
+        <button class="btn btn-out" onclick="goModalStep(1)">← Back</button>
+        <button class="btn btn-gold" style="flex:2;" onclick="goModalStep(3)">Continue →</button>
       </div>
     </div>
 
-    <button class="btn btn-gold btn-full" onclick="confirmOrder()">Confirm Order ✓</button>
+    <!-- ═══ STEP 3 — Review ═══ -->
+    <div class="modal-step" id="modal-step-3">
+      <div class="modal-tag">Step 3 of 3</div>
+      <div class="modal-h">Does everything look right?</div>
+
+      <div class="mrc">
+        <div class="mrc-lbl">Book</div>
+        <div class="mrc-row"><span class="mrc-k">Title</span><span class="mrc-v" id="rev-book">—</span></div>
+        <div class="mrc-row"><span class="mrc-k">Child</span><span class="mrc-v" id="rev-child">—</span></div>
+        <div class="mrc-row"><span class="mrc-k">Message</span><span class="mrc-v" id="rev-ded" style="font-size:.76rem;font-style:italic;">—</span></div>
+      </div>
+      <div class="mrc">
+        <div class="mrc-lbl">Delivery</div>
+        <div class="mrc-row"><span class="mrc-k">Name</span><span class="mrc-v" id="rev-name">—</span></div>
+        <div class="mrc-row"><span class="mrc-k">Contact</span><span class="mrc-v" id="rev-phone">—</span></div>
+        <div class="mrc-row"><span class="mrc-k">Address</span><span class="mrc-v" id="rev-addr">—</span></div>
+      </div>
+      <div class="mrc" style="margin-bottom:0;">
+        <div class="mrc-lbl">Payment</div>
+        <div class="mrc-row"><span class="mrc-k">Method</span><span class="mrc-v" id="rev-method">—</span></div>
+        <div class="mrc-row"><span class="mrc-k">Total</span><span class="mrc-v mrc-total" id="rev-total">—</span></div>
+      </div>
+
+      <div class="modal-step-nav" style="margin-top:18px;">
+        <button class="btn btn-out" onclick="goModalStep(2)">← Back</button>
+        <button class="btn btn-gold" style="flex:2;" onclick="confirmOrder()">Place My Order ✓</button>
+      </div>
+    </div>
+
+    <!-- ── HIDDEN LEGACY SECTIONS (kept for updateModalPrice() ID refs) ── -->
+    <div style="display:none;">
+      <div id="pay-cod-section">
+        <div class="modal-amt-breakdown">
+          <div class="mab-row"><span id="cod-base-lbl"></span><span id="cod-base-val"></span></div>
+          <div class="mab-row" id="cod-extra-row"><span id="cod-extra-lbl"></span><span id="cod-extra-val"></span></div>
+          <div class="mab-row total"><span>Total</span><span class="mab-val" id="cod-total"></span></div>
+          <div class="mab-ref">Reference: <strong id="cod-ref"></strong></div>
+        </div>
+      </div>
+      <div id="pay-gcash-section">
+        <div class="gcash-box">
+          <div class="gcash-qr" id="gcash-qr-wrap"><span></span></div>
+          <div class="gcash-num" id="gcash-num-display"></div>
+          <div class="gcash-nm" id="gcash-acct-display"></div>
+        </div>
+        <div class="modal-amt-breakdown">
+          <div class="mab-row"><span id="gc-base-lbl"></span><span id="gc-base-val"></span></div>
+          <div class="mab-row" id="gc-extra-row"><span id="gc-extra-lbl"></span><span id="gc-extra-val"></span></div>
+          <div class="mab-row total"><span>Total</span><span class="mab-val" id="gc-total"></span></div>
+          <div class="mab-ref">Reference: <strong id="modal-ref"></strong></div>
+        </div>
+        <div><input type="file" id="ss-in" accept="image/*" onchange="onSS(this)" style="display:none;">
+          <div id="ss-ph"></div><div id="ss-done"></div>
+          <div id="ss-progress-wrap"><div id="ss-progress-bar"></div><div id="ss-progress-pct"></div></div>
+          <div id="ss-success-msg"></div>
+          <div class="ferr" id="e-ss"></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1462,11 +1572,16 @@ function updateModalPrice() {
 var S_payMethod = 'cod'; // default
 
 function selectPayMethod(method) {
+  if (method === 'cod' && S.book === 'hardbound') return;
   S_payMethod = method;
   document.getElementById('pmc-cod').classList.toggle('active', method === 'cod');
   document.getElementById('pmc-gcash').classList.toggle('active', method === 'gcash');
+  // Legacy sections (hidden, kept for updateModalPrice ID refs)
   document.getElementById('pay-cod-section').style.display   = method === 'cod'   ? 'block' : 'none';
   document.getElementById('pay-gcash-section').style.display = method === 'gcash' ? 'block' : 'none';
+  // Show GCash note on Step 1
+  var gcNote = document.getElementById('gcash-choice-note');
+  if (gcNote) gcNote.style.display = method === 'gcash' ? 'block' : 'none';
 }
 
 function openPayment() {
@@ -1487,38 +1602,127 @@ function openPayment() {
   var chars='ABCDEFGHJKLMNPQRSTUVWXYZ';
   var uid='';for(var ci=0;ci<3;ci++)uid+=chars.charAt(Math.floor(Math.random()*chars.length));
   S.ref='BOP-'+mm+dd+yy+'-'+uid;
+
+  // Stash GCash config for success screen
   var es  = LL._readLocalState();
   var cfg = es.config || {};
-  document.getElementById('gcash-num-display').textContent  = cfg.gcashNum  || '09XX-XXX-XXXX';
-  document.getElementById('gcash-acct-display').textContent = cfg.gcashName || 'Account Name';
+  window._gcashNum  = cfg.gcashNum  || '09XX-XXX-XXXX';
+  window._gcashName = cfg.gcashName || 'Account Name';
+  window._gcashQR   = cfg.gcashQR   || null;
+
+  // Populate legacy ID refs (used by updateModalPrice)
+  document.getElementById('gcash-num-display').textContent  = window._gcashNum;
+  document.getElementById('gcash-acct-display').textContent = window._gcashName;
   var qw = document.getElementById('gcash-qr-wrap');
-  if (cfg.gcashQR) qw.innerHTML = '<img src="' + cfg.gcashQR + '" alt="GCash QR">';
+  if (cfg.gcashQR && qw) qw.innerHTML = '<img src="' + cfg.gcashQR + '" alt="GCash QR">';
   document.getElementById('modal-ref').textContent = S.ref;
-  document.getElementById('cod-ref').textContent = S.ref;
-  // Reset to COD by default
-  selectPayMethod('cod');
+  document.getElementById('cod-ref').textContent   = S.ref;
+
+  // Populate Step 1 — book strip
+  var bookLabel = S.book === 'hardbound' ? 'Hardbound Option' : 'Little Book of Psalms';
+  var childName = S.raw.trim().replace(/\b\w/g, function(c){ return c.toUpperCase(); });
+  var el; 
+  el = document.getElementById('mbs-book');  if(el) el.textContent = bookLabel;
+  el = document.getElementById('mbs-child'); if(el) el.textContent = childName + ' · ' + (S.gender === 'girl' ? 'Girl' : 'Boy');
+
+  // Populate Step 1 — price hero
   updateModalPrice();
+  var bt    = LL.PRICING[S.book];
+  var over  = Math.max(0, S.letters.length - bt.maxL);
+  var total = bt.base + over * bt.ex;
+  el = document.getElementById('mph-total'); if(el) el.textContent = '₱' + total.toLocaleString();
+  var extraEl = document.getElementById('mph-extra');
+  if (extraEl) {
+    if (over > 0) {
+      extraEl.style.display = 'block';
+      extraEl.textContent = '+₱' + (over * bt.ex).toLocaleString() + ' for ' + over + ' extra letter' + (over > 1 ? 's' : '') + ' — total ₱' + total.toLocaleString();
+    } else {
+      extraEl.style.display = 'none';
+    }
+  }
+
+  // Default to COD (or GCash if hardbound)
+  selectPayMethod(S.book === 'hardbound' ? 'gcash' : 'cod');
+  var codCard = document.getElementById('pmc-cod');
+  if (codCard) codCard.classList.toggle('disabled', S.book === 'hardbound');
+
+  // Start at step 1
+  goModalStep(1);
   oModal('pay-modal');
 }
 
-function confirmOrder() {
+// ── MODAL STEP NAVIGATION ──────────────────────────────────────
+function goModalStep(n) {
+  // Validate delivery fields before advancing to review
+  if (n === 3) {
+    var ok = true;
+    function showE2(id, on) { var el = document.getElementById(id); if(el) el.classList.toggle('show', on); }
+    var bn = document.getElementById('b-name').value.trim();
+    if (!bn)        { showE2('e-bname',  true); ok = false; } else showE2('e-bname',  false);
+    if (!phoneOK()) { showE2('e-bphone', true); ok = false; } else showE2('e-bphone', false);
+    if (!document.getElementById('b-addr1').value.trim()) { showE2('e-baddr1', true); ok = false; } else showE2('e-baddr1', false);
+    if (!document.getElementById('b-addr2').value.trim()) { showE2('e-baddr2', true); ok = false; } else showE2('e-baddr2', false);
+    if (!document.getElementById('b-addr3').value.trim()) { showE2('e-baddr3', true); ok = false; } else showE2('e-baddr3', false);
+    if (!document.getElementById('b-addr4').value.trim()) { showE2('e-baddr4', true); ok = false; } else showE2('e-baddr4', false);
+    if (!ok) { LL.toast('Please fill in all delivery details', 'err'); return; }
+    populateReview();
+  }
+  // Show the target step, hide others
+  document.querySelectorAll('.modal-step').forEach(function(el) { el.classList.remove('act'); });
+  var step = document.getElementById('modal-step-' + n);
+  if (step) step.classList.add('act');
+  // Update progress dots
+  for (var i = 1; i <= 3; i++) {
+    var dot = document.getElementById('msi-' + i);
+    if (!dot) continue;
+    dot.classList.remove('act', 'done');
+    if (i < n)      dot.classList.add('done');
+    else if (i === n) dot.classList.add('act');
+  }
+  // Scroll modal to top
+  var modal = document.querySelector('#pay-modal .modal');
+  if (modal) modal.scrollTop = 0;
+}
+
+function populateReview() {
   var bn  = document.getElementById('b-name').value.trim();
   var ph  = document.getElementById('b-phone').value.trim();
   var a1  = document.getElementById('b-addr1').value.trim();
   var a2  = document.getElementById('b-addr2').value.trim();
   var a3  = document.getElementById('b-addr3').value.trim();
   var a4  = document.getElementById('b-addr4').value.trim();
-  var ok  = true;
-  function showE(id, on) { document.getElementById(id).classList.toggle('show', on); }
-  if (!bn)        { showE('e-bname',  true); ok = false; } else showE('e-bname',  false);
-  if (!phoneOK()) { showE('e-bphone', true); ok = false; } else showE('e-bphone', false);
-  if (!a1)        { showE('e-baddr1', true); ok = false; } else showE('e-baddr1', false);
-  if (!a2)        { showE('e-baddr2', true); ok = false; } else showE('e-baddr2', false);
-  if (!a3)        { showE('e-baddr3', true); ok = false; } else showE('e-baddr3', false);
-  if (!a4)        { showE('e-baddr4', true); ok = false; } else showE('e-baddr4', false);
-  // Screenshot only required for GCash/Bank Transfer
-  if (S_payMethod === 'gcash' && !S.ss) { showE('e-ss', true); ok = false; } else showE('e-ss', false);
-  if (!ok) { LL.toast('Please fix the errors above', 'err'); return; }
+  var bt  = LL.PRICING[S.book];
+  var over = Math.max(0, S.letters.length - bt.maxL);
+  var total = bt.base + over * bt.ex;
+  var bookLabel  = S.book === 'hardbound' ? 'Hardbound Option' : 'Standard Option';
+  var childLabel = S.raw + ' (' + (S.gender === 'girl' ? 'Girl' : 'Boy') + ')';
+  var dedPreview = (S.ded || '').slice(0, 90) + ((S.ded || '').length > 90 ? '…' : '');
+  var methodLabel = S_payMethod === 'cod' ? 'Cash on Delivery' : 'GCash / Bank Transfer';
+  function set(id, v) { var el = document.getElementById(id); if(el) el.textContent = v; }
+  set('rev-book',   bookLabel);
+  set('rev-child',  childLabel);
+  set('rev-ded',    dedPreview);
+  set('rev-name',   bn);
+  set('rev-phone',  ph);
+  set('rev-addr',   [a1, a2, a3, a4].join(', '));
+  set('rev-method', methodLabel);
+  set('rev-total',  '₱' + total.toLocaleString());
+}
+
+function confirmOrder() {
+  // Final safety check on delivery fields (user could theoretically jump here)
+  var bn  = document.getElementById('b-name').value.trim();
+  var ph  = document.getElementById('b-phone').value.trim();
+  var a1  = document.getElementById('b-addr1').value.trim();
+  var a2  = document.getElementById('b-addr2').value.trim();
+  var a3  = document.getElementById('b-addr3').value.trim();
+  var a4  = document.getElementById('b-addr4').value.trim();
+  if (!bn || !phoneOK() || !a1 || !a2 || !a3 || !a4) {
+    LL.toast('Please complete all delivery details', 'err');
+    goModalStep(2);
+    return;
+  }
+  // GCash screenshot no longer required at checkout — user sends via Messenger after ordering
 
   var ad = [a1, a2, a3, a4].join(', ');
   S.bName = bn; S.phone = ph; S.addr = ad;
@@ -1538,14 +1742,12 @@ function confirmOrder() {
     giver:      S.giver,
     bookType:   S.book,
     buyer:      { name: S.bName, phone: S.phone, address: S.addr },
-    payment:    { screenshot: S.ss, amount: total, status: 'pending', method: S_payMethod === 'cod' ? 'COD' : 'GCash / Bank Transfer' },
+    payment:    { screenshot: S.ss || null, amount: total, status: 'pending', method: S_payMethod === 'cod' ? 'COD' : 'GCash / Bank Transfer' },
     pages:      totalPg,
     created:    Date.now(),
   };
 
-  // Save order to JSONBin so admin can see it from any device
-  LL.saveOrder(order, function() {
-  });
+  LL.saveOrder(order, function() {});
 
   // Set session lock — prevents duplicate orders
   sessionStorage.setItem('bop_order_placed', '1');
@@ -1555,7 +1757,7 @@ function confirmOrder() {
   // LL.firePixel(total, S.ref, window.location.href, order); // DISABLED FOR TESTING
   cModal('pay-modal');
 
-  // Show 3-second loading before success screen
+  // Loading overlay
   var loadingEl = document.createElement('div');
   loadingEl.id = 'order-loading';
   loadingEl.style.cssText = 'position:fixed;inset:0;background:rgba(13,10,8,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;';
@@ -1563,7 +1765,6 @@ function confirmOrder() {
     + '<div id="order-loading-msg" style="font-family:var(--head-font);font-size:1.1rem;color:var(--gold);letter-spacing:.1em;">Processing your order…</div>';
   document.body.appendChild(loadingEl);
 
-  // Phase 2 — switch message after 1.5s
   setTimeout(function() {
     var msgEl2 = document.getElementById('order-loading-msg');
     if (msgEl2) msgEl2.textContent = 'Sending book request…';
@@ -1574,7 +1775,7 @@ function confirmOrder() {
     document.querySelector('.steps-wrap').style.display = 'none';
     var suc = document.getElementById('suc');
 
-    // Render admin-editable confirmation message — {ref} and {phone} are bold placeholders
+    // Render confirmation message
     var cfg2 = LL._readLocalState().config || {};
     var msgTpl = cfg2.confirmMsg ||
       'We\'ve received your order {ref}. We\'ll send your book to {phone} within the delivery window. God bless you! ✦';
@@ -1586,6 +1787,21 @@ function confirmOrder() {
         if(p==='PHONE') return '<strong>'+S.phone+'</strong>';
         return LL.escHtml(p).replace(/\n/g, '<br>');
       }).join('');
+    }
+
+    // If GCash — show payment details on success screen
+    if (S_payMethod === 'gcash') {
+      var gcBox = document.getElementById('suc-gcash-box');
+      if (gcBox) {
+        function setSuc(id, v) { var el = document.getElementById(id); if(el) el.textContent = v; }
+        setSuc('suc-gcash-num',   window._gcashNum  || '—');
+        setSuc('suc-gcash-name',  window._gcashName || '—');
+        setSuc('suc-gcash-ref',   S.ref);
+        setSuc('suc-gcash-total', '₱' + total.toLocaleString());
+        var qrEl = document.getElementById('suc-gcash-qr');
+        if (qrEl && window._gcashQR) qrEl.innerHTML = '<img src="' + window._gcashQR + '" alt="GCash QR" style="width:110px;height:110px;object-fit:contain;border-radius:8px;margin-bottom:6px;">';
+        gcBox.style.display = 'block';
+      }
     }
 
     suc.classList.add('on');
