@@ -871,7 +871,6 @@ body.loading{overflow:hidden;}
         <div class="pay-method-card active" id="pmc-cod" onclick="selectPayMethod('cod')">
           <div class="pmc-icon">🏠</div>
           <div class="pmc-label">Cash on Delivery<br><span style="font-size:.68rem;color:var(--ok);font-weight:700;">Most popular</span></div>
-          <div class="pmc-unavail">Not available for Hardbound</div>
         </div>
         <div class="pay-method-card" id="pmc-gcash" onclick="selectPayMethod('gcash')">
           <div class="pmc-icon">💳</div>
@@ -1598,7 +1597,6 @@ function updateModalPrice() {
 var S_payMethod = 'cod'; // default
 
 function selectPayMethod(method) {
-  if (method === 'cod' && S.book === 'hardbound') return;
   S_payMethod = method;
   document.getElementById('pmc-cod').classList.toggle('active', method === 'cod');
   document.getElementById('pmc-gcash').classList.toggle('active', method === 'gcash');
@@ -1666,10 +1664,15 @@ function openPayment() {
   }
   el = document.getElementById('mph-total'); if (el) el.textContent = '\u20b1' + total.toLocaleString();
 
-  // Default to COD (or GCash if hardbound)
-  selectPayMethod(S.book === 'hardbound' ? 'gcash' : 'cod');
+  // Default to COD (or GCash if hardbound) — hide COD card entirely for hardbound
   var codCard = document.getElementById('pmc-cod');
-  if (codCard) codCard.classList.toggle('disabled', S.book === 'hardbound');
+  if (S.book === 'hardbound') {
+    if (codCard) codCard.style.display = 'none';
+    selectPayMethod('gcash');
+  } else {
+    if (codCard) codCard.style.display = '';
+    selectPayMethod('cod');
+  }
 
   // Start at step 1
   goModalStep(1);
