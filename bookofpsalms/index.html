@@ -371,6 +371,58 @@ body.loading{overflow:hidden;}
 .suc-gcash-hr{border:none;border-top:1px solid rgba(231,119,55,.2);margin:12px 0;}
 .suc-gcash-note{font-size:.84rem;color:var(--brown);line-height:1.6;margin:0;}
 
+/* ── SUCCESS SCREEN REDESIGN ── */
+.suc-wrap{max-width:520px;margin:0 auto;padding:0 24px;}
+.suc-bd{background:var(--accent-p);border:1px solid rgba(231,119,55,.22);border-radius:12px;padding:14px 16px;text-align:left;margin-bottom:16px;}
+.suc-bd-lbl{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brown);margin-bottom:8px;}
+.suc-bd-row{display:flex;justify-content:space-between;font-size:.84rem;color:#633806;padding:3px 0;border-bottom:1px solid rgba(231,119,55,.12);}
+.suc-bd-row:last-child{border-bottom:none;}
+.suc-bd-row.err{color:var(--err);}
+.suc-bd-total{display:flex;justify-content:space-between;align-items:baseline;padding-top:8px;margin-top:4px;}
+.suc-bd-total-lbl{font-size:.88rem;font-weight:600;color:#633806;}
+.suc-bd-total-val{font-family:var(--head-font);font-size:1.5rem;color:var(--accent);}
+.suc-bd-note{font-size:.72rem;color:var(--brown);text-align:center;margin-top:6px;}
+.suc-reminder{background:#fffaf3;border:1px solid #e8d5a3;border-radius:12px;padding:14px 16px;text-align:left;margin-bottom:16px;}
+.suc-reminder-title{font-family:var(--head-font);font-size:.95rem;font-weight:700;color:var(--deep);margin-bottom:8px;}
+.suc-reminder-item{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid #f0e0bc;font-size:.82rem;color:var(--body);line-height:1.5;}
+.suc-reminder-item:last-child{border-bottom:none;}
+.suc-reminder-item .ri-icon{font-size:15px;color:var(--accent);flex-shrink:0;margin-top:1px;}
+.suc-reminder-note{font-size:.78rem;color:var(--muted);font-style:italic;margin-top:8px;padding-top:8px;border-top:1px solid #e8d5a3;line-height:1.5;}
+.suc-next{background:rgba(255,255,255,.04);border:1px solid rgba(201,148,58,.15);border-radius:12px;padding:14px 16px;text-align:left;margin-bottom:16px;}
+.suc-next-head{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,237,224,.5);margin-bottom:8px;}
+.suc-next-row{display:flex;gap:8px;align-items:flex-start;padding:4px 0;border-bottom:1px solid rgba(201,148,58,.1);font-size:.82rem;color:rgba(245,237,224,.75);line-height:1.4;}
+.suc-next-row:last-child{border-bottom:none;}
+.suc-next-num{font-size:.75rem;font-weight:600;color:var(--gold);min-width:16px;padding-top:1px;flex-shrink:0;}
+.suc-msng-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:#0084FF;color:#fff;border:none;border-radius:10px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:var(--body-font);text-decoration:none;margin-bottom:10px;}
+.suc-new-order{display:block;width:100%;text-align:center;padding:13px;background:transparent;color:rgba(245,237,224,.4);border:1px solid rgba(245,237,224,.12);border-radius:10px;font-size:.84rem;cursor:pointer;font-family:var(--body-font);text-decoration:none;margin-bottom:16px;}
+.suc-gcash-pay{background:var(--accent-p);border:1px solid rgba(231,119,55,.22);border-radius:12px;padding:16px;text-align:left;margin-bottom:16px;}
+.suc-gcash-pay-lbl{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brown);margin-bottom:10px;}
+.suc-gcash-pay-qr{width:82px;height:82px;background:white;border:1px solid var(--bd);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;overflow:hidden;}
+.suc-gcash-pay-num{font-family:var(--head-font);font-size:1.55rem;color:var(--deep);margin:0 0 2px;}
+.suc-gcash-pay-name{font-size:.8rem;color:var(--muted);margin:0 0 10px;}
+.suc-gcash-hr2{border:none;border-top:1px solid rgba(231,119,55,.18);margin:12px 0;}
+.suc-gcash-inst{font-size:.82rem;color:var(--brown);line-height:1.6;margin:0 0 10px;}
+.suc-proof-lbl{font-size:.78rem;color:var(--brown);margin-bottom:8px;}
+.suc-proof-opts{display:flex;gap:8px;}
+.suc-proof-opt{flex:1;border:1.5px solid var(--bd);border-radius:8px;padding:10px 8px;text-align:center;cursor:pointer;background:white;transition:all .2s;}
+.suc-proof-opt.sel{border-color:var(--accent);background:var(--accent-p);}
+.suc-proof-opt .po-icon{font-size:1.2rem;margin-bottom:4px;}
+.suc-proof-opt .po-lbl{font-size:.74rem;color:var(--muted);font-weight:600;}
+.suc-proof-opt.sel .po-lbl{color:var(--brown);}
+/* Step 1 redesign */
+.mph-breakdown{background:var(--accent-p);border:1px solid rgba(231,119,55,.22);border-radius:12px;padding:14px 16px;margin-bottom:14px;text-align:left;}
+.mph-breakdown-lbl{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brown);margin-bottom:8px;}
+.mph-bd-row{display:flex;justify-content:space-between;font-size:.82rem;color:#633806;padding:3px 0;border-bottom:1px solid rgba(231,119,55,.12);}
+.mph-bd-row:last-child{border-bottom:none;}
+.mph-bd-row.err{color:var(--err);}
+.mph-bd-total{display:flex;justify-content:space-between;align-items:baseline;padding-top:7px;margin-top:3px;}
+.mph-bd-total-lbl{font-size:.86rem;font-weight:600;color:#633806;}
+.mph-bd-total-val{font-family:var(--head-font);font-size:1.3rem;color:var(--accent);}
+.mph-bd-note{font-size:.7rem;color:var(--brown);text-align:center;margin-top:6px;}
+.mph-trust{margin-bottom:14px;}
+.mph-trust-row{display:flex;align-items:flex-start;gap:7px;font-size:.82rem;color:var(--body);padding:3px 0;line-height:1.5;}
+.mph-trust-row::before{content:'✓';color:var(--ok);font-weight:700;flex-shrink:0;}
+
 /* ── SUCCESS ── */
 .suc{display:none;text-align:center;padding:88px 32px;background:#0d0a08 !important;min-height:100vh;color:rgba(245,237,224,.85);}
 .suc.on{display:block;}
@@ -750,31 +802,7 @@ body.loading{overflow:hidden;}
 
 <!-- SUCCESS -->
 <div class="suc" id="suc">
-  <div style="font-size:3rem;margin-bottom:16px;">✦</div>
-  <div style="font-family:var(--head-font);font-size:2rem;margin-bottom:8px;">Order Received!</div>
-  <div style="color:var(--muted);margin-bottom:20px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7;" id="suc-msg">
-    We've received your order <strong id="suc-ref"></strong>. We'll send your book to <strong id="suc-phone"></strong> within the delivery window. God bless you! ✦
-  </div>
-
-  <!-- GCash payment details — shown only when payment method is GCash -->
-  <div class="suc-gcash" id="suc-gcash-box">
-    <div class="suc-gcash-lbl">📲 GCash Payment Details</div>
-    <div class="suc-gcash-num" id="suc-gcash-num">—</div>
-    <div class="suc-gcash-name" id="suc-gcash-name">—</div>
-    <div id="suc-gcash-qr" style="margin-bottom:10px;"></div>
-    <hr class="suc-gcash-hr">
-    <p class="suc-gcash-note">
-      Please send <strong id="suc-gcash-total">—</strong> to the number above.<br>
-      After paying, <strong>send your screenshot via Messenger</strong> — we'll confirm your order within the hour.<br><br>
-      Reference: <strong id="suc-gcash-ref">—</strong>
-    </p>
-    <a href="https://m.me/littlelightstorybooks" target="_blank" rel="noopener"
-       style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;background:#0084FF;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:.85rem;font-weight:600;text-decoration:none;font-family:var(--body-font);">
-      📩 Send screenshot via Messenger
-    </a>
-  </div>
-
-  <a href="#" class="btn btn-gold" onclick="sessionStorage.removeItem('bop_order_placed');location.reload();return false;">Create Another Book</a>
+  <div id="suc-content"></div>
 
   <!-- FAQ -->
   <div style="max-width:600px;margin:48px auto 0;text-align:left;">
@@ -816,27 +844,25 @@ body.loading{overflow:hidden;}
     <!-- ═══ STEP 1 — Price + Payment method ═══ -->
     <div class="modal-step act" id="modal-step-1">
       <div class="modal-tag">Step 1 of 3</div>
-      <div class="modal-h">Here's what you're getting</div>
+      <div class="modal-h">Almost there</div>
+      <div class="modal-sub" id="modal-step1-sub" style="margin-bottom:16px;">Your book is just a few taps away.</div>
 
-      <!-- Book carry-over from preview -->
-      <div class="modal-book-strip">
-        <div class="mbs-icon">📖</div>
-        <div>
-          <div class="mbs-title" id="mbs-book">—</div>
-          <div class="mbs-sub" id="mbs-child">—</div>
+      <!-- Price breakdown -->
+      <div class="mph-breakdown">
+        <div class="mph-breakdown-lbl">Price breakdown</div>
+        <div id="mph-bd-rows"></div>
+        <div class="mph-bd-total">
+          <span class="mph-bd-total-lbl">Total</span>
+          <span class="mph-bd-total-val" id="mph-total">—</span>
         </div>
+        <div class="mph-bd-note">✦ Inclusive of shipping fee</div>
       </div>
 
-      <!-- Price hero — answers "magkano?" immediately -->
-      <div class="mph-block">
-        <div class="mph-amount" id="mph-total">—</div>
-        <div class="mph-sub">one-time · no hidden charges · shipping included</div>
-        <div class="mph-includes">
-          <div class="mph-row">Printed personalized storybook</div>
-          <div class="mph-row">Custom dedication message inside</div>
-          <div class="mph-row">Delivered to your door</div>
-        </div>
-        <div class="mph-extra" id="mph-extra"></div>
+      <!-- Trust bullets -->
+      <div class="mph-trust">
+        <div class="mph-trust-row" id="mph-trust-name">Their name on every page — made only for them</div>
+        <div class="mph-trust-row">Loved by 1,000+ Filipino families</div>
+        <div class="mph-trust-row">Message us anytime on Messenger</div>
       </div>
 
       <!-- Payment choice -->
@@ -855,7 +881,7 @@ body.loading{overflow:hidden;}
 
       <!-- GCash note (shows when GCash is selected) -->
       <div class="gcash-choice-note" id="gcash-choice-note">
-        ✓ After you place your order, we'll show you the GCash number to send payment to. Just send your screenshot via Messenger — we'll confirm within the hour.
+        ✓ After you place your order, we'll show you the GCash number to send payment to. Just send your screenshot or reference number via Messenger — we'll confirm within the hour.
       </div>
 
       <div class="modal-step-nav">
@@ -1618,28 +1644,27 @@ function openPayment() {
   document.getElementById('modal-ref').textContent = S.ref;
   document.getElementById('cod-ref').textContent   = S.ref;
 
-  // Populate Step 1 — book strip
-  var bookLabel = S.book === 'hardbound' ? 'Hardbound Option' : 'Little Book of Psalms';
-  var childName = S.raw.trim().replace(/\b\w/g, function(c){ return c.toUpperCase(); });
-  var el; 
-  el = document.getElementById('mbs-book');  if(el) el.textContent = bookLabel;
-  el = document.getElementById('mbs-child'); if(el) el.textContent = childName + ' · ' + (S.gender === 'girl' ? 'Girl' : 'Boy');
+  // Populate Step 1 — subline and trust bullet with child's first name
+  var firstName = S.raw.trim().split(' ')[0];
+  firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+  el = document.getElementById('modal-step1-sub');
+  if (el) el.textContent = firstName + '\u2019s book is just a few taps away.';
+  el = document.getElementById('mph-trust-name');
+  if (el) el.textContent = firstName + '\u2019s name on every page \u2014 made only for her';
 
-  // Populate Step 1 — price hero
-  updateModalPrice();
+  // Populate Step 1 — price breakdown rows
   var bt    = LL.PRICING[S.book];
   var over  = Math.max(0, S.letters.length - bt.maxL);
   var total = bt.base + over * bt.ex;
-  el = document.getElementById('mph-total'); if(el) el.textContent = '₱' + total.toLocaleString();
-  var extraEl = document.getElementById('mph-extra');
-  if (extraEl) {
+  var bdRowsEl = document.getElementById('mph-bd-rows');
+  if (bdRowsEl) {
+    var bdHtml = '<div class="mph-bd-row"><span>' + firstName + ' \u00b7 ' + S.letters.length + ' letter' + (S.letters.length !== 1 ? 's' : '') + ' (within ' + bt.maxL + ')</span><span>\u20b1' + bt.base.toLocaleString() + '</span></div>';
     if (over > 0) {
-      extraEl.style.display = 'block';
-      extraEl.textContent = '+₱' + (over * bt.ex).toLocaleString() + ' for ' + over + ' extra letter' + (over > 1 ? 's' : '') + ' — total ₱' + total.toLocaleString();
-    } else {
-      extraEl.style.display = 'none';
+      bdHtml += '<div class="mph-bd-row err"><span>' + over + ' extra letter' + (over > 1 ? 's' : '') + ' \u00d7 \u20b1' + bt.ex.toLocaleString() + '</span><span>+\u20b1' + (over * bt.ex).toLocaleString() + '</span></div>';
     }
+    bdRowsEl.innerHTML = bdHtml;
   }
+  el = document.getElementById('mph-total'); if (el) el.textContent = '\u20b1' + total.toLocaleString();
 
   // Default to COD (or GCash if hardbound)
   selectPayMethod(S.book === 'hardbound' ? 'gcash' : 'cod');
@@ -1774,36 +1799,107 @@ function confirmOrder() {
     document.body.removeChild(loadingEl);
     document.querySelector('.steps-wrap').style.display = 'none';
     var suc = document.getElementById('suc');
+    var sucContent = document.getElementById('suc-content');
 
-    // Render confirmation message
-    var cfg2 = LL._readLocalState().config || {};
-    var msgTpl = cfg2.confirmMsg ||
-      'We\'ve received your order {ref}. We\'ll send your book to {phone} within the delivery window. God bless you! ✦';
-    var msgEl = document.getElementById('suc-msg');
-    if (msgEl) {
-      var parts = msgTpl.replace('{ref}','|||REF|||').replace('{phone}','|||PHONE|||').replace('{babyname}', S.raw||'').split('|||');
-      msgEl.innerHTML = parts.map(function(p){
-        if(p==='REF')   return '<strong>Order #'+S.ref+'</strong>';
-        if(p==='PHONE') return '<strong>'+S.phone+'</strong>';
-        return LL.escHtml(p).replace(/\n/g, '<br>');
-      }).join('');
+    // Shared values
+    var bt2    = LL.PRICING[S.book];
+    var over2  = Math.max(0, S.letters.length - bt2.maxL);
+    var total2 = bt2.base + over2 * bt2.ex;
+    var fn = S.raw.trim().split(' ')[0];
+    fn = fn.charAt(0).toUpperCase() + fn.slice(1).toLowerCase();
+    var totalStr = '\u20b1' + total2.toLocaleString();
+
+    // Breakdown rows HTML (shared)
+    var bdRows = '<div class="suc-bd-row"><span>' + fn + ' \u00b7 ' + S.letters.length + ' letter' + (S.letters.length !== 1 ? 's' : '') + ' (within ' + bt2.maxL + ')</span><span>\u20b1' + bt2.base.toLocaleString() + '</span></div>';
+    if (over2 > 0) {
+      bdRows += '<div class="suc-bd-row err"><span>' + over2 + ' extra letter' + (over2 > 1 ? 's' : '') + ' \u00d7 \u20b1' + bt2.ex.toLocaleString() + '</span><span>+\u20b1' + (over2 * bt2.ex).toLocaleString() + '</span></div>';
     }
 
-    // If GCash — show payment details on success screen
-    if (S_payMethod === 'gcash') {
-      var gcBox = document.getElementById('suc-gcash-box');
-      if (gcBox) {
-        function setSuc(id, v) { var el = document.getElementById(id); if(el) el.textContent = v; }
-        setSuc('suc-gcash-num',   window._gcashNum  || '—');
-        setSuc('suc-gcash-name',  window._gcashName || '—');
-        setSuc('suc-gcash-ref',   S.ref);
-        setSuc('suc-gcash-total', '₱' + total.toLocaleString());
-        var qrEl = document.getElementById('suc-gcash-qr');
-        if (qrEl && window._gcashQR) qrEl.innerHTML = '<img src="' + window._gcashQR + '" alt="GCash QR" style="width:110px;height:110px;object-fit:contain;border-radius:8px;margin-bottom:6px;">';
-        gcBox.style.display = 'block';
+    var html = '';
+    html += '<div class="suc-wrap">';
+    html += '<div style="font-size:2.6rem;margin-bottom:14px;">✦</div>';
+    html += '<div style="font-family:var(--head-font);font-size:2rem;margin-bottom:8px;color:rgba(245,237,224,.9);">Order received!</div>';
+
+    if (S_payMethod === 'cod') {
+      // ── COD SUCCESS ──
+      html += '<div style="color:var(--muted);margin-bottom:6px;line-height:1.7;">We\'re already excited for <strong style="color:var(--accent-l);">' + fn + '.</strong></div>';
+      html += '<div style="font-size:.78rem;color:rgba(245,237,224,.3);margin-bottom:22px;">Order #' + S.ref + '</div>';
+
+      // Order summary breakdown
+      html += '<div class="suc-bd"><div class="suc-bd-lbl">Order summary</div>' + bdRows;
+      html += '<div class="suc-bd-total"><span class="suc-bd-total-lbl">Total</span><span class="suc-bd-total-val">' + totalStr + '</span></div>';
+      html += '<div class="suc-bd-note">✦ Inclusive of shipping fee</div></div>';
+
+      // Reminder with love
+      html += '<div class="suc-reminder">';
+      html += '<div class="suc-reminder-title">✦ A little reminder with love</div>';
+      html += '<div class="suc-reminder-item"><span class="ri-icon">🏠</span><span><strong>Someone will be home</strong> to receive and pay when our courier arrives</span></div>';
+      html += '<div class="suc-reminder-item"><span class="ri-icon">📞</span><span><strong>Your contact number is reachable</strong> — our courier will call ahead before delivery</span></div>';
+      html += '<div class="suc-reminder-item"><span class="ri-icon">❤️</span><span><strong>You are committed to receiving this order</strong> — every book is lovingly made just for your child</span></div>';
+      html += '<div class="suc-reminder-note">We will confirm and contact you at the number you provided before we proceed with production and delivery.</div>';
+      html += '</div>';
+
+      // What happens next
+      html += '<div class="suc-next"><div class="suc-next-head">What happens next</div>';
+      html += '<div class="suc-next-row"><span class="suc-next-num">1</span><span>We confirm your order via <strong>' + S.phone + '</strong></span></div>';
+      html += '<div class="suc-next-row"><span class="suc-next-num">2</span><span>' + fn + '\'s book is printed in 1–3 days</span></div>';
+      html += '<div class="suc-next-row"><span class="suc-next-num">3</span><span>Delivered to your door in 3–5 days</span></div>';
+      html += '</div>';
+
+      // Messenger button
+      html += '<a class="suc-msng-btn" href="https://m.me/littlelightstorybooks" target="_blank" rel="noopener">📩 Message us on Messenger</a>';
+
+    } else {
+      // ── GCASH SUCCESS ──
+      var mssgSS  = encodeURIComponent('Hi! I just placed an order for ' + fn + '\'s book (Order #' + S.ref + '). Here\'s my payment screenshot — ' + totalStr + ' sent!');
+      var mssgRef = encodeURIComponent('Hi! I just placed an order for ' + fn + '\'s book (Order #' + S.ref + '). My GCash reference number is: ___. Amount sent: ' + totalStr);
+
+      html += '<div style="color:var(--muted);margin-bottom:6px;line-height:1.7;">We\'re already excited for <strong style="color:var(--accent-l);">' + fn + '.</strong> Complete your payment below.</div>';
+      html += '<div style="font-size:.78rem;color:rgba(245,237,224,.3);margin-bottom:22px;">Order #' + S.ref + '</div>';
+
+      // GCash payment card
+      html += '<div class="suc-gcash-pay">';
+      html += '<div class="suc-gcash-pay-lbl">Pay via GCash / Bank</div>';
+      if (window._gcashQR) {
+        html += '<div class="suc-gcash-pay-qr"><img src="' + window._gcashQR + '" alt="GCash QR" style="width:100%;height:100%;object-fit:contain;"></div>';
+      } else {
+        html += '<div class="suc-gcash-pay-qr" style="font-size:.7rem;color:var(--muted);">QR Code</div>';
       }
+      html += '<div class="suc-gcash-pay-num">' + (window._gcashNum || '—') + '</div>';
+      html += '<div class="suc-gcash-pay-name">' + (window._gcashName || '—') + '</div>';
+
+      // Breakdown inside GCash card
+      html += bdRows;
+      html += '<div class="suc-bd-total" style="margin-top:4px;"><span class="suc-bd-total-lbl">Total to send</span><span class="suc-bd-total-val">' + totalStr + '</span></div>';
+      html += '<div class="suc-bd-note">Ref: <strong>' + S.ref + '</strong> · Inclusive of shipping</div>';
+
+      html += '<hr class="suc-gcash-hr2">';
+      html += '<div class="suc-gcash-inst">Send <strong>' + totalStr + '</strong> then let us know via Messenger. You can send your screenshot or just your GCash reference number — either works!</div>';
+
+      // Proof options
+      html += '<div class="suc-proof-lbl">How would you like to confirm payment?</div>';
+      html += '<div class="suc-proof-opts">';
+      html += '<div class="suc-proof-opt sel" id="suc-proof-ss" onclick="selectSucProof(\'ss\',\'' + mssgSS + '\',\'' + mssgRef + '\')">';
+      html += '<div class="po-icon">🖼️</div><div class="po-lbl">Send screenshot</div></div>';
+      html += '<div class="suc-proof-opt" id="suc-proof-ref" onclick="selectSucProof(\'ref\',\'' + mssgSS + '\',\'' + mssgRef + '\')">';
+      html += '<div class="po-icon">#️⃣</div><div class="po-lbl">Send ref number</div></div>';
+      html += '</div></div>';
+
+      // Messenger button (default: screenshot selected)
+      html += '<a class="suc-msng-btn" id="suc-msng-btn" href="https://m.me/littlelightstorybooks?text=' + mssgSS + '" target="_blank" rel="noopener">📩 Message us on Messenger</a>';
+
+      // What happens next
+      html += '<div class="suc-next"><div class="suc-next-head">What happens next</div>';
+      html += '<div class="suc-next-row"><span class="suc-next-num">1</span><span>' + fn + '\'s book is printed in 1–3 days after payment is confirmed</span></div>';
+      html += '<div class="suc-next-row"><span class="suc-next-num">2</span><span>Delivered to your door in 3–5 days</span></div>';
+      html += '</div>';
     }
 
+    // Order another book button (both)
+    html += '<a href="#" class="suc-new-order" onclick="sessionStorage.removeItem(\'bop_order_placed\');location.reload();return false;">Order another book</a>';
+    html += '</div>';
+
+    if (sucContent) sucContent.innerHTML = html;
     suc.classList.add('on');
     suc.style.display = 'block';
     document.querySelector('.steps-wrap').parentElement.appendChild(suc);
@@ -1813,6 +1909,16 @@ function confirmOrder() {
     renderFAQ();
     LL.toast('Order submitted!', 'ok');
   }, 6000);
+}
+
+// ── GCASH PROOF SELECTOR ───────────────────────────────────────
+function selectSucProof(type, mssgSS, mssgRef) {
+  var ss  = document.getElementById('suc-proof-ss');
+  var ref = document.getElementById('suc-proof-ref');
+  var btn = document.getElementById('suc-msng-btn');
+  if (ss)  ss.classList.toggle('sel',  type === 'ss');
+  if (ref) ref.classList.toggle('sel', type === 'ref');
+  if (btn) btn.href = 'https://m.me/littlelightstorybooks?text=' + (type === 'ss' ? mssgSS : mssgRef);
 }
 
 // ── PDF EXPORT ─────────────────────────────────────────────────
