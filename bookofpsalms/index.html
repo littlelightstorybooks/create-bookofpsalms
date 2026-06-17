@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Little Book of Psalms — Personalized Christian Storybook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -97,6 +98,7 @@ body.loading{overflow:hidden;}
   filter:drop-shadow(0 20px 48px rgba(0,0,0,.45));border-radius:4px;
   animation:float 4s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+@keyframes dedPulse{0%,100%{box-shadow:0 0 0 0 rgba(231,119,55,.45);}60%{box-shadow:0 0 0 7px rgba(231,119,55,0);}}
 .hero-product-empty{width:100%;height:320px;border-radius:16px;
   border:2px dashed rgba(231,119,55,.2);display:flex;flex-direction:column;
   align-items:center;justify-content:center;color:rgba(245,237,224,.2);font-size:.8rem;gap:10px;}
@@ -294,9 +296,8 @@ body.loading{overflow:hidden;}
 .sp-total-lbl{font-size:.9rem;color:var(--body);}
 .sp-total-val{font-family:var(--head-font);font-size:1.75rem;color:var(--accent);}
 .confirm-btn-wrap{margin-top:20px;}
-.edit-link{font-size:.78rem;color:var(--muted);text-align:center;margin-top:12px;
-  cursor:pointer;text-decoration:underline;display:block;}
-.edit-link:hover{color:var(--accent);}
+.edit-link{display:block;width:100%;margin-top:10px;padding:13px 20px;font-size:.88rem;font-weight:600;color:var(--accent);background:#fff;border:2px solid var(--accent);border-radius:10px;text-align:center;cursor:pointer;letter-spacing:.02em;transition:background .2s,color .2s;}
+.edit-link:hover{background:var(--accent-p);}
 
 /* PDF button */
 .pdf-btn-wrap{margin-top:14px;}
@@ -340,22 +341,19 @@ body.loading{overflow:hidden;}
 .msi-dot.done{background:var(--ok);}
 .modal-step-nav{display:flex;gap:10px;margin-top:20px;}
 .modal-step-nav .btn{flex:1;}
-/* Price hero */
-.mph-block{background:var(--accent-p);border:1px solid rgba(231,119,55,.22);border-radius:12px;padding:16px 18px;margin-bottom:18px;text-align:center;}
-.mph-amount{font-family:var(--head-font);font-size:2.4rem;color:var(--accent);margin:0 0 2px;}
-.mph-sub{font-size:.78rem;color:var(--brown);margin:0 0 10px;}
-.mph-includes{border-top:1px solid rgba(231,119,55,.18);padding-top:10px;display:flex;flex-direction:column;gap:5px;text-align:left;}
-.mph-row{font-size:.8rem;color:var(--brown);display:flex;align-items:center;gap:7px;}
-.mph-row::before{content:'✓';color:var(--ok);font-weight:700;flex-shrink:0;}
-.mph-extra{font-size:.76rem;color:var(--err);margin-top:4px;text-align:left;display:none;}
-/* Book strip */
-.modal-book-strip{background:var(--warm);border:1px solid var(--bd-l);border-radius:8px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
-.mbs-icon{font-size:1.4rem;}
-.mbs-title{font-size:.88rem;font-weight:600;color:var(--deep);}
-.mbs-sub{font-size:.76rem;color:var(--muted);}
-/* GCash note */
+.mph-breakdown{background:var(--accent-p);border:1px solid rgba(231,119,55,.22);border-radius:12px;padding:14px 16px;margin-bottom:14px;text-align:left;}
+.mph-breakdown-lbl{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brown);margin-bottom:8px;}
+.mph-bd-row{display:flex;justify-content:space-between;font-size:.82rem;color:#633806;padding:3px 0;border-bottom:1px solid rgba(231,119,55,.12);}
+.mph-bd-row:last-child{border-bottom:none;}
+.mph-bd-row.err{color:var(--err);}
+.mph-bd-total{display:flex;justify-content:space-between;align-items:baseline;padding-top:7px;margin-top:3px;}
+.mph-bd-total-lbl{font-size:.86rem;font-weight:600;color:#633806;}
+.mph-bd-total-val{font-family:var(--head-font);font-size:1.3rem;color:var(--accent);}
+.mph-bd-note{font-size:.7rem;color:var(--brown);text-align:center;margin-top:6px;}
+.mph-trust{margin-bottom:14px;}
+.mph-trust-row{display:flex;align-items:flex-start;gap:7px;font-size:.82rem;color:var(--body);padding:3px 0;line-height:1.5;}
+.mph-trust-row::before{content:'✓';color:var(--ok);font-weight:700;flex-shrink:0;}
 .gcash-choice-note{display:none;background:#f0faf4;border:1px solid #b6dfc8;border-radius:8px;padding:10px 14px;margin-top:-6px;margin-bottom:14px;font-size:.8rem;color:#2e6e40;line-height:1.5;}
-/* Review card */
 .mrc{background:var(--warm);border:1px solid var(--bd-l);border-radius:10px;padding:14px 16px;margin-bottom:12px;}
 .mrc-lbl{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
 .mrc-row{display:flex;justify-content:space-between;align-items:baseline;font-size:.84rem;padding:3px 0;border-bottom:1px solid var(--bd-l);}
@@ -363,15 +361,6 @@ body.loading{overflow:hidden;}
 .mrc-k{color:var(--muted);}
 .mrc-v{font-weight:600;color:var(--deep);text-align:right;max-width:200px;word-break:break-word;}
 .mrc-total{font-family:var(--head-font);font-size:1.4rem;color:var(--accent);}
-/* GCash success box */
-.suc-gcash{display:none;background:var(--accent-p);border:1px solid rgba(231,119,55,.25);border-radius:14px;padding:22px;margin:20px auto;max-width:440px;text-align:left;}
-.suc-gcash-lbl{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brown);margin-bottom:10px;}
-.suc-gcash-num{font-family:var(--head-font);font-size:1.7rem;color:var(--accent);margin:0 0 2px;}
-.suc-gcash-name{font-size:.84rem;color:var(--brown);margin:0 0 12px;}
-.suc-gcash-hr{border:none;border-top:1px solid rgba(231,119,55,.2);margin:12px 0;}
-.suc-gcash-note{font-size:.84rem;color:var(--brown);line-height:1.6;margin:0;}
-
-/* ── SUCCESS SCREEN REDESIGN ── */
 .suc-wrap{max-width:520px;margin:0 auto;padding:0 24px;}
 .suc-bd{background:var(--accent-p);border:1px solid rgba(231,119,55,.22);border-radius:12px;padding:14px 16px;text-align:left;margin-bottom:16px;}
 .suc-bd-lbl{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brown);margin-bottom:8px;}
@@ -397,9 +386,6 @@ body.loading{overflow:hidden;}
 .suc-new-order{display:block;width:100%;text-align:center;padding:13px;background:transparent;color:rgba(245,237,224,.4);border:1px solid rgba(245,237,224,.12);border-radius:10px;font-size:.84rem;cursor:pointer;font-family:var(--body-font);text-decoration:none;margin-bottom:16px;}
 .suc-gcash-pay{background:var(--accent-p);border:1px solid rgba(231,119,55,.22);border-radius:12px;padding:16px;text-align:left;margin-bottom:16px;}
 .suc-gcash-pay-lbl{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brown);margin-bottom:10px;}
-.suc-gcash-pay-qr{width:82px;height:82px;background:white;border:1px solid var(--bd);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;overflow:hidden;}
-.suc-gcash-pay-num{font-family:var(--head-font);font-size:1.55rem;color:var(--deep);margin:0 0 2px;}
-.suc-gcash-pay-name{font-size:.8rem;color:var(--muted);margin:0 0 10px;}
 .suc-gcash-hr2{border:none;border-top:1px solid rgba(231,119,55,.18);margin:12px 0;}
 .suc-gcash-inst{font-size:.82rem;color:var(--brown);line-height:1.6;margin:0 0 10px;}
 .suc-proof-lbl{font-size:.78rem;color:var(--brown);margin-bottom:8px;}
@@ -409,19 +395,6 @@ body.loading{overflow:hidden;}
 .suc-proof-opt .po-icon{font-size:1.2rem;margin-bottom:4px;}
 .suc-proof-opt .po-lbl{font-size:.74rem;color:var(--muted);font-weight:600;}
 .suc-proof-opt.sel .po-lbl{color:var(--brown);}
-/* Step 1 redesign */
-.mph-breakdown{background:var(--accent-p);border:1px solid rgba(231,119,55,.22);border-radius:12px;padding:14px 16px;margin-bottom:14px;text-align:left;}
-.mph-breakdown-lbl{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brown);margin-bottom:8px;}
-.mph-bd-row{display:flex;justify-content:space-between;font-size:.82rem;color:#633806;padding:3px 0;border-bottom:1px solid rgba(231,119,55,.12);}
-.mph-bd-row:last-child{border-bottom:none;}
-.mph-bd-row.err{color:var(--err);}
-.mph-bd-total{display:flex;justify-content:space-between;align-items:baseline;padding-top:7px;margin-top:3px;}
-.mph-bd-total-lbl{font-size:.86rem;font-weight:600;color:#633806;}
-.mph-bd-total-val{font-family:var(--head-font);font-size:1.3rem;color:var(--accent);}
-.mph-bd-note{font-size:.7rem;color:var(--brown);text-align:center;margin-top:6px;}
-.mph-trust{margin-bottom:14px;}
-.mph-trust-row{display:flex;align-items:flex-start;gap:7px;font-size:.82rem;color:var(--body);padding:3px 0;line-height:1.5;}
-.mph-trust-row::before{content:'✓';color:var(--ok);font-weight:700;flex-shrink:0;}
 
 /* ── SUCCESS ── */
 .suc{display:none;text-align:center;padding:88px 32px;background:#0d0a08 !important;min-height:100vh;color:rgba(245,237,224,.85);}
@@ -504,6 +477,9 @@ body.loading{overflow:hidden;}
 .pay-method-card .pmc-icon{font-size:1.6rem;margin-bottom:5px;}
 .pay-method-card .pmc-label{font-size:.8rem;font-weight:700;color:var(--deep);line-height:1.3;}
 .pay-method-card.active .pmc-label{color:var(--accent);}
+.pay-method-card.disabled{opacity:.45;cursor:not-allowed;pointer-events:none;}
+.pmc-unavail{font-size:.68rem;color:var(--err);margin-top:4px;font-weight:600;display:none;}
+.pay-method-card.disabled .pmc-unavail{display:block;}
 /* ── COD REMINDER ────────────────────────────────────────────── */
 .cod-reminder{background:#fffaf3;border:1px solid #e8d5a3;border-radius:12px;padding:16px;margin-bottom:14px;}
 .cod-reminder-title{font-family:var(--head-font);font-size:.95rem;font-weight:700;color:var(--deep);margin-bottom:8px;}
@@ -631,6 +607,9 @@ body.loading{overflow:hidden;}
       <div class="fcard">
         <div class="fcard-title" id="fs-title">✦ About Your Child</div>
         <div class="fcard-sub" id="fs-sub">Fill in the details below to personalize your storybook.</div>
+        <div style="display:flex;align-items:center;gap:8px;background:var(--accent-p);border:1px solid var(--accent-sh);border-radius:8px;padding:10px 14px;margin-bottom:20px;">
+          <span style="font-size:.78rem;font-weight:600;color:var(--accent);">✦ Live Preview ready — complete the form to see your personalized book.</span>
+        </div>
 
         <!-- Name -->
         <div class="fgrp">
@@ -660,13 +639,14 @@ body.loading{overflow:hidden;}
 
         <!-- Photo -->
         <div class="fgrp">
-          <label class="flbl">Child's Photo <span style="color:var(--err);font-size:.72rem;font-weight:600;">Required*</span></label>
+          <label class="flbl">Child's Photo</label>
+          <div style="display:inline-flex;align-items:center;gap:6px;background:#f0faf4;border:1px solid #b6dfc8;border-radius:6px;padding:6px 12px;margin-bottom:8px;"><span style="font-size:.8rem;">✓</span><span style="font-size:.78rem;font-weight:600;color:#2e6e40;">Optional — add a photo later, you can go back anytime.</span></div>
           <div class="upzone" id="up-zone">
             <input type="file" id="photo-in" accept="image/*" onchange="onPhoto(this)">
             <div id="up-ph">
               <div class="up-icon">📷</div>
               <div class="up-lbl">Tap to upload a photo</div>
-              <div class="up-hint">JPG or PNG · Max 10MB · Landscape works best</div>
+              <div class="up-hint">Upload a photo · Preview updates in ~6 seconds</div>
             </div>
             <div id="up-done" style="display:none;text-align:center;">
               <div class="up-prev"><img id="photo-prev-img" src="" alt=""></div>
@@ -704,6 +684,7 @@ body.loading{overflow:hidden;}
               <div class="bc-desc"><strong>A5 Landscape (5.8" × 8.3")</strong><br>
                 Sturdy hard cover · Thick coated pages · Side-stitched — made to be treasured for years.</div>
               <div style="font-size:.75rem;color:var(--muted);margin-top:6px;">Ready in 2–3 weeks</div>
+              <div style="font-size:.75rem;color:var(--err);font-weight:600;margin-top:5px;">⚠ COD not available — GCash / Bank Transfer only</div>
               <a href="samples.html" target="_blank" style="display:inline-block;margin-top:8px;font-size:.78rem;color:var(--gold);text-decoration:none;">📷 See photos &amp; video →</a>
             </div>
           </div>
@@ -713,8 +694,11 @@ body.loading{overflow:hidden;}
         <!-- Dedication -->
         <div class="fgrp">
           <label class="flbl">Dedication Message <span style="color:var(--err);font-size:.72rem;font-weight:600;">Required*</span></label>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:6px;">
+            <button type="button" onclick="generateDedMsg()" style="font-size:.78rem;font-weight:700;color:#fff;background:var(--accent);border:none;border-radius:8px;padding:7px 16px;letter-spacing:.02em;animation:dedPulse 2s ease-in-out infinite;">✨ Generate Message</button>
+          </div>
           <textarea class="ftextarea" id="ded-msg" rows="5" maxlength="600" onkeydown="if(event.key==='Enter'){event.preventDefault();}"
-            placeholder="Write a heartfelt message for your child. This will appear on the dedication page.&#10;&#10;Example:&#10;To my little miracle — you are God's greatest gift to us. We love you beyond words."
+            placeholder="Not sure what to write? Hit Generate Message above for a ready-made message you can edit."
             oninput="onDed(this)"></textarea>
           <div class="fcc" id="ded-cc">0 / 600 characters</div>
           <div class="ferr" id="e-ded">Please write a dedication message.</div>
@@ -724,7 +708,7 @@ body.loading{overflow:hidden;}
         <div class="fgrp">
           <label class="flbl">Who is this book from? <span style="color:var(--err);font-size:.72rem;font-weight:600;">Required*</span></label>
           <input class="finput" id="giver-msg" type="text"
-            placeholder="e.g. Daddy & Mommy, Lolo & Lola"
+            placeholder="e.g. Mommy & Daddy, Lola & Lolo, Ninang Sarah, Tito Jun & Tita Ces"
             maxlength="60" oninput="onGiver(this)">
           <div class="fcc" id="giver-cc">0 / 60 characters</div>
           <div class="ferr" id="e-giver">Please fill in who this book is from.</div>
@@ -803,14 +787,10 @@ body.loading{overflow:hidden;}
 <!-- SUCCESS -->
 <div class="suc" id="suc">
   <div id="suc-content"></div>
-
-  <!-- FAQ -->
   <div style="max-width:600px;margin:48px auto 0;text-align:left;">
     <div style="font-family:var(--head-font);font-size:1.3rem;color:var(--gold);margin-bottom:20px;text-align:center;">Frequently Asked Questions</div>
     <div class="faq-list" id="faq-list"></div>
   </div>
-
-  <!-- Footer inside success screen -->
   <footer class="site-footer" style="margin-top:48px;">
     <div class="footer-inner">
       <div class="footer-social">
@@ -821,9 +801,7 @@ body.loading{overflow:hidden;}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
         </a>
       </div>
-      <div class="footer-links">
-        <a href="privacy.html" class="footer-link">Privacy Policy</a>
-      </div>
+      <div class="footer-links"><a href="privacy.html" class="footer-link">Privacy Policy</a></div>
       <div class="footer-copy">© 2026 Little Light Storybooks. All rights reserved.</div>
     </div>
   </footer>
@@ -833,21 +811,16 @@ body.loading{overflow:hidden;}
 <div class="modal-ov" id="pay-modal">
   <div class="modal">
     <button class="modal-x" onclick="cModal('pay-modal')">✕</button>
-
-    <!-- Step progress dots -->
     <div class="msi-wrap">
       <div class="msi-dot act" id="msi-1"></div>
       <div class="msi-dot" id="msi-2"></div>
       <div class="msi-dot" id="msi-3"></div>
     </div>
-
-    <!-- ═══ STEP 1 — Price + Payment method ═══ -->
+    <!-- ═══ STEP 1 ═══ -->
     <div class="modal-step act" id="modal-step-1">
       <div class="modal-tag">Step 1 of 3</div>
       <div class="modal-h">Almost there</div>
       <div class="modal-sub" id="modal-step1-sub" style="margin-bottom:16px;">Your book is just a few taps away.</div>
-
-      <!-- Price breakdown -->
       <div class="mph-breakdown">
         <div class="mph-breakdown-lbl">Price breakdown</div>
         <div id="mph-bd-rows"></div>
@@ -857,15 +830,11 @@ body.loading{overflow:hidden;}
         </div>
         <div class="mph-bd-note">✦ Inclusive of shipping fee</div>
       </div>
-
-      <!-- Trust bullets -->
       <div class="mph-trust">
         <div class="mph-trust-row" id="mph-trust-name">Their name on every page — made only for them</div>
         <div class="mph-trust-row">Loved by 1,000+ Filipino families</div>
         <div class="mph-trust-row">Message us anytime on Messenger</div>
       </div>
-
-      <!-- Payment choice -->
       <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">How will you pay?</div>
       <div class="pay-method-wrap">
         <div class="pay-method-card active" id="pmc-cod" onclick="selectPayMethod('cod')">
@@ -877,22 +846,17 @@ body.loading{overflow:hidden;}
           <div class="pmc-label">GCash / Bank<br><span style="font-size:.68rem;color:var(--muted);font-weight:400;">Details shown after order</span></div>
         </div>
       </div>
-
-      <!-- GCash note (shows when GCash is selected) -->
       <div class="gcash-choice-note" id="gcash-choice-note">
         ✓ After you place your order, we'll show you the GCash number to send payment to. Just send your screenshot or reference number via Messenger — we'll confirm within the hour.
       </div>
-
       <div class="modal-step-nav">
         <button class="btn btn-gold" style="flex:1;" onclick="goModalStep(2)">Continue →</button>
       </div>
     </div>
-
-    <!-- ═══ STEP 2 — Delivery ═══ -->
+    <!-- ═══ STEP 2 ═══ -->
     <div class="modal-step" id="modal-step-2">
       <div class="modal-tag">Step 2 of 3</div>
       <div class="modal-h">Where should we send it?</div>
-
       <div class="fgrp">
         <label class="flbl">Your Full Name <span style="color:var(--err)">*</span></label>
         <input class="finput" id="b-name" type="text" placeholder="Your complete name" autocomplete="name">
@@ -924,18 +888,15 @@ body.loading{overflow:hidden;}
         <input class="finput" id="b-addr4" type="text" placeholder="e.g. Metro Manila" autocomplete="address-level1">
         <div class="ferr" id="e-baddr4">Required.</div>
       </div>
-
       <div class="modal-step-nav" style="margin-top:24px;">
         <button class="btn btn-out" onclick="goModalStep(1)">← Back</button>
         <button class="btn btn-gold" style="flex:2;" onclick="goModalStep(3)">Continue →</button>
       </div>
     </div>
-
-    <!-- ═══ STEP 3 — Review ═══ -->
+    <!-- ═══ STEP 3 ═══ -->
     <div class="modal-step" id="modal-step-3">
       <div class="modal-tag">Step 3 of 3</div>
       <div class="modal-h">Does everything look right?</div>
-
       <div class="mrc">
         <div class="mrc-lbl">Book</div>
         <div class="mrc-row"><span class="mrc-k">Title</span><span class="mrc-v" id="rev-book">—</span></div>
@@ -953,14 +914,12 @@ body.loading{overflow:hidden;}
         <div class="mrc-row"><span class="mrc-k">Method</span><span class="mrc-v" id="rev-method">—</span></div>
         <div class="mrc-row"><span class="mrc-k">Total</span><span class="mrc-v mrc-total" id="rev-total">—</span></div>
       </div>
-
       <div class="modal-step-nav" style="margin-top:18px;">
         <button class="btn btn-out" onclick="goModalStep(2)">← Back</button>
         <button class="btn btn-gold" style="flex:2;" onclick="confirmOrder()">Place My Order ✓</button>
       </div>
     </div>
-
-    <!-- ── HIDDEN LEGACY SECTIONS (kept for updateModalPrice() ID refs) ── -->
+    <!-- HIDDEN LEGACY (kept for updateModalPrice ID refs) -->
     <div style="display:none;">
       <div id="pay-cod-section">
         <div class="modal-amt-breakdown">
@@ -982,7 +941,8 @@ body.loading{overflow:hidden;}
           <div class="mab-row total"><span>Total</span><span class="mab-val" id="gc-total"></span></div>
           <div class="mab-ref">Reference: <strong id="modal-ref"></strong></div>
         </div>
-        <div><input type="file" id="ss-in" accept="image/*" onchange="onSS(this)" style="display:none;">
+        <div>
+          <input type="file" id="ss-in" accept="image/*" onchange="onSS(this)" style="display:none;">
           <div id="ss-ph"></div><div id="ss-done"></div>
           <div id="ss-progress-wrap"><div id="ss-progress-bar"></div><div id="ss-progress-pct"></div></div>
           <div id="ss-success-msg"></div>
@@ -990,7 +950,104 @@ body.loading{overflow:hidden;}
         </div>
       </div>
     </div>
+  </div>
+</div>
 
+    <!-- COD SECTION -->
+    <div id="pay-cod-section">
+      <div class="cod-reminder">
+        <div class="cod-reminder-title">✦ A Little Reminder with Love</div>
+        <p style="font-size:.85rem;color:var(--body);margin:0 0 10px 0;">We're so excited to bring this book to your doorstep! Before you proceed, please take a moment to ensure:</p>
+        <ul>
+          <li><strong>Someone will be home</strong> to receive and pay for the package when our courier arrives</li>
+          <li><strong>Your contact number is reachable</strong> — our courier will call ahead before delivery</li>
+          <li><strong>You are committed to receiving this order</strong> — every book is lovingly made just for your child</li>
+        </ul>
+        <div class="cod-reminder-note">After placing this order, we will confirm and contact you at the number you provided before we proceed with production and delivery.</div>
+      </div>
+      <div class="modal-amt-breakdown">
+        <div class="mab-row"><span id="cod-base-lbl">Standard · up to 8 letters</span><span id="cod-base-val">—</span></div>
+        <div class="mab-row" id="cod-extra-row" style="display:none;"><span id="cod-extra-lbl"></span><span id="cod-extra-val" style="color:var(--err)"></span></div>
+        <div class="mab-row total"><span>Total</span><span class="mab-val" id="cod-total">—</span></div>
+        <div class="mab-shipping">✦ Inclusive of shipping fee</div>
+        <div class="mab-ref">Reference: <strong id="cod-ref">—</strong></div>
+      </div>
+    </div>
+
+    <!-- GCASH / BANK TRANSFER SECTION -->
+    <div id="pay-gcash-section" style="display:none;">
+      <div class="modal-sub" style="margin-bottom:12px;">Please send the exact amount to the GCash account below, then upload a screenshot of your payment for verification.<br><br>You may also transfer using your banking app by selecting:<br><strong>Transfer → E-Wallet → GCash</strong></div>
+      <div class="gcash-box">
+        <div class="gcash-qr" id="gcash-qr-wrap">
+          <span style="font-size:.7rem;color:var(--muted)">QR Code</span>
+        </div>
+        <div class="gcash-num" id="gcash-num-display">09XX-XXX-XXXX</div>
+        <div class="gcash-nm" id="gcash-acct-display">Account Name</div>
+      </div>
+      <div class="modal-amt-breakdown">
+        <div class="mab-row"><span id="gc-base-lbl">Standard · up to 8 letters</span><span id="gc-base-val">—</span></div>
+        <div class="mab-row" id="gc-extra-row" style="display:none;"><span id="gc-extra-lbl"></span><span id="gc-extra-val" style="color:var(--err)"></span></div>
+        <div class="mab-row total"><span>Total</span><span class="mab-val" id="gc-total">—</span></div>
+        <div class="mab-shipping">✦ Inclusive of shipping fee</div>
+        <div class="mab-ref">Reference: <strong id="modal-ref">—</strong></div>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Payment Screenshot <span style="color:var(--err)">*</span></label>
+        <div class="ss-zone">
+          <input type="file" id="ss-in" accept="image/*" onchange="onSS(this)">
+          <div id="ss-ph"><div style="font-size:1.6rem;margin-bottom:6px;">🖼️</div>
+            <div style="font-size:.82rem;color:var(--brown);font-weight:500;">Tap to upload payment screenshot</div></div>
+          <div id="ss-done" style="display:none;padding:8px;">
+            <div id="ss-progress-wrap" style="display:none;margin-bottom:6px;">
+              <div style="background:rgba(255,255,255,.1);border-radius:20px;height:6px;overflow:hidden;">
+                <div id="ss-progress-bar" style="height:100%;width:0%;background:var(--gold);border-radius:20px;transition:width .2s;"></div>
+              </div>
+              <div id="ss-progress-pct" style="font-size:.72rem;color:var(--gold);margin-top:4px;">0%</div>
+            </div>
+            <div id="ss-success-msg" style="color:var(--ok);font-size:.82rem;">✓ Screenshot uploaded</div>
+          </div>
+        </div>
+        <div class="ferr" id="e-ss">Please upload your payment screenshot.</div>
+      </div>
+    </div>
+
+    <!-- Delivery details -->
+    <div style="margin-bottom:14px;">
+      <div style="font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Delivery Details</div>
+      <div class="fgrp">
+        <label class="flbl">Your Full Name <span style="color:var(--err)">*</span></label>
+        <input class="finput" id="b-name" type="text" placeholder="Your complete name">
+        <div class="ferr" id="e-bname">Required.</div>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Contact Number <span style="color:var(--err)">*</span></label>
+        <input class="finput" id="b-phone" type="tel" placeholder="09XXXXXXXXX" maxlength="11" oninput="onPhone(this)">
+        <div class="fhint">11 digits · must start with 09</div>
+        <div class="ferr" id="e-bphone">Valid 11-digit PH number required.</div>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">House No. / Street / Village / Subdivision / Purok / Sitio <span style="color:var(--err)">*</span></label>
+        <input class="finput" id="b-addr1" type="text" placeholder="e.g. 123 Sampaguita St., Villa Maria Subd.">
+        <div class="ferr" id="e-baddr1">Required.</div>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Barangay <span style="color:var(--err)">*</span></label>
+        <input class="finput" id="b-addr2" type="text" placeholder="e.g. Brgy. San Antonio">
+        <div class="ferr" id="e-baddr2">Required.</div>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">City / Municipality <span style="color:var(--err)">*</span></label>
+        <input class="finput" id="b-addr3" type="text" placeholder="e.g. Quezon City">
+        <div class="ferr" id="e-baddr3">Required.</div>
+      </div>
+      <div class="fgrp" style="margin-bottom:0;">
+        <label class="flbl">Province <span style="color:var(--err)">*</span></label>
+        <input class="finput" id="b-addr4" type="text" placeholder="e.g. Metro Manila">
+        <div class="ferr" id="e-baddr4">Required.</div>
+      </div>
+    </div>
+
+    <button class="btn btn-gold btn-full" onclick="confirmOrder()">Confirm Order ✓</button>
   </div>
 </div>
 
@@ -1125,7 +1182,7 @@ function applySettings(state) {
   if (_bsp) _bsp.textContent = '₱' + LL.PRICING.standard.base.toLocaleString();
   if (_bhp) _bhp.textContent = '₱' + LL.PRICING.hardbound.base.toLocaleString();
 
-  // if (cfg.pixelId) LL.initPixel(cfg.pixelId); // DISABLED FOR TESTING
+  if (cfg.pixelId) LL.initPixel(cfg.pixelId);
 
   // Apply messenger link
   if (cfg.messengerLink) {
@@ -1218,6 +1275,14 @@ function pickBookOption(type, el) {
   el.classList.add('sel');
   document.getElementById('e-book').classList.remove('show');
   renderChips(S.raw);
+  var codCard = document.getElementById('pmc-cod');
+  if (codCard) {
+    if (type === 'hardbound') {
+      codCard.classList.add('disabled');
+    } else {
+      codCard.classList.remove('disabled');
+    }
+  }
 }
 
 function onPhoto(input) {
@@ -1279,6 +1344,36 @@ function onDed(el) {
   S.ded = el.value;
 }
 
+var _dedMsgIndex = -1;
+var _dedMessages = [
+  "You are so loved. More than words could ever say. From the moment you came into our lives, we knew you were a gift from God. May you always carry this in your heart. You are never alone. You are prayed for every day. You are thought of, cherished, and deeply valued. There is so much beauty still ahead of you. So many wonderful moments waiting to unfold. And we will be right here with you through all of it. Never forget that you are seen. You matter. You have a purpose greater than you know. You are, and always will be, such a blessing to us. We love you.",
+  "From the very beginning, you were prayed for. Long before you arrived, you were already loved. You came into our lives and changed everything in the most beautiful way. May you grow up knowing that you are never without someone in your corner. You are surrounded by love that will not waver. God placed you here on purpose, and that purpose is something wonderful. We pray you always feel it. We pray you always know it. You are a treasure to us, now and for every single day that follows. Never doubt how much you mean to us. You are deeply, completely loved.",
+  "There are no words big enough to describe what you mean to us. You are a joy, a wonder, and a constant reminder that God is good. May you grow up with confidence in who you are and whose you are. You are loved not just by us but by a God who knows you by name. That love will follow you everywhere you go. Through the hard days and the happy ones, through every season of your life. We will always be here. We will always be proud of you. You are so deeply, completely, and endlessly loved. That will never change. We love you so much. You are seen, you are known, and you are cherished.",
+  "You came into our lives like an answered prayer. Quiet at first, then suddenly everything. We did not know how much we needed you until you were here. May you always know that you are wanted, loved, and celebrated just as you are. You do not have to earn our love. You already have it, all of it. God knew what He was doing when He brought you to us. We see His goodness every time we look at you. Grow well, live fully, and never forget that you have people who will love you without condition. Always, completely, and with everything we have. You are so precious to us.",
+  "We want you to know something important. You are not here by accident. You were planned, prayed for, and placed in our lives for a reason. God does not make mistakes, and you are proof of that. You are a blessing in the truest sense of the word. May you grow up rooted in that truth. May it carry you through every challenge and every moment of doubt. You are stronger than you know and more loved than you realize. No matter where life takes you, you will always have a place with us. We love you more than words could ever say. You are seen. You are known. You are so loved.",
+  "From the first moment we held you, we knew our lives had changed forever. You brought a kind of joy we had never felt before — a quiet, deep, overwhelming joy. May you always feel that same joy reflected back to you every single day. You deserve to be celebrated. You deserve to be cherished. You deserve every good thing that comes your way. God has great plans for you and we believe in them completely. We believe in you completely. Whatever comes, we are with you. Whatever happens, our love for you will never change. You are everything to us. You are so cherished, now and always.",
+  "You are a miracle. Not in a distant or abstract way but in the most real and personal way. You are here, you are loved, and you are exactly who God intended you to be. May you carry that knowledge with you always. On the days when life feels heavy, remember that you are held. On the days when you feel unseen, remember that you are known. There are people who think of you, pray for you, and root for you every single day. We are among them. You will never walk alone. That is our promise to you. We love you more than you know. You are seen, known, and deeply cherished.",
+  "We have watched you and marveled every single day. You are something truly special. The way you light up a room, the way you make people smile, the way God shines through you even in the smallest moments. May you never lose that light. May you grow into it more with every passing year. Life will bring challenges but it will also bring beauty, and you are built for both. We pray you face it all with courage and with faith. And through it all, know that you are loved deeply, completely, and without condition. Now, tomorrow, and always. You are so deeply cherished and loved.",
+  "You are so much more than you know. More than your age, your size, your name. You carry something inside you that the world needs — a light, a purpose, a story still being written. May you grow up trusting that. May you never shrink yourself to fit a smaller version of what God has called you to be. We see greatness in you. We see kindness, strength, and a heart full of goodness. We are so honored to have you in our lives. Keep going. Keep growing. Keep shining. You are so deeply loved and so fiercely believed in. Always. You are seen, valued, and so deeply loved.",
+  "Not a day goes by that we do not think of you and feel grateful. Grateful that you are here. Grateful that you are ours to love. You have brought so much into our lives without even trying. Just by being you, you have made everything better. May you always know that. May you grow up with the kind of confidence that comes from being truly loved. Not conditional love, not performance-based love, but the real kind that stays. That is what we have for you. That is what God has for you. And it will never, ever run out. You are so deeply and completely loved.",
+  "Before you were even born, you were already loved, already prayed over, already hoped for. You arrived and exceeded every hope we had, and you continue to every single day. May you grow up knowing that you are a joy to everyone around you. That your presence matters. That your life has weight and meaning and purpose. God sees you. We see you. And what we see is something truly remarkable. Keep growing into the wonderful person you are becoming. We will be cheering you on every single step of the way, with all the love we have. You are such a gift and we are so grateful.",
+  "Life is full of moments but some stand out above the rest. You are one of those moments for us. The moment you became part of our lives, something shifted and became clearer, warmer, and more full. May you always feel that warmth surrounding you. May you always know that you are the kind of person who changes things for the better just by being present. God gave us a gift when He gave us you and we do not take that lightly. We carry it with gratitude every day. You are loved beyond measure and beyond words. Always and forever. You are so treasured and so deeply loved.",
+  "We pray that as you grow, you will always know where to turn. To faith when things are uncertain. To love when things feel cold. To hope when things seem impossible. You are not meant to face this life alone and you never will be. There are people who love you deeply and a God who loves you even more. May that truth be your anchor through every storm and every season. You are precious to us. You are precious to Him. And that will never change no matter what happens. We love you with absolutely everything we have. Always. You are so precious to us and to Him.",
+  "You have a way of making the ordinary feel special. Just your presence does that and we notice it every single time. May you grow up knowing the kind of love that does not keep score, does not give up, and does not fade with time. That is the love we have for you and the love God has for you. You are worth every prayer, every hope, and every moment of joy you have brought into our lives. Never let anyone tell you otherwise. You are remarkable. You are loved. And we are so very glad you are here with us. You are so loved. You are so treasured. Always.",
+  "Some people come into your life and make everything bigger, warmer, and more alive. You are that person for us. From the very beginning you have been a source of light, laughter, and love. May you always carry that with you. May you always know that you are treasured not just for what you do but for who you are. God made you with care and intention and every part of you is on purpose. We see it. We celebrate it. We are so grateful for it every single day. You are a blessing and we will never stop being thankful for you. You are a treasure and you are so deeply loved.",
+  "We want you to grow up knowing something true and unshakeable. You are loved. Not because you are perfect or because you always get it right, but because you are you, and that is more than enough. God sees your heart and so do we. May you always feel safe in that love. May it give you the courage to be fully yourself, to dream big, and to trust that you are never without support. We are here. We are proud of you. We will keep showing up for you for as long as we live. You are everything to us. We love you. We are so grateful you are ours to love.",
+  "There is something about you that is hard to put into words. A warmth. A light. Something that makes people feel at ease just by being near you. May you never take that for granted and may you grow into it fully and share it with everyone around you. The world is better because you are in it and we believe that completely. God placed you here with intention and we are so glad He did. You have already brought so much love into our lives and we know the best is still ahead. Keep going. Keep growing. We love you so much. You are treasured beyond measure. We love you.",
+  "Every day with you is a reminder of how good God is. You did not have to earn your place in our hearts — you were already there before you even knew it. May you grow up rooted in that kind of love. The unconditional kind. The kind that holds even when things are hard. You will face challenges in life but you will never face them alone. We are with you and God is with you. The love surrounding you is stronger than any obstacle ahead. You are brave, you are loved, and you are destined for something truly beautiful. We are so grateful for every moment with you.",
+  "We think about you and we smile — that is just what you do to people. You bring joy without even trying. May you always know the effect you have on the ones who love you. May you grow up feeling seen, celebrated, and deeply cherished. You are not ordinary. You are someone set apart, called by name, loved by God and by every person He placed in your life. That includes us. We are so honored to be part of your story. We pray it is a long, full, and beautiful one. You are so deeply and completely loved. We are so deeply honored and grateful to love you.",
+  "From the moment you became part of our lives, gratitude has been a constant feeling. Gratitude for your laugh, your spirit, your presence. You make life richer just by being in it. May you grow up anchored in love and rooted in faith. May you face the future with confidence knowing you are backed by people who believe in you completely. You are not alone in this life. You have love around you, above you, and within you. God put that there and we are so grateful to be a small part of it. You are wonderfully and completely loved. You are treasured beyond words. We love you."
+];
+function generateDedMsg() {
+  _dedMsgIndex = (_dedMsgIndex + 1) % _dedMessages.length;
+  var el = document.getElementById('ded-msg');
+  el.value = _dedMessages[_dedMsgIndex];
+  onDed(el);
+}
+
 function onGiver(el) {
   if (el.value.length > 60) el.value = el.value.slice(0, 60);
   var len = el.value.length;
@@ -1337,16 +1432,7 @@ function goStep2() {
   var ok = true;
   function showE(id, on) { document.getElementById(id).classList.toggle('show', on); }
   if (!S.letters)           { showE('e-cname', true);  ok = false; } else showE('e-cname', false);
-  if (!S.photo) {
-    var donEl = document.getElementById('up-done');
-    var uploading = donEl && donEl.style.display !== 'none' && donEl.textContent.includes('Uploading');
-    if (uploading) {
-      LL.toast('Please wait — photo is still uploading...', 'err');
-      ok = false;
-    } else {
-      showE('e-photo', true); ok = false;
-    }
-  } else showE('e-photo', false);
+  showE('e-photo', false);
   if (!S.book)              { showE('e-book',  true);  ok = false; } else showE('e-book',  false);
   if (!S.ded || !S.ded.trim()) { showE('e-ded', true); ok = false; } else showE('e-ded', false);
   if (!S.giver || !S.giver.trim()) { showE('e-giver', true); ok = false; } else showE('e-giver', false);
@@ -1454,7 +1540,7 @@ function buildSpreads(state) {
   renderBookScroll(frontCoverPage, innerPages, backCoverPage, name);
 
   // Fire ViewContent — customer sees their personalized book
-  // try { if (typeof fbq !== 'undefined') fbq('track', 'ViewContent', { content_name: 'Book Preview', content_category: 'Personalized Storybook' }); } catch(e) {} // DISABLED FOR TESTING
+  try { if (typeof fbq !== 'undefined') fbq('track', 'ViewContent', { content_name: 'Book Preview', content_category: 'Personalized Storybook' }); } catch(e) {}
 }
 
 function renderBookScroll(frontCoverPage, innerPages, backCoverPage, name) {
@@ -1600,24 +1686,19 @@ function selectPayMethod(method) {
   S_payMethod = method;
   document.getElementById('pmc-cod').classList.toggle('active', method === 'cod');
   document.getElementById('pmc-gcash').classList.toggle('active', method === 'gcash');
-  // Legacy sections (hidden, kept for updateModalPrice ID refs)
   document.getElementById('pay-cod-section').style.display   = method === 'cod'   ? 'block' : 'none';
   document.getElementById('pay-gcash-section').style.display = method === 'gcash' ? 'block' : 'none';
-  // Show GCash note on Step 1
   var gcNote = document.getElementById('gcash-choice-note');
   if (gcNote) gcNote.style.display = method === 'gcash' ? 'block' : 'none';
 }
 
 function openPayment() {
-  // Hide sticky button when modal opens
   var sw = document.getElementById('sticky-order-btn-wrap');
   if (sw) sw.style.display = 'none';
-  // Session lock — prevent duplicate orders in same session
   if (sessionStorage.getItem('bop_order_placed') === '1') {
     LL.toast('Order already placed. Click "Create Another Book" to start a new order.', 'err');
     return;
   }
-  // Fire InitiateCheckout — customer clicked Order Now
   // try { if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout'); } catch(e) {} // DISABLED FOR TESTING
   var now=new Date();
   var mm=String(now.getMonth()+1).padStart(2,'0');
@@ -1627,14 +1708,12 @@ function openPayment() {
   var uid='';for(var ci=0;ci<3;ci++)uid+=chars.charAt(Math.floor(Math.random()*chars.length));
   S.ref='BOP-'+mm+dd+yy+'-'+uid;
 
-  // Stash GCash config for success screen
   var es  = LL._readLocalState();
   var cfg = es.config || {};
   window._gcashNum  = cfg.gcashNum  || '09XX-XXX-XXXX';
   window._gcashName = cfg.gcashName || 'Account Name';
   window._gcashQR   = cfg.gcashQR   || null;
 
-  // Populate legacy ID refs (used by updateModalPrice)
   document.getElementById('gcash-num-display').textContent  = window._gcashNum;
   document.getElementById('gcash-acct-display').textContent = window._gcashName;
   var qw = document.getElementById('gcash-qr-wrap');
@@ -1642,29 +1721,26 @@ function openPayment() {
   document.getElementById('modal-ref').textContent = S.ref;
   document.getElementById('cod-ref').textContent   = S.ref;
 
-  // Populate Step 1 — subline and trust bullet with child's first name
   var firstName = S.raw.trim().split(' ')[0];
   firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+  var el;
   el = document.getElementById('modal-step1-sub');
   if (el) el.textContent = firstName + '\u2019s book is just a few taps away.';
   el = document.getElementById('mph-trust-name');
   if (el) el.textContent = firstName + '\u2019s name on every page \u2014 made only for them';
 
-  // Populate Step 1 — price breakdown rows
+  updateModalPrice();
   var bt    = LL.PRICING[S.book];
   var over  = Math.max(0, S.letters.length - bt.maxL);
   var total = bt.base + over * bt.ex;
   var bdRowsEl = document.getElementById('mph-bd-rows');
   if (bdRowsEl) {
     var bdHtml = '<div class="mph-bd-row"><span>' + firstName + ' \u00b7 ' + S.letters.length + ' letter' + (S.letters.length !== 1 ? 's' : '') + ' (within ' + bt.maxL + ')</span><span>\u20b1' + bt.base.toLocaleString() + '</span></div>';
-    if (over > 0) {
-      bdHtml += '<div class="mph-bd-row err"><span>' + over + ' extra letter' + (over > 1 ? 's' : '') + ' \u00d7 \u20b1' + bt.ex.toLocaleString() + '</span><span>+\u20b1' + (over * bt.ex).toLocaleString() + '</span></div>';
-    }
+    if (over > 0) bdHtml += '<div class="mph-bd-row err"><span>' + over + ' extra letter' + (over > 1 ? 's' : '') + ' \u00d7 \u20b1' + bt.ex.toLocaleString() + '</span><span>+\u20b1' + (over * bt.ex).toLocaleString() + '</span></div>';
     bdRowsEl.innerHTML = bdHtml;
   }
   el = document.getElementById('mph-total'); if (el) el.textContent = '\u20b1' + total.toLocaleString();
 
-  // Default to COD (or GCash if hardbound) — hide COD card entirely for hardbound
   var codCard = document.getElementById('pmc-cod');
   if (S.book === 'hardbound') {
     if (codCard) codCard.style.display = 'none';
@@ -1674,14 +1750,11 @@ function openPayment() {
     selectPayMethod('cod');
   }
 
-  // Start at step 1
   goModalStep(1);
   oModal('pay-modal');
 }
 
-// ── MODAL STEP NAVIGATION ──────────────────────────────────────
 function goModalStep(n) {
-  // Validate delivery fields before advancing to review
   if (n === 3) {
     var ok = true;
     function showE2(id, on) { var el = document.getElementById(id); if(el) el.classList.toggle('show', on); }
@@ -1695,19 +1768,16 @@ function goModalStep(n) {
     if (!ok) { LL.toast('Please fill in all delivery details', 'err'); return; }
     populateReview();
   }
-  // Show the target step, hide others
   document.querySelectorAll('.modal-step').forEach(function(el) { el.classList.remove('act'); });
   var step = document.getElementById('modal-step-' + n);
   if (step) step.classList.add('act');
-  // Update progress dots
   for (var i = 1; i <= 3; i++) {
     var dot = document.getElementById('msi-' + i);
     if (!dot) continue;
     dot.classList.remove('act', 'done');
-    if (i < n)      dot.classList.add('done');
+    if (i < n) dot.classList.add('done');
     else if (i === n) dot.classList.add('act');
   }
-  // Scroll modal to top
   var modal = document.querySelector('#pay-modal .modal');
   if (modal) modal.scrollTop = 0;
 }
@@ -1734,11 +1804,10 @@ function populateReview() {
   set('rev-phone',  ph);
   set('rev-addr',   [a1, a2, a3, a4].join(', '));
   set('rev-method', methodLabel);
-  set('rev-total',  '₱' + total.toLocaleString());
+  set('rev-total',  '\u20b1' + total.toLocaleString());
 }
 
 function confirmOrder() {
-  // Final safety check on delivery fields (user could theoretically jump here)
   var bn  = document.getElementById('b-name').value.trim();
   var ph  = document.getElementById('b-phone').value.trim();
   var a1  = document.getElementById('b-addr1').value.trim();
@@ -1750,7 +1819,6 @@ function confirmOrder() {
     goModalStep(2);
     return;
   }
-  // GCash screenshot no longer required at checkout — user sends via Messenger after ordering
 
   var ad = [a1, a2, a3, a4].join(', ');
   S.bName = bn; S.phone = ph; S.addr = ad;
@@ -1776,8 +1844,6 @@ function confirmOrder() {
   };
 
   LL.saveOrder(order, function() {});
-
-  // Set session lock — prevents duplicate orders
   sessionStorage.setItem('bop_order_placed', '1');
   var orderBtn = document.getElementById('order-now-btn');
   if (orderBtn) { orderBtn.disabled = true; orderBtn.textContent = 'Order Placed ✓'; }
@@ -1785,7 +1851,6 @@ function confirmOrder() {
   // LL.firePixel(total, S.ref, window.location.href, order); // DISABLED FOR TESTING
   cModal('pay-modal');
 
-  // Loading overlay
   var loadingEl = document.createElement('div');
   loadingEl.id = 'order-loading';
   loadingEl.style.cssText = 'position:fixed;inset:0;background:rgba(13,10,8,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;';
@@ -1804,7 +1869,6 @@ function confirmOrder() {
     var suc = document.getElementById('suc');
     var sucContent = document.getElementById('suc-content');
 
-    // Shared values
     var bt2    = LL.PRICING[S.book];
     var over2  = Math.max(0, S.letters.length - bt2.maxL);
     var total2 = bt2.base + over2 * bt2.ex;
@@ -1812,59 +1876,36 @@ function confirmOrder() {
     fn = fn.charAt(0).toUpperCase() + fn.slice(1).toLowerCase();
     var totalStr = '\u20b1' + total2.toLocaleString();
 
-    // Breakdown rows HTML (shared)
     var bdRows = '<div class="suc-bd-row"><span>' + fn + ' \u00b7 ' + S.letters.length + ' letter' + (S.letters.length !== 1 ? 's' : '') + ' (within ' + bt2.maxL + ')</span><span>\u20b1' + bt2.base.toLocaleString() + '</span></div>';
-    if (over2 > 0) {
-      bdRows += '<div class="suc-bd-row err"><span>' + over2 + ' extra letter' + (over2 > 1 ? 's' : '') + ' \u00d7 \u20b1' + bt2.ex.toLocaleString() + '</span><span>+\u20b1' + (over2 * bt2.ex).toLocaleString() + '</span></div>';
-    }
+    if (over2 > 0) bdRows += '<div class="suc-bd-row err"><span>' + over2 + ' extra letter' + (over2 > 1 ? 's' : '') + ' \u00d7 \u20b1' + bt2.ex.toLocaleString() + '</span><span>+\u20b1' + (over2 * bt2.ex).toLocaleString() + '</span></div>';
 
-    var html = '';
-    html += '<div class="suc-wrap">';
+    var html = '<div class="suc-wrap">';
     html += '<div style="font-size:2.6rem;margin-bottom:14px;">✦</div>';
     html += '<div style="font-family:var(--head-font);font-size:2rem;margin-bottom:8px;color:rgba(245,237,224,.9);">Order received!</div>';
 
     if (S_payMethod === 'cod') {
-      // ── COD SUCCESS ──
       html += '<div style="color:var(--muted);margin-bottom:6px;line-height:1.7;">We\'re already excited for <strong style="color:var(--accent-l);">' + fn + '.</strong></div>';
       html += '<div style="font-size:.78rem;color:rgba(245,237,224,.3);margin-bottom:22px;">Order #' + S.ref + '</div>';
-
-      // Order summary breakdown
       html += '<div class="suc-bd"><div class="suc-bd-lbl">Order summary</div>' + bdRows;
       html += '<div class="suc-bd-total"><span class="suc-bd-total-lbl">Total</span><span class="suc-bd-total-val">' + totalStr + '</span></div>';
       html += '<div class="suc-bd-note">✦ Inclusive of shipping fee</div>';
-      html += '<div style="font-size:.76rem;color:var(--brown);margin-top:8px;padding-top:8px;border-top:1px solid rgba(231,119,55,.15);">Reference: <strong>' + S.ref + '</strong></div>';
-      html += '</div>';
-
-      // Reminder with love
-      html += '<div class="suc-reminder">';
-      html += '<div class="suc-reminder-title">✦ A little reminder with love</div>';
+      html += '<div style="font-size:.76rem;color:var(--brown);margin-top:8px;padding-top:8px;border-top:1px solid rgba(231,119,55,.15);">Reference: <strong>' + S.ref + '</strong></div></div>';
+      html += '<div class="suc-reminder"><div class="suc-reminder-title">✦ A little reminder with love</div>';
       html += '<div class="suc-reminder-item"><span class="ri-icon">🏠</span><span><strong>Someone will be home</strong> to receive and pay when our courier arrives</span></div>';
       html += '<div class="suc-reminder-item"><span class="ri-icon">📞</span><span><strong>Your contact number is reachable</strong> — our courier will call ahead before delivery</span></div>';
       html += '<div class="suc-reminder-item"><span class="ri-icon">❤️</span><span><strong>You are committed to receiving this order</strong> — every book is lovingly made just for your child</span></div>';
-      html += '<div class="suc-reminder-note">We will confirm and contact you at the number you provided before we proceed with production and delivery.</div>';
-      html += '</div>';
-
-      // What happens next
+      html += '<div class="suc-reminder-note">We will confirm and contact you at the number you provided before we proceed with production and delivery.</div></div>';
       html += '<div class="suc-next"><div class="suc-next-head">What happens next</div>';
       html += '<div class="suc-next-row"><span class="suc-next-num">1</span><span>We confirm your order via <strong>' + S.phone + '</strong></span></div>';
       html += '<div class="suc-next-row"><span class="suc-next-num">2</span><span>' + fn + '\'s book is printed in 1–3 days</span></div>';
-      html += '<div class="suc-next-row"><span class="suc-next-num">3</span><span>Delivered to your door in 3–5 days</span></div>';
-      html += '</div>';
-
-      // Messenger button
+      html += '<div class="suc-next-row"><span class="suc-next-num">3</span><span>Delivered to your door in 3–5 days</span></div></div>';
       html += '<a class="suc-msng-btn" href="https://m.me/littlelightstorybooks" target="_blank" rel="noopener">📩 Message us on Messenger</a>';
-
     } else {
-      // ── GCASH SUCCESS ──
       var mssgSS  = encodeURIComponent('Hi! I just placed an order for ' + fn + '\'s book (Order #' + S.ref + '). Here\'s my payment screenshot — ' + totalStr + ' sent!');
       var mssgRef = encodeURIComponent('Hi! I just placed an order for ' + fn + '\'s book (Order #' + S.ref + '). My GCash reference number is: ___. Amount sent: ' + totalStr);
-
       html += '<div style="color:var(--muted);margin-bottom:6px;line-height:1.7;">We\'re already excited for <strong style="color:var(--accent-l);">' + fn + '.</strong> Complete your payment below.</div>';
       html += '<div style="font-size:.78rem;color:rgba(245,237,224,.3);margin-bottom:22px;">Order #' + S.ref + '</div>';
-
-      // GCash payment card
-      html += '<div class="suc-gcash-pay">';
-      html += '<div class="suc-gcash-pay-lbl">Pay via GCash / Bank</div>';
+      html += '<div class="suc-gcash-pay"><div class="suc-gcash-pay-lbl">Pay via GCash / Bank</div>';
       html += '<div style="text-align:center;margin-bottom:12px;">';
       if (window._gcashQR) {
         html += '<div style="width:126px;height:126px;margin:0 auto 12px;background:white;border:1px solid var(--bd);border-radius:8px;overflow:hidden;"><img src="' + window._gcashQR + '" alt="GCash QR" style="width:100%;height:100%;object-fit:contain;"></div>';
@@ -1876,37 +1917,23 @@ function confirmOrder() {
       html += '<div style="font-size:.68rem;color:var(--brown);font-weight:500;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px;">GCash Account Name</div>';
       html += '<div style="font-size:1rem;color:var(--deep);font-weight:700;">' + (window._gcashName || '—') + '</div>';
       html += '</div><hr style="border:none;border-top:1px solid rgba(231,119,55,.18);margin:10px 0;">';
-
-      // Breakdown inside GCash card
       html += bdRows;
       html += '<div class="suc-bd-total" style="margin-top:4px;"><span class="suc-bd-total-lbl">Total to send</span><span class="suc-bd-total-val">' + totalStr + '</span></div>';
       html += '<div class="suc-bd-note">Ref: <strong>' + S.ref + '</strong> · Inclusive of shipping</div>';
-
       html += '<hr class="suc-gcash-hr2">';
       html += '<div class="suc-gcash-inst">Send <strong>' + totalStr + '</strong> then let us know via Messenger. You can send your screenshot or just your GCash reference number — either works!</div>';
-
-      // Proof options
       html += '<div class="suc-proof-lbl">How would you like to confirm payment?</div>';
       html += '<div class="suc-proof-opts">';
-      html += '<div class="suc-proof-opt sel" id="suc-proof-ss" onclick="selectSucProof(\'ss\',\'' + mssgSS + '\',\'' + mssgRef + '\')">';
-      html += '<div class="po-icon">🖼️</div><div class="po-lbl">Send screenshot</div></div>';
-      html += '<div class="suc-proof-opt" id="suc-proof-ref" onclick="selectSucProof(\'ref\',\'' + mssgSS + '\',\'' + mssgRef + '\')">';
-      html += '<div class="po-icon">#️⃣</div><div class="po-lbl">Send ref number</div></div>';
+      html += '<div class="suc-proof-opt sel" id="suc-proof-ss" onclick="selectSucProof(\'ss\',\'' + mssgSS + '\',\'' + mssgRef + '\')"><div class="po-icon">🖼️</div><div class="po-lbl">Send screenshot</div></div>';
+      html += '<div class="suc-proof-opt" id="suc-proof-ref" onclick="selectSucProof(\'ref\',\'' + mssgSS + '\',\'' + mssgRef + '\')"><div class="po-icon">#️⃣</div><div class="po-lbl">Send ref number</div></div>';
       html += '</div></div>';
-
-      // Messenger button (default: screenshot selected)
       html += '<a class="suc-msng-btn" id="suc-msng-btn" href="https://m.me/littlelightstorybooks?text=' + mssgSS + '" target="_blank" rel="noopener">📩 Message us on Messenger</a>';
-
-      // What happens next
       html += '<div class="suc-next"><div class="suc-next-head">What happens next</div>';
       html += '<div class="suc-next-row"><span class="suc-next-num">1</span><span>' + fn + '\'s book is printed in 1–3 days after payment is confirmed</span></div>';
-      html += '<div class="suc-next-row"><span class="suc-next-num">2</span><span>Delivered to your door in 3–5 days</span></div>';
-      html += '</div>';
+      html += '<div class="suc-next-row"><span class="suc-next-num">2</span><span>Delivered to your door in 3–5 days</span></div></div>';
     }
 
-    // Order another book button (both)
-    html += '<a href="#" class="suc-new-order" onclick="sessionStorage.removeItem(\'bop_order_placed\');location.reload();return false;">Order another book</a>';
-    html += '</div>';
+    html += '<a href="#" class="suc-new-order" onclick="sessionStorage.removeItem(\'bop_order_placed\');location.reload();return false;">Order another book</a></div>';
 
     if (sucContent) sucContent.innerHTML = html;
     suc.classList.add('on');
@@ -1920,7 +1947,6 @@ function confirmOrder() {
   }, 6000);
 }
 
-// ── GCASH PROOF SELECTOR ───────────────────────────────────────
 function selectSucProof(type, mssgSS, mssgRef) {
   var ss  = document.getElementById('suc-proof-ss');
   var ref = document.getElementById('suc-proof-ref');
@@ -2062,7 +2088,6 @@ function toggleFAQ(i) {
 
   function checkVisibility() {
     if (!stickyWrap || !orderBtn) return;
-    // If the payment modal is open, always hide the sticky button
     var payModal = document.getElementById('pay-modal');
     if (payModal && payModal.classList.contains('open')) {
       stickyWrap.style.display = 'none';

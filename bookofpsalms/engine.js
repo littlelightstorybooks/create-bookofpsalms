@@ -622,7 +622,7 @@ LL.renderPage = function(page, name, giver) {
       : 'background:#FEFAF3';
 
     var nameLen = meta.nameLen || 5;
-    var scale   = nameLen <= 5 ? 1.0 : nameLen === 6 ? 0.92 : nameLen === 7 ? 0.85 : nameLen === 8 ? 0.78 : 0.72;
+    var scale   = nameLen <= 13 ? 1.0 : 0.95;
 
     var bSz  = Math.round((ly.blessingSize || 13) * scale) + 'px';
     var mSz  = Math.round((ly.messageSize  || 12) * scale) + 'px';
